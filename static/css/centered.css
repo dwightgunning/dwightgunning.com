@@ -139,6 +139,13 @@ footer {
 }
 
 /* Twitter widget */
+.twitter-wrapper {
+  height: 260px;
+  width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 iframe[id^='twitter-widget-'] {
   width:100% !important;
 }
