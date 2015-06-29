@@ -1,0 +1,14 @@
+---
+layout: post
+title: Google Web Accelerator plays ReST watchdog
+author: dwight
+published: true
+date: 2005-05-07T08:29:00+0000
+categories: 
+  - uncategorized
+
+---
+
+<p>There's been quite a bit of stink over <a href="http://www.backpackit.com">Backpack</a>'s non-idempotent use of HTTP:<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3">GET</a>. As Joe Gregorio <a href="http://bitworking.org/news/I_m_sorry__I_can_t_kiss_it_and_make_it_better_">explains</a>, it's come to light due Google's new <a href="http://webaccelerator.google.com/">Web Accelerator</a> service.<br />
+<blockquote>You used GET to delete items from Backpack and when Googles Web Accelerator pre-fetches that URI in you web app, items get deleted. Let's make this clear, Google didn't break your application, your application was broken, Google was just the first person to point it out to you.</p></blockquote>
+<p>I wonder how many other web-apps are effected as a result of poor design?</p>

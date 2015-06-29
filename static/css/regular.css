@@ -1,0 +1,52 @@
+/*
+ * Base structure
+ */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 40px;
+	background-color: #FFE9D6;
+	color: #514E40;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 40px;
+  font:  12px/1.25em Tahoma,Verdana,Segoe,sans-serif;
+  letter-spacing: 1.1px;
+  font-weight: 500;
+}
+
+footer {
+  margin-top: 20px;
+}
+
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #514E40;
+  text-decoration: underline;
+}
+
+/*
+ * Copy styling
+ */
+ul {
+  margin-top: 30px;
+  list-style-type: none;
+  padding-left: 0px;
+font:  18px/1.125em "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;    
+  line-height: 1.6;
+}
+
+ul#reading-list a {
+  text-decoration: none;
+}

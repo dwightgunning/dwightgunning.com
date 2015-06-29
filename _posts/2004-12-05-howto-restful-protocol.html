@@ -1,0 +1,19 @@
+---
+layout: post
+title: 'HOWTO: Restful Protocol'
+author: dwight
+published: true
+date: 2004-12-05T08:19:00+0000
+categories: 
+  - uncategorized
+
+---
+
+<p><a href="http://bitworking.org/">Joe Gregorio</a> has published the first article, <a href="http://www.xml.com/pub/a/2004/12/01/restful-web.html">How to create a REST protocol</a> in his new column, <a href="http://www.xml.com/pub/at/34">The Restful Web</a>. It's a great guide to help anybody get into the right frame of mind for developing RESTful services.</p>
+<p>The article points to Paul Prescod's <a href="http://www.prescod.net/rest/mistakes/">Common REST mistakes</a> which I found to be very useful in the early stages of my first REST service. Point 4, <em>do not put actions in URIs</em>, such as <strong><em>action=delete</em></strong>, is worth noting:</p>
+<blockquote><p>First, you are using GET to do something unsafe. Second, there is no formal relationship between this "action URI" and the "object" URI. After all your "action=" convention is something specific to your application. REST is about driving as many "application conventions" out of the protocol as possible.</p></blockquote>
+<p>In contrast, <a href="http://www.xml.com/pub/a/2004/08/11/rest.html">Implementing REST Web Services: Best Practices and Guidelines</a> recommends the use of query parameters, although it cautions that their use may not be entirely RESTful.</p>
+<blockquote><p>A resource may have different views, even if there is only one representation available. For example, a resource has an XML representation but different clients may only see different portion of the same XML. Another common example is that a client might want to obtain metadata of the current representation.To obtain a different view, a client can set a "view" parameter in the URI query string. For example: <em>GET http://www.example.com/abc?view=meta</em></p></blockquote>
+<p>This is legitimate with respect to the URI specification as the query suffix is not actually a part of the URI... so <em>http://mydomain.com/app/resA?view=min</em> and <em>http://mydomain.com/app/resA?view=max</em> both represent the same resource.</p>
+<p>I would probably side with prescod's advice that leaving application conventions, such as this one, out of your RESTful service will increase its usability. Interestingly there wasn't much debate about Hao He's Best Practices article amongst the REST community.</p>
+<p>I wonder what the Restifarian evangalists really think?</p>

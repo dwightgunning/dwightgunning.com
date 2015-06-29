@@ -1,0 +1,12 @@
+---
+layout: post
+title: Wordpress 2.5.1 upgrade
+author: dwight
+published: true
+date: 2008-05-26T23:34:18+0000
+categories: 
+  - technology
+
+---
+
+<p>Blarg... almost six months since a post.Last night I upgraded the blog software from 2.5.0 to 2.5.1. This supposedly locks down a few security issues and patches miscellaneous bugs.After momentarily thinking I'd hosed the database and would need to revert to a daily backup, I realised I had incorrectly configured the table prefix variable. This was because the head revision in subversion differed from the deployed wordpress instance. Bad Dwight.Another side effect of this blunder was some general weirdness with Feedburner. After some investigation, fooling around with the plug-in, and an eventual version upgrade, things should have returned to normal.I definitely need to write myself a process guide for future upgrades!</p>

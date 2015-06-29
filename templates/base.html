@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns# profile: http://ogp.me/ns/profile#">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width">
+
+  <meta name="title" content="Dwight Gunning">
+  <meta name="description" content="Technology, entrepreneurship, software and travel.">
+  <meta name="author" content="Dwight Gunning">
+
+  <meta property="og:url" content="http://www.dwightgunning.com" />
+  <meta property="og:description" content="Technology, entrepreneurship, software and travel." />
+  <meta property="og:title" content="Dwight Gunning" />
+  <meta property="og:locale" content="en_GB" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta property="og:locale:alternate" content="nl_NL" />
+  <meta property="og:type" content="profile" />
+  <meta property="profile:first_name" content="Dwight" />
+  <meta property="profile:last_name" content="Gunning" />
+  <meta property="profile:username" content="dwightgunning" />
+  <meta property="og:image" content="{% static 'img/dwight_amsterdam_tcr_square.png' %}" />
+  <meta property="og:image:width" content="255">
+  <meta property="og:image:height" content="255">
+  <meta property="og:site_name" content="Dwight Gunning" />
+
+  <link rel="canonical" href="{{ CURRENT_PAGE.absolute_final_url }}" />
+  <link rel="shortcut icon" href="{% static 'favicon.ico' %}"> 
+
+  <link href="{% static 'vendor/bootstrap-3.1.1/css/bootstrap.min.css' %}" rel="stylesheet">  
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  {% block stylesheets %}{% endblock %}
+
+  <title>Dwight Gunning</title>
+  
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+<body>
+  {% block content %}{% endblock %}
+
+  {% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{% static 'vendor/bootstrap-3.1.1/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+  {% endblock %}
+</body>
+</html>

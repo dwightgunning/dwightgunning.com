@@ -1,0 +1,12 @@
+---
+layout: post
+title: 'Visual Studio Question #1: Discovering if a function throws exceptions'
+author: dwight
+published: true
+date: 2005-08-23T05:52:00+0000
+categories: 
+  - uncategorized
+
+---
+
+<p>I've been asked to modify a VB.net function. It's approximately 30 lines, the majority of which are on the inside a try-catch block, catching the base Exception. I'm pretty sure better-practice here is to try and keep only code that could throw an exception inside the try-catch block. I'm even more certain that I should be catching more specific exceptions than the base Exception class.If I was more experienced with VB I'd probably skim over the code, recognise which are capable of throwing an exception and place them inside a try-catch block. Since the core VB libraries aren't second nature to me, I'm wondering if there's any support from Visual Studio in discovering which of these function calls are capable of throwing an exception, and then what specific exceptions might be thrown.</p>

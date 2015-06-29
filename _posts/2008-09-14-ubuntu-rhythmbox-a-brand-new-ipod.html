@@ -1,0 +1,23 @@
+---
+layout: post
+title: Ubuntu, RhythmBox&a brand new iPod
+author: dwight
+published: true
+date: 2008-09-14T06:03:31+0000
+categories: 
+  - music
+  - technology
+
+---
+
+<p>I just got home with my new toy, a 120GB iPod classic. It's the first iPod I've owned so this is something of a new experience.I plugged it into my laptop (an eeePC, running Hardy Heron) and RhythmBox started up automatically. It looked good as the new device appeared in the side-panel and there seemed to be a synchronisation check.When it came to pushing the music library from laptop down onto the iPod, things got a little tricky. First I tried to drag and drop the 'All Artists' listing from the music library to the iPod item. This caused RhythmBox to shutdown; there was no error dialog to point out what was going on.I started googling and discovered that one of the first things that happens when you plug an iPod into a Mac/Windows PC with iTunes is that it'll format and create a basic directory structure for the music. I'd assume this is somewhere below (or hidden) from the standard top-level folders which were already present: Calendars, Contacts, iPod_Control, Notes, Photos, Recordings.There were a few old forum threads where people had difficulty using RhythmBox to sync their iPods. The best suggestion I could see was to use gtkPod.So, the simplest thing that can possibly work (but no simpler):
+<ul>
+<li>Eject the iPod and physically disconnect;</li>
+<li>Install gtkPod using Synaptic;</li>
+<li>Re-connect the iPod and it should auto-mount;</li>
+<li>Close  RhythmBox if it's already open or it opens automatically;</li>
+<li>Open up gtkPod. It will more than likely detect the iPod and ask you to confirm the mount location. It then launches the wizard to create the necessary default folder structure. Alternatively, use the File &gt; `Create iPod's directories` menu item.</li>
+<li>Choose the model and it should make the updates. Then just use the toolbar icon to Save the changes to the iPod. Once this is set, you can close gtkPod.</li>
+<li>Open up RhythmBox and you should be able to drag the 'All Artists' listing that contains all your music onto the IPOD device in the side-bar.</li>
+</ul>
+<p>And from there you should be laughing. I've even found that the Last.fm plug-in will scrobble the tracks played on the iPod since the last time it was connected. Very neat.One other thing. My iPod model wasn't on the list available in gtkPod. It's one of the newer 120GB classics. I just gave the 160GB Silver option a crack and it worked fine. I guess your mileage may vary though.</p>

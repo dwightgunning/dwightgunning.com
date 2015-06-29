@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'css/regular.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container text-center">
+    <div class="col-md-12">
+      <h1>Reading list</h1>
+      <p class="lead">Herewith a brief list of books that have influenced the way I approach things.</p>
+        <ul id="reading-list">
+          <li><a href="http://amzn.to/1GYLZsW" target="blank">How to win friends and influence people</a></li>
+          <li><a href="http://amzn.to/1L9fFFl" target="blank">7 Habits of highly effective people</a></li>
+          <li><a href="http://amzn.to/1IqbTlN" target="blank">Getting Things Done</a></li>
+          <li><a href="http://amzn.to/1GYMoeR" target="blank">Maverick</a></li>
+          <li><a href="http://amzn.to/1BCufDp" target="blank">The Cluetrain Manifesto</a></li>
+          <li><a href="http://amzn.to/1H4Yo0l" target="blank">Positioning: The battle for your mind</a></li>
+          <li><a href="http://amzn.to/1TDdmxW" target="blank">The Lean Startup</a></li>
+          <li><a href="http://amzn.to/1QI93CE" target="blank">Do More Faster</a></li>
+        </ul>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer text-center">
+      <div class="container">
+        {% include 'partial-footer.html' %}
+      </div>
+    </div>
+  </footer>
+{% endblock %}
