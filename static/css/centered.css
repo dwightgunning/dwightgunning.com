@@ -15,7 +15,7 @@ a:hover {
 html,
 body {
     height: 100%;
-    background-color: #FFE9D6;
+    background-color: #ECE7E2;
     color: #514E40;
 }
 
@@ -83,16 +83,6 @@ footer {
   }
 }
 
-.bio {
-  text-align: center;
-}
-
-@media (min-width: 992px) {
-  .bio {
-    text-align: left;
-  }
-}
-
 /*
  * Copy styling
  */
@@ -110,38 +100,62 @@ footer {
     letter-spacing: 1.5px;
     color: #7E8E86;
     font-style: italic;
+    font-size: 20px;
 }
 
-
-.bio p {
-    margin-bottom: 15px;
-    font:  18px/1.125em "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;    
-    line-height: 1.2;
-    letter-spacing: 1.1px;
+.about {
+  text-align: center;
 }
 
-.bio p > a {
+@media (min-width: 992px) {
+  .about {
+    text-align: left;
+  }
+}
+
+.about p {
+  margin-bottom: 15px;
+  font:  18px/1.125em "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;    
+  line-height: 1.2;
+  letter-spacing: 1.1px;
+}
+
+.about p > a {
   text-decoration: underline;
+}
+
+.bio {
+  margin-top: 20px;
+}
+
+.social-icons .fa {
+  color: #7E8E86;
+  font-size: 2.2em;
+}
+
+.social-icons > a {
+  margin-left: 20px;
+}
+
+.social-icons > a:first-child {
+  margin-left: 0px;
+}
+
+.widgets {
+  margin-bottom: 40px;
+  margin-top: 40px;
 }
 
 .social-icons {
   line-height: 38px;
+  margin-bottom: 40px;
 }
 
-.social-icons .fa {
-    padding-right: 10px;
-    color: #7E8E86;
-    font-size: 1.5em;
-}
-
-.widgets {
-  margin-top: 20px;
-}
 
 /* Twitter widget */
 .twitter-wrapper {
   height: 260px;
-  width: 520px;
+  max-width: 520px;
   margin-left: auto;
   margin-right: auto;
 }

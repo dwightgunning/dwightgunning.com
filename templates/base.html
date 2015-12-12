@@ -27,26 +27,22 @@
   <link rel="canonical" href="{{ CURRENT_PAGE.absolute_final_url }}" />
   <link rel="shortcut icon" href="{% static 'favicon.ico' %}"> 
 
-  <link href="{% static 'vendor/bootstrap-3.1.1/css/bootstrap.min.css' %}" rel="stylesheet">  
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-  {% block stylesheets %}{% endblock %}
-
   <title>Dwight Gunning</title>
-  
+
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
-
+  <link href="{% static 'vendor/bootstrap-3.1.1/css/bootstrap.min.css' %}" rel="stylesheet">  
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
 <body>
   {% block content %}{% endblock %}
-
+  {% block stylesheets %}{% endblock %}
   {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="{% static 'vendor/bootstrap-3.1.1/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
   {% endblock %}
 </body>
 </html>
