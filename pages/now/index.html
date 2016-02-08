@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+ 
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'css/regular.css' %}">
+{% endblock %}
+ 
+{% block content %}
+  <div class="container body-content">
+    <div class="col-md-12">
+      <h1>Now</h1>
+      <h2>Where am I now?</h2>
+      <p>Currently in Amsterdam.</p>
+      <h2>What am I reading?</h2>
+        <p>Colorless Tsuzkuru Tazaki by Haruki Murakami</p>
+      <h2>What am I working on</h2>
+      <p>I have this project called <a href="https://www.knownly.com">Knownly</a>.</p>
+      <p>It's a service that helps people publish websites without servers. With Knownly I'm looking to help 
+      more people create their first website by making it simple to write in design, build and host.</p>
+      <p>I'm also looking to show experienced designers and developers that many of the things they associate with "dynamic" websites can be achieved with a simple and elegant static HTML, CSS and Javascript. There is so much bloat and complexity in software and platforms like Wordpress, Wix and Squarespace. They're unnecessary for the sites you and I want to craft.</p>
+      <h2>What do I look like?</h2>
+      <p>During a recent trip to Bulgaria to facilitate a Startup Weekend...</p>
+      <img class="img img-responsive img-rounded" src="{% static '/img/dwight_blagoevgrad.png' %}" alt="Dwight in Blagoevgrad">
+      <h2>What am I planning?</h2>
+      Currently quite a bit of travel:
+      <ul>
+        <li>Jan 22nd 2016: Back home to Australia to live closer to old family and friends for 3 months.</li>
+        <li>August 2016: Canada for my best mate's wedding</li>
+        <li>December 2016: A second trip downunder, this time for my sister's wedding.</li>
+      </ul>
+    </div>
+  </div>
+  <footer>
+    <div class="footer text-center">
+      <div class="container">
+        {% include 'partial-footer.html' %}
+      </div>
+    </div>
+  </footer>
+{% endblock %}

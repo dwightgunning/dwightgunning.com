@@ -1,7 +1,3 @@
-/*
- * Globals
- */
-
 /* Links */
 a,
 a:focus,
@@ -14,19 +10,17 @@ a:hover {
  */
 html,
 body {
-    height: 100%;
-    background-color: #ECE7E2;
-    color: #514E40;
+  background-color: #ECE7E2;
+  color: #514E40;
+  height: 100%;
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
   display: table;
-  width: 100%;
   height: 100%; /* For at least Firefox */
   min-height: 100%;
-/*  margin-top: 10px;
-  margin-bottom: 10px;*/
+  width: 100%;
 }
 .site-wrapper-inner {
   display: table-cell;
@@ -34,8 +28,8 @@ body {
 }
 .cover-container {
   display: table;
-  margin-right: auto;
   margin-left: auto;
+  margin-right: auto;
 }
 
 /* Padding for spacing */
@@ -44,7 +38,7 @@ body {
 }
 
 .cover-container .img-responsive {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 footer {
@@ -52,11 +46,11 @@ footer {
 }
 
 .footer {
-  margin-top: 20px;
-  margin-bottom: 20px;
   font:  12px/1.25em Tahoma,Verdana,Segoe,sans-serif;
-  letter-spacing: 1.1px;
   font-weight: 500;
+  letter-spacing: 1.1px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 /*
@@ -66,9 +60,9 @@ footer {
 @media (min-width: 768px) {
   /* Start the vertical centering */
   .site-wrapper-inner {
-    vertical-align: middle;
     margin-left: auto;
     margin-right: auto;
+    vertical-align: middle;
   }
   /* Handle the widths */
   .cover-container {
@@ -78,8 +72,8 @@ footer {
 
 @media (min-width: 992px) {
   .cover-container {
-    width: 720px;
     text-align: left;
+    width: 720px;
   }
 }
 
@@ -87,9 +81,9 @@ footer {
  * Copy styling
  */
 .cover-heading {
+    font-family: Tahoma,Verdana,Segoe,sans-serif;
     margin-top: 0px;
     margin-bottom: 5px;
-    font-family: Tahoma,Verdana,Segoe,sans-serif;;
     color: #514E40;
 }
 
@@ -114,10 +108,10 @@ footer {
 }
 
 .about p {
-  margin-bottom: 15px;
   font:  18px/1.125em "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;    
-  line-height: 1.2;
   letter-spacing: 1.1px;
+  line-height: 1.2;
+  margin-bottom: 15px;
 }
 
 .about p > a {
@@ -151,13 +145,12 @@ footer {
   margin-bottom: 40px;
 }
 
-
 /* Twitter widget */
 .twitter-wrapper {
   height: 260px;
-  max-width: 520px;
   margin-left: auto;
   margin-right: auto;
+  max-width: 520px;
 }
 
 iframe[id^='twitter-widget-'] {
@@ -165,7 +158,7 @@ iframe[id^='twitter-widget-'] {
 }
 
 .thm-dark {
-  color: #a9a9a9;
   background-color: #7E8E86 !important;
+  color: #a9a9a9;
 }
 /* End Twitter widget */
