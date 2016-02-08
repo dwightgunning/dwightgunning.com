@@ -1,3 +1,6 @@
 .DS_Store
 .pyc
 .build/
+.deploy/
+*.sublime*
+*.sublime*
