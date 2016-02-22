@@ -1,1 +1,5 @@
-{"site-url":"http://www.dwightgunning.com","knownly-website-folder":"/users/dwight/dropbox/apps/knownly.net/www.dwightgunning.com","port":8857}
+{
+  "site-url":"http://www.dwightgunning.com",
+  "website-folder": "/users/dwight/dropbox/apps/knownly.net/www.dwightgunning.com",
+  "provider": "filesystem"
+}
