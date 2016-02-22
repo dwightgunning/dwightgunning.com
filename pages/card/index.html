@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Business Card - Dwight Gunning</title>
+      <script>
+        // Mathlib
+        var RAD=Math.PI/180;var PI=Math.PI;var TWOPI=Math.PI*2;var ONEOPI=1/Math.PI;var PIO2=Math.PI/2;var PIO4=Math.PI/4;var PIO8=Math.PI/8;var PIO16=Math.PI/16;var PIO32=Math.PI/32;var Rnd=Math.random;var Sin=Math.sin;var Cos=Math.cos;var Sqrt=Math.sqrt;var Floor=Math.floor;var Atan2=Math.atan2;var Ceil=Math.ceil;var Abs=Math.abs;function randomInt(a,b){return ~~(Rnd()*(b-a+1)+a)}function weightedRandom(b){var a=Rnd();if(a<0.5){return 1-Math.pow(1-a,b!==undefined?b:2)/2}return 0.5+Math.pow((a-0.5)*2,b!==undefined?b:2)/2}function calcNormalVector(b,d,f,a,c,e){return new Vector3D((d*e)-(f*c),-((e*b)-(a*f)),(b*c)-(d*a)).norm()}function extend(d,e,c){var b=function(){},a;b.prototype=e.prototype;d.prototype=new b();d.prototype.constructor=d;d.superclass=e.prototype;if(e.prototype.constructor==Object.prototype.constructor){e.prototype.constructor=e}if(c){for(a in c){if(c.hasOwnProperty(a)){d.prototype[a]=c[a]}}}}function isArray(a){return(a.constructor.toString().indexOf("Array")!==-1)}(function(){Vector=function(x,y){this.x=x;this.y=y;return this};Vector.prototype={x:0,y:0,clone:function(){return new Vector(this.x,this.y)},set:function(v){this.x=v.x;this.y=v.y;return this},add:function(v){this.x+=v.x;this.y+=v.y;return this},nadd:function(v){return new Vector(this.x+v.x,this.y+v.y)},sub:function(v){this.x-=v.x;this.y-=v.y;return this},nsub:function(v){return new Vector(this.x-v.x,this.y-v.y)},dot:function(v){return this.x*v.x+this.y*v.y},length:function(){return Sqrt(this.x*this.x+this.y*this.y)},distance:function(v){var xx=this.x-v.x,yy=this.y-v.y;return Sqrt(xx*xx+yy*yy)},theta:function(){return Atan2(this.y,this.x)},thetaTo:function(vec){var v=this.clone().norm(),w=vec.clone().norm();return Math.acos(v.dot(w))},thetaTo2:function(vec){return Atan2(vec.y,vec.x)-Atan2(this.y,this.x)},norm:function(){var len=this.length();this.x/=len;this.y/=len;return this},nnorm:function(){var len=this.length();return new Vector(this.x/len,this.y/len)},rotate:function(a){var ca=Cos(a),sa=Sin(a);with(this){var rx=x*ca-y*sa,ry=x*sa+y*ca;x=rx;y=ry}return this},nrotate:function(a){var ca=Cos(a),sa=Sin(a);return new Vector(this.x*ca-this.y*sa,this.x*sa+this.y*ca)},invert:function(){this.x=-this.x;this.y=-this.y;return this},ninvert:function(){return new Vector(-this.x,-this.y)},scale:function(s){this.x*=s;this.y*=s;return this},nscale:function(s){return new Vector(this.x*s,this.y*s)},scaleTo:function(s){var len=s/this.length();this.x*=len;this.y*=len;return this},nscaleTo:function(s){var len=s/this.length();return new Vector(this.x*len,this.y*len)}}})();(function(){Vector3D=function(a,c,b){this.x=a;this.y=c;this.z=b;return this};Vector3D.prototype={x:0,y:0,z:0,clone:function(){return new Vector3D(this.x,this.y,this.z)},set:function(a){this.x=a.x;this.y=a.y;this.z=a.z;return this},add:function(a){this.x+=a.x;this.y+=a.y;this.z+=a.z;return this},sub:function(a){this.x-=a.x;this.y-=a.y;this.z-=a.z;return this},dot:function(a){return this.x*a.x+this.y*a.y+this.z*a.z},cross:function(a){return new Vector3D(this.y*a.z-this.z*a.y,this.z*a.x-this.x*a.z,this.x*a.y-this.y*a.x)},length:function(){return Sqrt(this.x*this.x+this.y*this.y+this.z*this.z)},distance:function(b){var c=this.x-b.x,d=this.y-b.y,a=this.z-b.z;return Sqrt(c*c+d*d+a*a)},thetaTo:function(b){var a=this.y*b.z-this.z*b.y,d=this.z*b.x-this.x*b.z,c=this.x*b.y-this.y*b.x;return Atan2(Sqrt(a*a+d*d+c*c),this.dot(b))},thetaTo2:function(a){return Math.acos(this.dot(a)/(Sqrt(this.x*this.x+this.y*this.y+this.z*this.z)*Sqrt(a.x*a.x+a.y*a.y+a.z*a.z)))},norm:function(){var a=this.length();this.x/=a;this.y/=a;this.z/=a;return this},scale:function(a){this.x*=a;this.y*=a;this.z*=a;return this}}})();(function(){Preloader=function(){this.images=new Array();return this};Preloader.prototype={images:null,callback:null,counter:0,addImage:function b(c,d){var e=this;c.url=d;c.onload=function(){e.counter++;if(e.counter===e.images.length){e.callback.call(e)}};this.images.push(c)},onLoadCallback:function a(e){this.counter=0;this.callback=e;for(var d=0,c=this.images.length;d<c;d++){this.images[d].src=this.images[d].url}}}})();
+
+        window.addEventListener('load', onloadHandler, false);
+
+        function onloadHandler() {
+           // get the canvas DOM element
+           var canvas = document.getElementById('card-canvas'),
+               ctx = canvas.getContext("2d"),
+               width = canvas.width,
+               height = canvas.height;
+           
+           // data structures - generate initial blobs
+           var blobList = new BlobList();
+           blobList.blobs = [
+              new Blob(150, 160, 0, 90, "rgba(47,118,178,.9)"),
+              new Blob(67,  136, 0, 34, "rgba(145,200,46,.9)"),
+              new Blob(106, 74,  0, 22, "rgba(45,172,173,.9)"),
+              new Blob(114, 52,  0, 10, "rgba(238,172,78,.75)"),
+              new Blob(210, 82,  0, 56, "rgba(248,172,78,.9)"),
+              new Blob(212, 232, 0, 25, "rgba(99,198,78,.9)"),
+              new Blob(236, 222, 0, 10, "rgba(140,45,136,.9)"),
+              // new Blob(128, 244, 0, 36, "rgba(226,74,63,.9)"),
+              new Blob(64,  188, 0, 10, "rgba(255,203,78,.9)")
+           ];
+           
+           function drawText(x, y, text, colour) {
+             ctx.fillStyle = colour;
+             ctx.fillText(text, x, y);
+           };
+           
+           function drawDisc(x, y, rad, colour) {
+              ctx.fillStyle = colour;
+              ctx.beginPath();
+              ctx.arc(x, y, rad, 0, TWOPI, true);
+              ctx.fill();
+           };
+           
+           // event handlers
+           var mouseMove = function(e) {
+              blobList.mousex = e.clientX;
+              blobList.mousey = e.clientY;
+           };
+           canvas.addEventListener("mousemove", mouseMove, false);
+           
+           var offsetx = 0, offsety = 0;
+           
+           // init main animation loop
+           requestAnimFrame(loop);
+           function loop()
+           {
+              // compute canvas offset within parent window including page view position
+              var el = canvas;
+              offsetx = offsety = 0;
+              do
+              {
+                 offsetx += el.offsetLeft;
+                 offsety += el.offsetTop;
+              } while (el = el.offsetParent);
+              offsetx = offsetx - window.pageXOffset;
+              offsety = offsety - window.pageYOffset;
+              
+              ctx.save();
+              
+              // clear the left side of the card
+              // the right hand side is already rendered with fixed text
+              ctx.clearRect(0, 0, width, height);
+              
+              // perform initial one time rendering of text etc.
+              ctx.save();
+              ctx.font = "Bold 12pt Arial";
+              drawText(280,080,"Dwight Gunning", "rgb(80,80,80)");
+              ctx.font = "12pt Arial";
+              drawText(280,120,"Software Engineer | Founder", "rgb(80,80,80)");
+              drawText(280,140,"www.knownly.net", "rgb(47,118,178)");
+              
+              drawText(280,180,"Web:" ,"rgb(80,80,80)");
+              drawText(340,180,"dwightgunning.com" ,"rgb(47,118,178)");
+              
+              drawText(280,200,"Email:" ,"rgb(80,80,80)");
+              drawText(340,200,"dwight@dwightgunning.com", "rgb(47,118,178)");
+              
+              drawText(280,220,"Phone:" ,"rgb(80,80,80)");
+              drawText(340,220,"+31 6 2363 8344", "rgb(80,80,80)");
+
+              ctx.font = "italic 12pt Arial";
+              drawText(280,260,"Keep on truckin'." ,"rgb(80,80,80)");
+              ctx.restore();
+              
+              // render each edge blob - which react to mouse movement
+              ctx.globalCompositeOperation = 'darker';
+              blobList.update();
+              blobList.render();
+              
+              // render "eg" text overlay
+              ctx.globalCompositeOperation = 'source-over';
+              ctx.font = "Bold 100pt Arial";
+              ctx.fillStyle = "white";
+              ctx.fillText("d", 96, 224);
+              ctx.fillText("g", 154, 224);
+              
+              ctx.restore();
+              
+              requestAnimFrame(loop);
+           };
+           
+           // data structures
+           function BlobList()
+           {
+              this.mousex = this.mousey = 0;
+              this.blobs = [];
+              
+              this.update = function()
+              {
+                 // special case for first blob - which is the main magenta disc
+                 var blob = this.blobs[0];
+                 if (Rnd() > 0.99)
+                 {
+                    blob.velocity.z += (Rnd()*0.10 - 0.05);
+                    blob.spring = 0.0125;
+                 }
+                 blob.update();
+                 
+                 // all the other blobs can animate based on mouse interaction
+                 for (var i = 1,dx,dy,d; i < this.blobs.length; i++)
+                 {
+                    blob = this.blobs[i];
+                    
+                    // calculate offset from mouse position - apply canvas element offset
+                    dx = this.mousex - (blob.position.x + offsetx);
+                    dy = this.mousey - (blob.position.y + offsety);
+                    d = Sqrt(dx * dx + dy * dy);
+                    
+                    // if the mouse is within the radius of a blog - then nudge it out
+                    var rad = (blob.originradius > 16 ? blob.originradius : 16);
+                    if (d < rad)
+                    {
+                       blob.targetPos.x = blob.position.x - dx;
+                       blob.targetPos.y = blob.position.y - dy;
+                       blob.spring = 0.033;
+                    }
+                    // else based on a random chance, pulse the blob
+                    else if (Rnd() > 0.995)
+                    {
+                       blob.targetPos.x = blob.origin.x;
+                       blob.targetPos.y = blob.origin.y;
+                       blob.velocity.z += (Rnd()*0.30 - 0.15);
+                       blob.spring = 0.0125;
+                    }
+                    // else just animate towards the original position
+                    else
+                    {
+                       blob.targetPos.x = blob.origin.x;
+                       blob.targetPos.y = blob.origin.y;
+                       blob.spring = 0.05;
+                    }
+                    
+                    blob.update();
+                 }
+              };
+              
+              this.render = function()
+              {
+                 for (var i = 0; i < this.blobs.length; i++)
+                 {
+                    ctx.save();
+                    this.blobs[i].render();
+                    ctx.restore();
+                 }
+              };
+           };
+           
+           function Blob(x, y, z, radius, colour)
+           {
+              this.origin = new Vector3D(x,y,z);
+              this.position = new Vector3D(x,y,z);
+              this.targetPos = new Vector3D(x,y,z);
+              this.originradius = radius;
+              this.radius = radius;
+              this.velocity = new Vector3D(0,0,0);
+              this.colour = colour;
+              this.friction = 0.75;
+              this.spring = 0.05;
+              
+              this.update = function()
+              {
+                 this.velocity.x += (this.targetPos.x - this.position.x) * this.spring;
+                 this.velocity.x *= this.friction;
+                 this.position.x += this.velocity.x;
+                 
+                 this.velocity.y += (this.targetPos.y - this.position.y) * this.spring;
+                 this.velocity.y *= this.friction;
+                 this.position.y += this.velocity.y;
+                 
+                 var dox = this.origin.x - this.position.x,
+                     doy = this.origin.y - this.position.y,
+                     d = Sqrt(dox * dox + doy * doy);
+                 
+                 this.targetPos.z = d/150 + 1;
+                 this.velocity.z += (this.targetPos.z - this.position.z) * this.spring;
+                 this.velocity.z *= this.friction;
+                 this.position.z += this.velocity.z;
+                 
+                 this.radius = this.originradius * this.position.z;
+                 if (this.radius < 1) this.radius = 1;
+              };
+              
+              this.render = function()
+              {
+                 ctx.fillStyle = this.colour;
+                 ctx.beginPath();
+                 ctx.arc(this.position.x, this.position.y, this.radius, 0, TWOPI, true);
+                 ctx.fill();
+              };
+           };
+        }
+
+        // requestAnimFrame shim
+        window.requestAnimFrame = (function()
+        {
+           return  window.requestAnimationFrame       || 
+                   window.webkitRequestAnimationFrame || 
+                   window.mozRequestAnimationFrame    || 
+                   window.oRequestAnimationFrame      || 
+                   window.msRequestAnimationFrame     || 
+                   function(callback, element)
+                   {
+                       window.setTimeout(callback, 1000 / 60);
+                   };
+        })();
+    </script>
+    <style>
+      #card-canvas
+      {
+        bottom: 0;
+        background-image: url('/static/img/paper.png');
+        border: 1px solid #aaa;
+        border-radius: 3px 3px 3px 3px;
+        box-shadow: 8px 8px 4px 0px rgba(0,0,0,0.5);
+        left: 0;
+        margin:auto;
+        position: absolute;
+        right: 0;
+        top:0;
+        -moz-border-radius: 3px 3px 3px 3px;
+        -moz-box-shadow: 8px 8px 4px 0px rgba(0,0,0,0.5);
+        -webkit-border-radius: 3px 3px 3px 3px;
+        -webkit-box-shadow: 8px 8px 4px 0px rgba(0,0,0,0.5);
+      }
+    </style>
+   </head>
+
+   <body>
+      <canvas id="card-canvas" width="560" height="320"></canvas>
+      <!-- Derived from fine work by Kevin Roast (http://www.kevs3d.co.uk/dev/eglogo/) -->
+   </body>
+</html>
