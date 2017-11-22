@@ -1,5 +1,5 @@
 {
-  "site-url":"http://www.dwightgunning.com",
-  "website-folder": "/users/dwight/dropbox/apps/knownly.net/www.dwightgunning.com",
-  "provider": "filesystem"
+    "aws-access-key": "AKIAI5M7AD3WF7RHX3TQ",
+    "aws-bucket-name": "www.dwightgunning.com",
+    "aws-bucket-website": "www.dwightgunning.com.s3-website-us-east-1.amazonaws.com"
 }
