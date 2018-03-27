@@ -108,9 +108,9 @@ footer {
 }
 
 .about p {
-  font:  18px/1.125em "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;    
+  font:  16px/1.0em "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
   letter-spacing: 1.1px;
-  line-height: 1.2;
+  line-height: 1.4;
   margin-bottom: 15px;
 }
 
@@ -136,29 +136,5 @@ footer {
 }
 
 .widgets {
-  margin-bottom: 40px;
-  margin-top: 40px;
+  margin-top: 20px;
 }
-
-.social-icons {
-  line-height: 38px;
-  margin-bottom: 40px;
-}
-
-/* Twitter widget */
-.twitter-wrapper {
-  height: 260px;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 520px;
-}
-
-iframe[id^='twitter-widget-'] {
-  width:100% !important;
-}
-
-.thm-dark {
-  background-color: #7E8E86 !important;
-  color: #a9a9a9;
-}
-/* End Twitter widget */
