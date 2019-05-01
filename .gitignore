@@ -4,3 +4,4 @@
 .deploy/
 *.sublime*
 *.sublime*
+static/downloads/*resume*
