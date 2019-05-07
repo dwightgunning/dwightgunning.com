@@ -5,3 +5,4 @@
 *.sublime*
 *.sublime*
 static/downloads/*resume*
+deploy.sh
