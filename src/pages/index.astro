@@ -1,81 +1,65 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import { Image, Picture } from '@astrojs/image/components';
+
+import HomeLayout from '../layouts/Home.astro';
+
+import dwightImage from '../images/dwight.jpg';
+import emailIcon from '../images/at.svg';
+import twitterIcon from '../images/twitter.svg';
+import githubIcon from '../images/github.svg';
+import linkedInIcon from '../images/linkedin-in.svg';
+import stackOverflowIcon from '../images/stack-overflow.svg';
 ---
 
-<Layout title="Welcome to Astro.">
-  <main>
-    <h1>Welcome to <span class="text-gradient">Astro</span></h1>
-    <p class="instructions">
-      To get started, open the directory <code>src/pages</code> in your project.<br />
-      <strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-    </p>
-    <ul class="link-card-grid">
-      <Card
-        href="https://docs.astro.build/"
-        title="Documentation"
-        body="Learn how Astro works and explore the official API docs."
-      />
-      <Card
-        href="https://astro.build/integrations/"
-        title="Integrations"
-        body="Supercharge your project with new frameworks and libraries."
-      />
-      <Card
-        href="https://astro.build/themes/"
-        title="Themes"
-        body="Explore a galaxy of community-built starter themes."
-      />
-      <Card
-        href="https://astro.build/chat/"
-        title="Community"
-        body="Come say hi to our amazing Discord community. ❤️"
-      />
-    </ul>
-  </main>
-</Layout>
-
-<style>
-  main {
-    margin: auto;
-    padding: 1.5rem;
-    max-width: 60ch;
-  }
-  h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    margin: 0;
-  }
-  .text-gradient {
-    background-image: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 400%;
-    background-position: 0%;
-  }
-  .instructions {
-    line-height: 1.6;
-    margin: 1rem 0;
-    border: 1px solid rgba(var(--accent), 25%);
-    background-color: white;
-    padding: 1rem;
-    border-radius: 0.4rem;
-  }
-  .instructions code {
-    font-size: 0.875em;
-    font-weight: bold;
-    background: rgba(var(--accent), 12%);
-    color: rgb(var(--accent));
-    border-radius: 4px;
-    padding: 0.3em 0.45em;
-  }
-  .instructions strong {
-    color: rgb(var(--accent));
-  }
-  .link-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-    gap: 1rem;
-    padding: 0;
-  }
-</style>
+<HomeLayout title="Dwight Gunning">
+  <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
+    <Picture
+      alt="Dwight"
+      aspectRatio="3:4"
+      class="object-contain w-[420px] rounded-lg"
+      sizes="((min-width: 50em) and (max-width: 60em)) 50em, ((min-width: 30em) and (max-width: 50em)) 30em,(max-width: 30em) 20em"
+      src={dwightImage}
+      widths={[420]}
+    />
+  </div>
+  <div class="grid col-span-2 sm:col-span-1 content-center text-center sm:text-left my-8">
+    <h1 class="text-2xl md:text-3xl text-fuscous-gray">Dwight Gunning</h1>
+    <h2 class="text-lg text-blue-smoke italic">Software | Product | Technical Leadership</h2>
+    <div class="text-center sm:text-left my-4">
+      <p class="mb-3">Hi! Thanks for stopping by.</p>
+      <p class="mb-3">
+        I'm an Australian software engineer and technical leader with an entrepreneurial spirit, based in Amsterdam
+        since 2010.
+      </p>
+      <p class="mb-3">I love building effective teams, solving technical challenges, and shipping great products.</p>
+      <p class="mb-3 font-mono text-sm"><strong>Roles:</strong> Senior Engineer, Tech Lead, Engineering Manager</p>
+      <p class="mb-3 font-mono text-sm">
+        <strong>Tech:</strong> CSS, HTML, Java, JavaScript, Python, SQL, TypeScript
+      </p>
+      <p class="mb-3 font-mono text-sm">
+        <strong>Frameworks:</strong> Astro, Django, Express, MUI, Next.js, React, Tailwind, Vue
+      </p>
+      <p class="mb-3 font-mono text-sm">
+        <strong>Tools:</strong> Airflow, AWS, DataDog, Docker, Git, Helm, Heroku, Kubernetes, Metabase, Mongo, Nginx, Postgres,
+        RabbitMQ, Redis, Render, Sentry, Strapi, Traefik, Vercel
+      </p>
+    </div>
+    <div class="flex flex-row justify-evenly items-center sm:justify-start md:gap-4 mx-4 sm:mx-12 md:mx-0">
+      <a href="mailto:dwight@dwightgunning.com" target="_blank" rel="noreferrer"
+        ><img alt="" src={emailIcon} width="32px" />
+      </a>
+      <a href="https://twitter.com/DwightGunning" target="_blank" rel="noreferrer"
+        ><img alt="" src={twitterIcon} width="32px" />
+      </a>
+      <a href="http://nl.linkedin.com/in/dwightgunning" target="_blank" rel="noreferrer"
+        ><img alt="" src={linkedInIcon} width="32px" />
+      </a>
+      <a href="https://github.com/dwightgunning" target="_blank" rel="noreferrer"
+        ><img alt="" src={githubIcon} width="32px" />
+      </a>
+      <a href="http://stackoverflow.com/users/263421/dwightgunning" target="_blank" rel="noreferrer"
+        ><img alt="" src={stackOverflowIcon} width="32px" />
+      </a>
+    </div>
+  </div>
+</HomeLayout>
