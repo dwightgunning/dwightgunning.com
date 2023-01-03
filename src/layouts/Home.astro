@@ -33,16 +33,17 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body
-    class="bg-pampas p-2 pb-4 sm:pb:2 flex sm:h-screen justify-center items-center max-w-screen-md m-auto text-fuscous-gray"
-  >
+  <body class="bg-pampas-200 p-2 pb-4 sm:pb:2 flex sm:h-screen justify-center max-w-screen-md m-auto text-armadillo">
     <div class="grid grid-cols-1">
       <main class="grid grid-cols-2 sm:gap-4 md:gap-8 content-center justify-center sm:justify-left">
         <slot />
       </main>
-      <footer class="grid content-center justify-center">
-        <div class="text-fuscous-gray-200 text-sm font-extralight">
-          Copyright © 2005-22. <a class="underline" href="/">Dwight Gunning</a>.
+      <footer class="grid justify-center">
+        <div class="text-armadillo-400 text-sm font-light">
+          Copyright © 2005-22. <a
+            class="underline text-armadillo-400 outline-offset-4 focus-visible:outline-armadillo-400 focus:outline-armadillo-400"
+            href="/">Dwight Gunning</a
+          >.
         </div>
       </footer>
     </div>
