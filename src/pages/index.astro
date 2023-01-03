@@ -15,15 +15,18 @@ import stackOverflowIcon from '../images/stack-overflow.svg';
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <Picture
       alt="Dwight"
-      aspectRatio="3:4"
-      class="object-contain w-[420px] rounded-lg"
-      sizes="((min-width: 50em) and (max-width: 60em)) 50em, ((min-width: 30em) and (max-width: 50em)) 30em,(max-width: 30em) 20em"
+      class="object-contain rounded-lg"
       src={dwightImage}
-      widths={[420]}
+      loading="eager"
+      widths={[360]}
+      sizes="360px"
+      aspectRatio="3:4"
+      width="360px"
+      height="480px"
     />
   </div>
-  <div class="grid col-span-2 sm:col-span-1 content-center text-center sm:text-left my-8">
-    <h1 class="text-2xl md:text-3xl text-fuscous-gray">Dwight Gunning</h1>
+  <div class="grid col-span-2 sm:col-span-1 content-center text-center sm:text-left my-8 sm:my-4">
+    <h1 class="text-2xl md:text-3xl text-armadillo">Dwight Gunning</h1>
     <h2 class="text-lg text-blue-smoke italic">Software | Product | Technical Leadership</h2>
     <div class="text-center sm:text-left my-4">
       <p class="mb-3">Hi! Thanks for stopping by.</p>
@@ -32,33 +35,56 @@ import stackOverflowIcon from '../images/stack-overflow.svg';
         since 2010.
       </p>
       <p class="mb-3">I love building effective teams, solving technical challenges, and shipping great products.</p>
-      <p class="mb-3 font-mono text-sm"><strong>Roles:</strong> Senior Engineer, Tech Lead, Engineering Manager</p>
-      <p class="mb-3 font-mono text-sm">
-        <strong>Tech:</strong> CSS, HTML, Java, JavaScript, Python, SQL, TypeScript
+      <p class="mb-3 font-mono text-sm text-blue-smoke">
+        <span class="text-armadillo font-bold">Roles:</span> Senior Engineer, Tech Lead, Engineering Manager
       </p>
-      <p class="mb-3 font-mono text-sm">
-        <strong>Frameworks:</strong> Astro, Django, Express, MUI, Next.js, React, Tailwind, Vue
+      <p class="mb-3 font-mono text-sm text-blue-smoke">
+        <span class="text-armadillo font-bold">Tech:</span> CSS, HTML, Java, JavaScript, Python, SQL, TypeScript
       </p>
-      <p class="mb-3 font-mono text-sm">
-        <strong>Tools:</strong> Airflow, AWS, DataDog, Docker, Git, Helm, Heroku, Kubernetes, Metabase, Mongo, Nginx, Postgres,
-        RabbitMQ, Redis, Render, Sentry, Strapi, Traefik, Vercel
+      <p class="mb-3 font-mono text-sm text-blue-smoke">
+        <span class="text-armadillo font-bold">Frameworks:</span> Astro, Django, Express, MUI, Next.js, React, Tailwind,
+        Vue
+      </p>
+      <p class="mb-3 font-mono text-sm text-blue-smoke">
+        <span class="text-armadillo font-bold">Tools:</span> Airflow, AWS, DataDog, Docker, Git, Helm, Heroku, Kubernetes,
+        Metabase, Mongo, Nginx, Postgres, RabbitMQ, Redis, Render, Sentry, Strapi, Traefik, Vercel
       </p>
     </div>
-    <div class="flex flex-row justify-evenly items-center sm:justify-start md:gap-4 mx-4 sm:mx-12 md:mx-0">
-      <a href="mailto:dwight@dwightgunning.com" target="_blank" rel="noreferrer"
-        ><img alt="" src={emailIcon} width="32px" />
+    <div class="flex flex-row justify-evenly items-center sm:justify-start sm:gap-4 mx-4 sm:mx-12 sm:mx-0">
+      <a
+        class="object-contain outline-offset-4 focus-visible:outline-armadillo-400 focus:outline-armadillo-400"
+        href="mailto:dwight@dwightgunning.com"
+        target="_blank"
+        rel="noreferrer"
+        ><img alt="Send email to Dwight" src={emailIcon} height="32px" width="32px" />
       </a>
-      <a href="https://twitter.com/DwightGunning" target="_blank" rel="noreferrer"
-        ><img alt="" src={twitterIcon} width="32px" />
+      <a
+        class="object-contain outline-offset-4 focus-visible:outline-armadillo-400 focus:outline-armadillo-400"
+        href="https://twitter.com/dwightgunning"
+        target="_blank"
+        rel="noreferrer"
+        ><img alt="Dwight on Twitter" src={twitterIcon} height="32px" width="32px" />
       </a>
-      <a href="http://nl.linkedin.com/in/dwightgunning" target="_blank" rel="noreferrer"
-        ><img alt="" src={linkedInIcon} width="32px" />
+      <a
+        class="outline-offset-4 focus-visible:outline-armadillo-400 focus:outline-armadillo-400"
+        href="http://nl.linkedin.com/in/dwightgunning"
+        target="_blank"
+        rel="noreferrer"
+        ><img alt="Dwight's LinkedIn profile" src={linkedInIcon} height="32px" width="32px" />
       </a>
-      <a href="https://github.com/dwightgunning" target="_blank" rel="noreferrer"
-        ><img alt="" src={githubIcon} width="32px" />
+      <a
+        class="outline-offset-4 focus-visible:outline-armadillo-400 focus:outline-armadillo-400"
+        href="https://github.com/dwightgunning"
+        target="_blank"
+        rel="noreferrer"
+        ><img alt="Dwight's Github" src={githubIcon} height="33px" width="32px" />
       </a>
-      <a href="http://stackoverflow.com/users/263421/dwightgunning" target="_blank" rel="noreferrer"
-        ><img alt="" src={stackOverflowIcon} width="32px" />
+      <a
+        class="outline-offset-4 focus-visible:outline-armadillo-400 focus:outline-armadillo-400"
+        href="http://stackoverflow.com/users/263421/dwightgunning"
+        target="_blank"
+        rel="noreferrer"
+        ><img alt="Dwight's Stack Overflow profile" src={stackOverflowIcon} height="32px" width="32px" />
       </a>
     </div>
   </div>
