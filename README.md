@@ -62,6 +62,17 @@ Tools:
 
 - Quick FIT>GPX converter: https://www.alltrails.com/converter/
 - Bounding Box coordinates tool: https://geojson.io/
+
+## Deployment
+
+### Deploy to S3 (excluding OpenMapTiles)
+
+aws s3 sync dist/ s3://staging.dwightgunning.com/ --exclude 'assets/maps/pmtiles*' --exclude 'assets/maps/fonts/*' --exclude 'assets/maps/sprites/\*' --delete
+
+# Invalidate Cloudfront CDN Cache
+
+aws cloudfront create-invalidation --distribution-id E1LBPVSBKVF447 --paths "/outdoors/_" "/\_astro/_"
+
 ## Astro docs
 
 ### 🚀 Project Structure
