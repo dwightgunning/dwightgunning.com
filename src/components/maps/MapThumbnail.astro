@@ -7,7 +7,7 @@ type Props = {
   tracks?: string;
 };
 
-const { class: className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.props;
+const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.props;
 ---
 
 <astro-map-thumbnail
@@ -40,6 +40,8 @@ const { class: className, mapCenterDefault, mapId, mapZoomDefault, tracks } = As
   class AstroMapThumbnail extends HTMLElement {
     constructor() {
       super();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
       VectorTextProtocol.addProtocols(maplibregl);
 
