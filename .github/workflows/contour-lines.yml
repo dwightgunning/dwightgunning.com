@@ -1,0 +1,186 @@
+name: Contour Lines
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  prepare-droplet:
+    name: Prepare Droplet
+    runs-on: ubuntu-22.04
+    environment: tiles
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+    outputs:
+      DROPLET_ID: ${{ steps.create-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ steps.create-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ steps.attach-block-storage.outputs.BLOCK_STORAGE_VOLUME_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Create Droplet
+        id: create-droplet
+        shell: bash
+        run: |
+          DROPLET_ID=$( \
+            doctl compute droplet \
+              create \
+              --image ubuntu-22-10-x64 \
+              --size s-1vcpu-512mb-10gb \
+              --region ${{ vars.DIGITAL_OCEAN_REGION }} \
+              --enable-monitoring \
+              --ssh-keys ${{ secrets.DIGITAL_OCEAN_SSH_KEY_FINGERPRINT }} \
+              --no-header \
+              --format=ID \
+              --wait \
+              aw3d30-$IMAGE_TAG \
+            )
+            DROPLET_IP=$(doctl compute droplet get $DROPLET_ID --no-header --format=PublicIPv4)
+            echo "DROPLET_ID=$DROPLET_ID" >> $GITHUB_ENV
+            echo "DROPLET_ID=$DROPLET_ID" >> $GITHUB_OUTPUT
+            echo "DROPLET_IP=$DROPLET_IP" >> $GITHUB_OUTPUT
+            echo "DROPLET_IP=$DROPLET_IP" >> $GITHUB_ENV
+
+      - name: Assign the droplet to the project
+        shell: bash
+        run: |
+          doctl projects resources \
+            assign \
+            ${{ secrets.DIGITAL_OCEAN_PROJECT_ID_TILES }} \
+            --resource=do:droplet:${{ env.DROPLET_ID}}
+
+      - name: Poll for SSH connectivity to the Droplet
+        shell: bash
+        run: |
+          MAX_RETRIES=3
+          SLEEP_TIME=10
+          sleep $SLEEP_TIME  # Sleep before the first attempt
+          for i in $(seq 1 $MAX_RETRIES); do
+            doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa && break
+            sleep $SLEEP_TIME  # Sleep between retries
+          done
+
+      - name: Attach the re-usable Block Storage volume to the Droplet
+        id: attach-block-storage
+        run: |
+          BLOCK_STORAGE_VOLUMES=$(doctl compute volume list --format "ID,Name,DropletIDs" --no-header)
+          BLOCK_STORAGE_VOLUME_ID=""
+          BLOCK_STORAGE_ATTACHED_DROPLET_ID=""
+          while IFS= read -r line; do
+            volume_id=$(echo "$line" | awk '{print $1}')
+            volume_name=$(echo "$line" | awk '{print $2}')
+            attached_droplet_id=$(echo "$line" | awk '{print $3}')
+            if [[ "$volume_name" == "${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }}" ]]; then
+              BLOCK_STORAGE_VOLUME_ID=$volume_id
+              BLOCK_STORAGE_ATTACHED_DROPLET_ID=$attached_droplet_id
+              echo $BLOCK_STORAGE_ATTACHED_DROPLET_ID
+              break
+            fi
+          done <<< "$BLOCK_STORAGE_VOLUMES"
+          if [[ ! -z "$BLOCK_STORAGE_ATTACHED_DROPLET_ID" ]]; then
+            echo "Block Storage volume is already attached to another Droplet: $BLOCK_STORAGE_ATTACHED_DROPLET_ID"
+            exit 1
+          elif [[ -z "$BLOCK_STORAGE_VOLUME_ID" ]]; then
+            echo "Creating Block Storage volume"
+            BLOCK_STORAGE_VOLUME_ID=$(doctl compute volume create ${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }} --region ${{ vars.DIGITAL_OCEAN_REGION }} --size ${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_SIZE }} --fs-type ext4 --format ID --no-header)
+            echo "Created Block Storage volume: $BLOCK_STORAGE_VOLUME_ID"
+          fi
+          echo "Attaching the Block Storage volume to the Droplet"
+          doctl compute volume-action attach $BLOCK_STORAGE_VOLUME_ID ${{ env.DROPLET_ID }} --wait
+          echo "BLOCK_STORAGE_VOLUME_ID=$BLOCK_STORAGE_VOLUME_ID" >> $GITHUB_ENV
+          echo "BLOCK_STORAGE_VOLUME_ID=$BLOCK_STORAGE_VOLUME_ID" >> $GITHUB_OUTPUT
+
+      - name: Verify that Block Storage is mounted within the Droplet
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
+          EXPECTED_BLOCK_STORAGE_DEVICE_PATH="/dev/disk/by-id/scsi-0DO_Volume_${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }}"
+          EXPECTED_MOUNT_POINT="/mnt/${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }}"
+
+          echo "Checking block storage device is attached with the expected device path..."
+          if [ ! -z "\$(lsblk -no MOUNTPOINT $EXPECTED_BLOCK_STORAGE_DEVICE_PATH)" ]; then
+            echo "Block Storage device is attached to the droplet at \$EXPECTED_BLOCK_STORAGE_DEVICE_PATH"
+          else
+            echo "Error: Block Storage device is not properly attached to the Droplet at: \$EXPECTED_BLOCK_STORAGE_DEVICE_PATH"
+            exit 1
+          fi
+
+          echo "Checking mount point..."
+          if ! mount | grep -q \$EXPECTED_MOUNT_POINT; then
+            echo "Mounting the Block Storage volume within the Droplet"
+            mkdir -p /mnt/${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }}
+            mount -o discard,defaults,noatime -t ext4 \$EXPECTED_BLOCK_STORAGE_DEVICE_PATH /mnt/${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }}
+          fi
+
+          MOUNTED_DEVICE_PATH=\$(mount | grep \$EXPECTED_MOUNT_POINT | cut -d' ' -f1)
+          echo "- Mounted device path: \$MOUNTED_DEVICE_PATH"
+          DEVICE_PATH_CANONICAL=\$(readlink -f \$MOUNTED_DEVICE_PATH)
+          echo "- Actual canonical device path: \$DEVICE_PATH_CANONICAL"
+          EXPECTED_DEVICE_PATH_CANONICAL=\$(readlink -f \$MOUNTED_DEVICE_PATH)
+          echo "- Expected canonical device path: \$EXPECTED_DEVICE_PATH_CANONICAL"
+
+          if [ -z "\$DEVICE_PATH_CANONICAL" ] || [ -z "\$EXPECTED_DEVICE_PATH_CANONICAL" ]; then
+            echo "Failed to resolve one or both of the device paths"
+            exit 1
+          elif [ "\$DEVICE_PATH_CANONICAL" != "\$EXPECTED_DEVICE_PATH_CANONICAL" ]; then
+            echo "An unexpected device (\$MOUNTED_DEVICE_PATH) is mounted at \$EXPECTED_MOUNT_POINT"
+            exit 1
+          else
+            echo "The device \$MOUNTED_DEVICE_PATH is mounted at \$EXPECTED_MOUNT_POINT"
+          fi
+
+          ls -la \$EXPECTED_MOUNT_POINT
+          df -h \$EXPECTED_MOUNT_POINT
+          EOF
+
+      - name: Run SSH script
+        shell: bash
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
+          mkdir -p /mnt/${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }}/aw3d30-data
+          ls /mnt/${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }}/
+          EOF
+
+  download-aw3d30:
+    name: Download ALOS World 3D-30m (AW3D30) Data
+    environment: tiles
+    needs: [prepare-droplet]
+    runs-on: ubuntu-22.04
+    env:
+      DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Copy scripts and data to the Droplet
+        shell: bash
+        run: |
+          scp ${{ github.workspace }}/tiles/aw3d30-data-download.py root@${{ env.DROPLET_IP }}:/root/aw3d30-data-download.py
+
+      - name: Download the ALOS World 3D-30m (AW3D30) Data
+        shell: bash
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command "pip install httpx && python3 /root/aw3d30-data-download.py --download /mnt/${{ vars.AW3D30_BLOCK_STORAGE_VOLUME_NAME }}/aw3d30-data/"
