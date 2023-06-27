@@ -153,6 +153,9 @@ jobs:
           doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
           mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions
           mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/planetiler-openmaptiles-data
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}
           EOF
 
       - name: Copy scripts and data to the Droplet
@@ -243,6 +246,84 @@ jobs:
             bash -c './wildcard-merge.sh  --overwrite --output=/output/$MERGED_OSM_DATA_FILENAME'"
           echo "MERGED_OSM_DATA_FILENAME=$MERGED_OSM_DATA_FILENAME" >> $GITHUB_ENV
           echo "MERGED_OSM_DATA_FILENAME=$MERGED_OSM_DATA_FILENAME" >> $GITHUB_OUTPUT
+
+  render-tiles:
+    name: Render vector tiles
+    needs: [prepare-droplet, merge-osm-data-files]
+    environment: tiles
+    runs-on: ubuntu-22.04
+    env:
+      DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
+      MERGED_OSM_DATA_FILENAME: ${{ needs.merge-osm-data-files.outputs.MERGED_OSM_DATA_FILENAME }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Login to GHCR
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Pull the planetiler-openmaptiles Docker image
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker pull --quiet ghcr.io/${{ github.repository }}/planetiler-openmaptiles:latest"
+
+      - name: Pull the tippecanoe Docker image
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker pull --quiet ghcr.io/${{ github.repository }}/tippecanoe:latest"
+        
+      - name: Render tiles for each region
+        run: |
+          # Define the SSH command to be executed
+          ssh_command="
+          set -e
+          # Parse the tile-regions file and extract the regions
+          regions=\$(jq -r 'keys[]' ${{ github.event.inputs.tile-regions-id }}.json)
+          # Iterate over each region
+          for region in \${regions[@]}; do
+            # Extract the variables using jq with dot notation
+            min_zoom=\$(jq -r .\$region.minZoom ${{ github.event.inputs.tile-regions-id }}.json)
+            max_zoom=\$(jq -r .\$region.maxZoom ${{ github.event.inputs.tile-regions-id }}.json)
+            bbox=\$(jq -r .\$region.bbox ${{ github.event.inputs.tile-regions-id }}.json)
+            # Print the extracted variables
+            echo \"Region: \$region | Min Zoom: \$min_zoom | Max Zoom: \$max_zoom | Bounding Box: \$bbox\"
+            docker run --rm -e JAVA_TOOL_OPTIONS='-Xmx2g' \
+            -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions/${{ env.MERGED_OSM_DATA_FILENAME }}':/input/${{ env.MERGED_OSM_DATA_FILENAME }} \
+            -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/planetiler-openmaptiles-data/':/data \
+            -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/':/output \
+            ghcr.io/${{ github.repository }}/planetiler-openmaptiles:latest \
+            --force --download --fetch-wikidata \
+            --exclude_layers=building,housenumber --languages=en  \
+            --bounds=\$bbox --minzoom=\$min_zoom --maxzoom=\$max_zoom \
+            --osm-path=/input/${{ env.MERGED_OSM_DATA_FILENAME }} \
+            --output=/output/\${region}-z\${min_zoom}-z\${max_zoom}.mbtiles
+            echo '---'
+          done
+          rm /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions/${{ env.MERGED_OSM_DATA_FILENAME }}"
+          # Execute the SSH command on the remote host
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command "$ssh_command"
 
   cleanup:
     name: Cleanup
