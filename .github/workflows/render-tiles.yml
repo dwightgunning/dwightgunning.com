@@ -152,6 +152,7 @@ jobs:
         run: |
           doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
           mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions
           EOF
 
       - name: Copy scripts and data to the Droplet
@@ -188,6 +189,60 @@ jobs:
           doctl compute ssh ${{ env.DROPLET_ID }} \
             --ssh-key-path ${{ runner.temp }}/id_rsa \
             --ssh-command "pip install requests && REGIONS_FILE=/root/${{ github.event.inputs.tile-regions-id }}.json DOWNLOAD_DIR=/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions/ python3 /root/osm-data-download.py"
+
+  merge-osm-data-files:
+    name: Merge OSM data files
+    needs: [prepare-droplet, download-osm-data]
+    environment: tiles
+    runs-on: ubuntu-22.04
+    env:
+      DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
+    outputs:
+      MERGED_OSM_DATA_FILENAME: ${{ steps.merge-osm-data-files-with-osmium.outputs.MERGED_OSM_DATA_FILENAME }}  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Login to GHCR
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Pull the osmium image
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker pull --quiet ghcr.io/${{ github.repository }}/osmium-tool:latest"
+
+      - name: Merge OSM data files with osmium
+        id: merge-osm-data-files-with-osmium
+        run: |
+          MERGED_OSM_DATA_FILENAME="merged_$(date +%Y-%m-%d)_${{ github.run_number }}.osm.pbf"
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker run \
+            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions:/data \
+            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions:/output \
+            ghcr.io/${{ github.repository }}/osmium-tool:latest \
+            bash -c './wildcard-merge.sh  --overwrite --output=/output/$MERGED_OSM_DATA_FILENAME'"
+          echo "MERGED_OSM_DATA_FILENAME=$MERGED_OSM_DATA_FILENAME" >> $GITHUB_ENV
+          echo "MERGED_OSM_DATA_FILENAME=$MERGED_OSM_DATA_FILENAME" >> $GITHUB_OUTPUT
 
   cleanup:
     name: Cleanup
