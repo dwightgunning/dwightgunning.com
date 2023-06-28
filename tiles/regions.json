@@ -1,0 +1,109 @@
+{
+  "comaPedrosa": {
+    "geofabrikRegions": ["andorra"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "1.423887,42.569363,1.501405,42.610462"
+  },
+  "refugiDeJuclar": {
+    "geofabrikRegions": ["andorra"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "1.660471,42.578908,1.741632,42.620979"
+  },
+  "andorra": {
+    "geofabrikRegions": ["andorra"],
+    "minZoom": 12,
+    "maxZoom": 12,
+    "bbox": "1.412368,42.4276,1.787481,42.65717"
+  },
+  "helsinki": {
+    "geofabrikRegions": ["finland"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "24.840704,60.134949,25.022274,60.198646"
+  },
+  "finland": {
+    "geofabrikRegions": ["finland"],
+    "minZoom": 12,
+    "maxZoom": 12,
+    "bbox": "19.08,59.45,31.59,70.09"
+  },
+  "beaconRock": {
+    "geofabrikRegions": ["us/washington"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "-122.0252342165,45.6256874022,-122.0187601653,45.6293461399"
+  },
+  "hamiltonMountain": {
+    "geofabrikRegions": ["us/washington"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "-122.0345990293,45.629482134,-122.00259188,45.6650468709"
+  },
+  "tableMountain": {
+    "geofabrikRegions": ["us/washington"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "-122.0113940984,45.648052638,-121.9226802917,45.7224018579"
+  },
+  "craterLakeNationalPark": {
+    "geofabrikRegions": ["us/oregon"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "-122.234319,42.870511,-121.975797,43.017533"
+  },
+  "usWestCoast": {
+    "geofabrikRegions": ["us/california", "us/oregon", "us/washington"],
+    "minZoom": 12,
+    "maxZoom": 12,
+    "bbox": "-125.08,32.06,-114.02,49.28"
+  },
+  "goldCoastMarathon": {
+    "geofabrikRegions": ["australia"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "153.382697,-28.101234,153.475395,-27.863986"
+  },
+  "broadbeachWatersCarraraBenowa": {
+    "geofabrikRegions": ["australia"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "153.360245,-28.118381,153.470795,-27.957169"
+  },
+  "lennoxHeadBalina": {
+    "geofabrikRegions": ["australia"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "153.571131,-28.878862,153.614218,-28.772535"
+  },
+  "mountBarneyNationalPark": {
+    "geofabrikRegions": ["australia"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "152.499454,-28.351921,152.898738,-28.173509"
+  },
+  "SouthEastQueenslandAndNorthernNewSouthWales": {
+    "geofabrikRegions": ["australia"],
+    "minZoom": 12,
+    "maxZoom": 12,
+    "bbox": "152.4368,-29.5105,153.8239,-26.48"
+  },
+  "amsterdamDenHaagHaarlemUtrecht": {
+    "geofabrikRegions": ["netherlands"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "4.1698,51.9803,5.2464,52.4698"
+  },
+  "netherlands": {
+    "geofabrikRegions": ["netherlands"],
+    "minZoom": 12,
+    "maxZoom": 12,
+    "bbox": "2.9921,50.6975,7.2768,53.7992"
+  },
+  "planet": {
+    "minZoom": 0,
+    "maxZoom": 11,
+    "bbox": "-180,-85,180,85"
+  }
+}

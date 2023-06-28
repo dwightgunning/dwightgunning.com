@@ -7,14 +7,22 @@ on:
         description: 'Disable the Cleanup job'
         default: 'false'
         required: false
+      tile-regions-id:
+        description: 'Regions mapping file identifier (ie. region mapping filename without `.json` extension); used in pmtiles filename'
+        default: 'regions'
+        required: false
 
 jobs:
-  render-tiles:
-    name: Render Tiles
+  prepare-droplet:
+    name: Prepare Droplet
     runs-on: ubuntu-22.04
     environment: tiles
     env:
       IMAGE_TAG: ${{ github.sha }}
+    outputs:
+      DROPLET_ID: ${{ steps.create-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ steps.create-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ steps.attach-block-storage.outputs.BLOCK_STORAGE_VOLUME_ID }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -47,6 +55,8 @@ jobs:
             )
             DROPLET_IP=$(doctl compute droplet get $DROPLET_ID --no-header --format=PublicIPv4)
             echo "DROPLET_ID=$DROPLET_ID" >> $GITHUB_ENV
+            echo "DROPLET_ID=$DROPLET_ID" >> $GITHUB_OUTPUT
+            echo "DROPLET_IP=$DROPLET_IP" >> $GITHUB_OUTPUT
             echo "DROPLET_IP=$DROPLET_IP" >> $GITHUB_ENV
 
       - name: Assign the droplet to the project
@@ -67,6 +77,7 @@ jobs:
           done
 
       - name: Attach the re-usable Block Storage volume to the Droplet
+        id: attach-block-storage
         run: |
           BLOCK_STORAGE_VOLUMES=$(doctl compute volume list --format "ID,Name,DropletIDs" --no-header)
           BLOCK_STORAGE_VOLUME_ID=""
@@ -93,6 +104,7 @@ jobs:
           echo "Attaching the Block Storage volume to the Droplet"
           doctl compute volume-action attach $BLOCK_STORAGE_VOLUME_ID ${{ env.DROPLET_ID }} --wait
           echo "BLOCK_STORAGE_VOLUME_ID=$BLOCK_STORAGE_VOLUME_ID" >> $GITHUB_ENV
+          echo "BLOCK_STORAGE_VOLUME_ID=$BLOCK_STORAGE_VOLUME_ID" >> $GITHUB_OUTPUT
 
       - name: Verify that Block Storage is mounted within the Droplet
         run: |
@@ -139,10 +151,43 @@ jobs:
       - name: Run SSH script
         run: |
           doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
-          ls /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/
-          touch /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/${{ env.IMAGE_TAG }}_${{ github.run_number }}
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions
           EOF
 
+      - name: Copy scripts and data to the Droplet
+        shell: bash
+        run: |
+          scp ${{ github.workspace }}/tiles/osm-data-download.py root@${{ env.DROPLET_IP }}:/root/osm-data-download.py
+          scp ${{ github.workspace }}/tiles/${{ github.event.inputs.tile-regions-id }}.json root@${{ env.DROPLET_IP }}:/root/${{ github.event.inputs.tile-regions-id }}.json
+
+  download-osm-data:
+    name: Download OSM Data
+    environment: tiles
+    needs: [prepare-droplet]
+    runs-on: ubuntu-22.04
+    env:
+      DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Download the OSM Data
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command "pip install requests && REGIONS_FILE=/root/${{ github.event.inputs.tile-regions-id }}.json DOWNLOAD_DIR=/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions/ python3 /root/osm-data-download.py"
 
   cleanup:
     name: Cleanup
