@@ -325,6 +325,21 @@ jobs:
             --ssh-key-path ${{ runner.temp }}/id_rsa \
             --ssh-command "$ssh_command"
 
+      - name: Combine and convert regional mbtiles to planet pmtiles
+        id: combine-and-convert-mbtiles-to-pmtiles
+        run: |
+          PMTILES_FILENAME="${{ github.event.inputs.tile-regions-id }}_$(date +%Y-%m-%d)_${{ github.run_number }}.pmtiles"
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker run \
+            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/:/input \
+            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/:/output \
+            ghcr.io/${{ github.repository }}/tippecanoe:latest \
+            bash -c 'tile-join --force -o /output/$PMTILES_FILENAME /input/*.mbtiles'"
+          rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/
+          echo "PMTILES_FILENAME=$PMTILES_FILENAME" >> $GITHUB_OUTPUT
+          echo "PMTILES_FILENAME=$PMTILES_FILENAME" >> $GITHUB_ENV
   cleanup:
     name: Cleanup
     needs: [prepare-droplet, download-osm-data, merge-osm-data-files, render-tiles]
