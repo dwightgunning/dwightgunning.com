@@ -1,0 +1,24 @@
+name: SSH Setup
+description: Set up SSH for Digital Ocean
+inputs:
+  ssh-private-key:
+    description: 'The private key for SSH connection'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Store the SSH private key for Digital Ocean
+      shell: bash
+      run: |
+        echo "${{ inputs.ssh-private-key }}" > ${{ runner.temp }}/id_rsa
+        chmod 600 ${{ runner.temp }}/id_rsa
+    - name: Configure SSH
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        echo "Host *" >> ~/.ssh/config
+        echo "  StrictHostKeyChecking=no" >> ~/.ssh/config
+        echo "  IdentityFile ${{ runner.temp }}/id_rsa" >> ~/.ssh/config
+        echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+        echo "  RequestTTY no" >> ~/.ssh/config
+        chmod 600 ~/.ssh/config
