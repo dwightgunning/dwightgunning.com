@@ -1,0 +1,68 @@
+name: Render Tiles
+
+on: workflow_dispatch
+
+jobs:
+  render-tiles:
+    name: Render Tiles
+    runs-on: ubuntu-22.04
+    environment: tiles
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+    steps:
+      - name: Store the SSH private key for Digital Ocean
+        run: |
+          echo "${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}" > ${{ runner.temp }}/id_rsa
+          chmod 600 ${{ runner.temp }}/id_rsa
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "StrictHostKeyChecking=no" >> ~/.ssh/config
+          chmod 600 ~/.ssh/config
+      
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Create Droplet
+        id: create-droplet
+        run: |
+          DROPLET_ID=$( \
+            doctl compute droplet \
+              create \
+              --image ${{ vars.DROPLET_IMAGE }} \
+              --size ${{ vars.DROPLET_SIZE }} \
+              --region ${{ vars.DIGITAL_OCEAN_REGION }} \
+              --enable-monitoring \
+              --ssh-keys ${{ secrets.DIGITAL_OCEAN_SSH_KEY_FINGERPRINT }} \
+              --no-header \
+              --format=ID \
+              --wait \
+              tiles-$IMAGE_TAG \
+            )
+            echo "DROPLET_ID=$DROPLET_ID" >> $GITHUB_ENV
+
+      - name: Assign the droplet to the project
+        run: |
+          doctl projects resources \
+            assign \
+            ${{ secrets.DIGITAL_OCEAN_PROJECT_ID_TILES }} \
+            --resource=do:droplet:${{ env.DROPLET_ID}}
+
+      - name: Poll for SSH connectivity
+        run: |
+          MAX_RETRIES=5
+          SLEEP_TIME=10
+          for i in $(seq 1 $MAX_RETRIES); do doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa && break || sleep $SLEEP_TIME; done
+
+      - name: Run SSH script
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
+          touch ${{ env.IMAGE_TAG }}_${{ github.run_number }}
+          EOF
+
+      - name: Destroy the Droplet
+        run: |
+          doctl compute droplet delete -f ${{ env.DROPLET_ID}}
