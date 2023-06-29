@@ -12,16 +12,18 @@
         <div class="col-md-5">
           <img src="/static/img/dwight_amsterdam_tcr.png" class="img-responsive img-rounded">
         </div>
-        <div class="col-md-6 bio">
+        <div class="col-md-6 about">
           <h1 class="cover-heading">Dwight Gunning</h1>
           <h2 class="cover-subtitle">Tech Adventurer.</h2>
-          <p>I'm all about technology, entrepreneurship and travel.</p>
-          <p>I live in Amsterdam, hack on startup ideas and work as a freelance software engineer.</p>
-          <p>In my spare time I contribute to <a href="http://www.startupweekend.org/events/">Startup Weekend</a>, <a href="https://www.startupdigest.com/digests/amsterdam">Digest</a> & <a href="http://www.startupnext.co">Next</a>.</p>
-          <p>I am currently available for new projects. <a href="{% static '/downloads/Dwight-Gunning_Resume.pdf' %}">Check my resume</a>.</p>
-<!--           <p><a href="http://www.launchsteps.com/">Launch Steps</a> is a hobby where I help people learn to code and bootstrap products.</p>
-          <p>I run, ride, play basketball, listen to music and enjoy hanging with friends.</p> -->
-          <p>Find more / get in touch...</p>
+          <div class="bio">
+            <p>A brief introduction:</p>
+            <p>I'm an Australian software engineer now based in Amsterdam.</p>
+            <p>I spend my time working on <a href="https://www.knownly.net">Knownly</a>, helping build the Amsterdam startup community, and travelling.</p>
+            <p><a href="http://www.launchsteps.com/">Launch Steps</a> is where I help people learn to code and bootstrap products.</p>
+            <p>I am always open to discuss new projects. My resume is available <a href="{% static '/downloads/Dwight-Gunning_Resume.pdf' %}">here</a>.</p>
+          </div>
+        </div>
+        <div class="col-md-12 text-center widgets">
           <div class="social-icons">
               <a href="mailto:dwight@dwightgunning.com" target="blank" rel="me"><i class="fa fa-inbox"></i></a>
               <a href="https://clarity.fm/dwightgunning" target="blank" rel="me"><i class="fa fa-phone-square"></i></a>
@@ -32,10 +34,7 @@
               <a href="http://www.bitbucket.com/dwightgunning" target="blank" rel="me"><i class="fa fa-bitbucket-square"></i></a>
               <a href="https://plus.google.com/+DwightGunning_au" target="blank" rel="me"><i class="fa fa-google-plus-square"></i></a>
               <a href="https://facebook.com/DwightGunning" target="blank" rel="me"><i class="fa fa-facebook-square"></i></a>
-              <a href="{% url '/reading-list.html' %}" rel="me"><i class="fa fa-book"></i></a>
           </div>
-        </div>
-        <div class="col-md-12 text-center widgets">
           <div class="twitter-wrapper">
             <a class="twitter-timeline" href="https://twitter.com/DwightGunning" data-widget-id="597046689279647744">Tweets by @DwightGunning</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -45,6 +44,8 @@
               <img src="http://stackexchange.com/users/flair/97035.png" width="208" height="58" alt="profile for dwightgunning on Stack Exchange, a network of free, community-driven Q&amp;A sites" title="profile for dwightgunning on Stack Exchange, a network of free, community-driven Q&amp;A sites">
             </a>
           </div>
+        </div>
+        <div class="col-md-12 text-center">
           <div class="footer">
             {% include 'partial-footer.html' %}
           </div>
