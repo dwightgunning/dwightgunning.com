@@ -1,0 +1,150 @@
+/*
+ * Globals
+ */
+
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #514E40;
+}
+
+/*
+ * Base structure
+ */
+html,
+body {
+    height: 100%;
+    background-color: #FFE9D6;
+    color: #514E40;
+}
+
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+/*  margin-top: 10px;
+  margin-bottom: 10px;*/
+}
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
+}
+.cover-container {
+  display: table;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Padding for spacing */
+.inner {
+  padding: 5px;
+}
+
+.cover-container .img-responsive {
+    margin: 0 auto;
+}
+
+footer {
+  margin-top: 20px;
+}
+
+.footer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font:  12px/1.25em Tahoma,Verdana,Segoe,sans-serif;
+  letter-spacing: 1.1px;
+  font-weight: 500;
+}
+
+/*
+ * Affix and center
+ */
+
+@media (min-width: 768px) {
+  /* Start the vertical centering */
+  .site-wrapper-inner {
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* Handle the widths */
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .cover-container {
+    width: 720px;
+    text-align: left;
+  }
+}
+
+.bio {
+  text-align: center;
+}
+
+@media (min-width: 992px) {
+  .bio {
+    text-align: left;
+  }
+}
+
+/*
+ * Copy styling
+ */
+.cover-heading {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-family: Tahoma,Verdana,Segoe,sans-serif;;
+    color: #514E40;
+}
+
+.cover-subtitle {
+    margin-top: 0px;
+    margin-bottom: 15px;
+    font-family: Tahoma,Verdana,Segoe,sans-serif;
+    letter-spacing: 1.5px;
+    color: #7E8E86;
+    font-style: italic;
+}
+
+
+.bio p {
+    margin-bottom: 15px;
+    font:  18px/1.125em "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;    
+    line-height: 1.2;
+    letter-spacing: 1.1px;
+}
+
+.bio p > a {
+  text-decoration: underline;
+}
+
+.social-icons {
+  line-height: 38px;
+}
+
+.social-icons .fa {
+    padding-right: 10px;
+    color: #7E8E86;
+    font-size: 1.5em;
+}
+
+.widgets {
+  margin-top: 20px;
+}
+
+/* Twitter widget */
+iframe[id^='twitter-widget-'] {
+  width:100% !important;
+}
+
+.thm-dark {
+  color: #a9a9a9;
+  background-color: #7E8E86 !important;
+}
+/* End Twitter widget */

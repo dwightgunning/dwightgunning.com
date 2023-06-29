@@ -1,0 +1,6 @@
+.DS_Store
+.pyc
+config.json
+.build/
+.deploy/
+static/downloads/
