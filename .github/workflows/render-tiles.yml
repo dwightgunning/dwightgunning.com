@@ -1,0 +1,398 @@
+name: Render Tiles
+
+on: 
+  workflow_dispatch:
+    inputs:
+      disable-cleanup-job:
+        description: 'Disable the Cleanup job'
+        default: 'false'
+        required: false
+      tile-regions-id:
+        description: 'Regions mapping file identifier (ie. region mapping filename without `.json` extension); used in pmtiles filename'
+        default: 'regions'
+        required: false
+
+jobs:
+  prepare-droplet:
+    name: Prepare Droplet
+    runs-on: ubuntu-22.04
+    environment: tiles
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+    outputs:
+      DROPLET_ID: ${{ steps.create-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ steps.create-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ steps.attach-block-storage.outputs.BLOCK_STORAGE_VOLUME_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Create Droplet
+        id: create-droplet
+        run: |
+          DROPLET_ID=$( \
+            doctl compute droplet \
+              create \
+              --image ${{ vars.DROPLET_IMAGE }} \
+              --size ${{ vars.DROPLET_SIZE }} \
+              --region ${{ vars.DIGITAL_OCEAN_REGION }} \
+              --enable-monitoring \
+              --ssh-keys ${{ secrets.DIGITAL_OCEAN_SSH_KEY_FINGERPRINT }} \
+              --no-header \
+              --format=ID \
+              --wait \
+              tiles-$IMAGE_TAG \
+            )
+            DROPLET_IP=$(doctl compute droplet get $DROPLET_ID --no-header --format=PublicIPv4)
+            echo "DROPLET_ID=$DROPLET_ID" >> $GITHUB_ENV
+            echo "DROPLET_ID=$DROPLET_ID" >> $GITHUB_OUTPUT
+            echo "DROPLET_IP=$DROPLET_IP" >> $GITHUB_OUTPUT
+            echo "DROPLET_IP=$DROPLET_IP" >> $GITHUB_ENV
+
+      - name: Assign the droplet to the project
+        run: |
+          doctl projects resources \
+            assign \
+            ${{ secrets.DIGITAL_OCEAN_PROJECT_ID_TILES }} \
+            --resource=do:droplet:${{ env.DROPLET_ID}}
+
+      - name: Poll for SSH connectivity to the Droplet
+        run: |
+          MAX_RETRIES=3
+          SLEEP_TIME=10
+          sleep $SLEEP_TIME  # Sleep before the first attempt
+          for i in $(seq 1 $MAX_RETRIES); do
+            doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa && break
+            sleep $SLEEP_TIME  # Sleep between retries
+          done
+
+      - name: Attach the re-usable Block Storage volume to the Droplet
+        id: attach-block-storage
+        run: |
+          BLOCK_STORAGE_VOLUMES=$(doctl compute volume list --format "ID,Name,DropletIDs" --no-header)
+          BLOCK_STORAGE_VOLUME_ID=""
+          BLOCK_STORAGE_ATTACHED_DROPLET_ID=""
+          while IFS= read -r line; do
+            volume_id=$(echo "$line" | awk '{print $1}')
+            volume_name=$(echo "$line" | awk '{print $2}')
+            attached_droplet_id=$(echo "$line" | awk '{print $3}')
+            if [[ "$volume_name" == "${{ vars.BLOCK_STORAGE_VOLUME_NAME }}" ]]; then
+              BLOCK_STORAGE_VOLUME_ID=$volume_id
+              BLOCK_STORAGE_ATTACHED_DROPLET_ID=$attached_droplet_id
+              echo $BLOCK_STORAGE_ATTACHED_DROPLET_ID
+              break
+            fi
+          done <<< "$BLOCK_STORAGE_VOLUMES"
+          if [[ ! -z "$BLOCK_STORAGE_ATTACHED_DROPLET_ID" ]]; then
+            echo "Block Storage volume is already attached to another Droplet: $BLOCK_STORAGE_ATTACHED_DROPLET_ID"
+            exit 1
+          elif [[ -z "$BLOCK_STORAGE_VOLUME_ID" ]]; then
+            echo "Creating Block Storage volume"
+            BLOCK_STORAGE_VOLUME_ID=$(doctl compute volume create ${{ vars.BLOCK_STORAGE_VOLUME_NAME }} --region ${{ vars.DIGITAL_OCEAN_REGION }} --size ${{ vars.BLOCK_STORAGE_VOLUME_SIZE }} --fs-type ext4 --format ID --no-header)
+            echo "Created Block Storage volume: $BLOCK_STORAGE_VOLUME_ID"
+          fi
+          echo "Attaching the Block Storage volume to the Droplet"
+          doctl compute volume-action attach $BLOCK_STORAGE_VOLUME_ID ${{ env.DROPLET_ID }} --wait
+          echo "BLOCK_STORAGE_VOLUME_ID=$BLOCK_STORAGE_VOLUME_ID" >> $GITHUB_ENV
+          echo "BLOCK_STORAGE_VOLUME_ID=$BLOCK_STORAGE_VOLUME_ID" >> $GITHUB_OUTPUT
+
+      - name: Verify that Block Storage is mounted within the Droplet
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
+          EXPECTED_BLOCK_STORAGE_DEVICE_PATH="/dev/disk/by-id/scsi-0DO_Volume_${{ vars.BLOCK_STORAGE_VOLUME_NAME }}"
+          EXPECTED_MOUNT_POINT="/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}"
+
+          echo "Checking block storage device is attached with the expected device path..."
+          if [ ! -z "\$(lsblk -no MOUNTPOINT $EXPECTED_BLOCK_STORAGE_DEVICE_PATH)" ]; then
+            echo "Block Storage device is attached to the droplet at \$EXPECTED_BLOCK_STORAGE_DEVICE_PATH"
+          else
+            echo "Error: Block Storage device is not properly attached to the Droplet at: \$EXPECTED_BLOCK_STORAGE_DEVICE_PATH"
+            exit 1
+          fi
+
+          echo "Checking mount point..."
+          if ! mount | grep -q \$EXPECTED_MOUNT_POINT; then
+            echo "Mounting the Block Storage volume within the Droplet"
+            mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}
+            mount -o discard,defaults,noatime -t ext4 \$EXPECTED_BLOCK_STORAGE_DEVICE_PATH /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}
+          fi
+
+          MOUNTED_DEVICE_PATH=\$(mount | grep \$EXPECTED_MOUNT_POINT | cut -d' ' -f1)
+          echo "- Mounted device path: \$MOUNTED_DEVICE_PATH"
+          DEVICE_PATH_CANONICAL=\$(readlink -f \$MOUNTED_DEVICE_PATH)
+          echo "- Actual canonical device path: \$DEVICE_PATH_CANONICAL"
+          EXPECTED_DEVICE_PATH_CANONICAL=\$(readlink -f \$MOUNTED_DEVICE_PATH)
+          echo "- Expected canonical device path: \$EXPECTED_DEVICE_PATH_CANONICAL"
+
+          if [ -z "\$DEVICE_PATH_CANONICAL" ] || [ -z "\$EXPECTED_DEVICE_PATH_CANONICAL" ]; then
+            echo "Failed to resolve one or both of the device paths"
+            exit 1
+          elif [ "\$DEVICE_PATH_CANONICAL" != "\$EXPECTED_DEVICE_PATH_CANONICAL" ]; then
+            echo "An unexpected device (\$MOUNTED_DEVICE_PATH) is mounted at \$EXPECTED_MOUNT_POINT"
+            exit 1
+          else
+            echo "The device \$MOUNTED_DEVICE_PATH is mounted at \$EXPECTED_MOUNT_POINT"
+          fi
+
+          ls -la \$EXPECTED_MOUNT_POINT
+          df -h \$EXPECTED_MOUNT_POINT
+          EOF
+
+      - name: Run SSH script
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/planetiler-openmaptiles-data
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}
+          mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}
+          EOF
+
+      - name: Copy scripts and data to the Droplet
+        shell: bash
+        run: |
+          scp ${{ github.workspace }}/tiles/osm-data-download.py root@${{ env.DROPLET_IP }}:/root/osm-data-download.py
+          scp ${{ github.workspace }}/tiles/${{ github.event.inputs.tile-regions-id }}.json root@${{ env.DROPLET_IP }}:/root/${{ github.event.inputs.tile-regions-id }}.json
+
+  download-osm-data:
+    name: Download OSM Data
+    environment: tiles
+    needs: [prepare-droplet]
+    runs-on: ubuntu-22.04
+    env:
+      DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Download the OSM Data
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command "pip install requests && REGIONS_FILE=/root/${{ github.event.inputs.tile-regions-id }}.json DOWNLOAD_DIR=/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions/ python3 /root/osm-data-download.py"
+
+  merge-osm-data-files:
+    name: Merge OSM data files
+    needs: [prepare-droplet, download-osm-data]
+    environment: tiles
+    runs-on: ubuntu-22.04
+    env:
+      DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
+    outputs:
+      MERGED_OSM_DATA_FILENAME: ${{ steps.merge-osm-data-files-with-osmium.outputs.MERGED_OSM_DATA_FILENAME }}  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Login to GHCR
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Pull the osmium image
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker pull --quiet ghcr.io/${{ github.repository }}/osmium-tool:latest"
+
+      - name: Merge OSM data files with osmium
+        id: merge-osm-data-files-with-osmium
+        run: |
+          MERGED_OSM_DATA_FILENAME="merged_$(date +%Y-%m-%d)_${{ github.run_number }}.osm.pbf"
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker run \
+            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions:/data \
+            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions:/output \
+            ghcr.io/${{ github.repository }}/osmium-tool:latest \
+            bash -c './wildcard-merge.sh  --overwrite --output=/output/$MERGED_OSM_DATA_FILENAME'"
+          echo "MERGED_OSM_DATA_FILENAME=$MERGED_OSM_DATA_FILENAME" >> $GITHUB_ENV
+          echo "MERGED_OSM_DATA_FILENAME=$MERGED_OSM_DATA_FILENAME" >> $GITHUB_OUTPUT
+
+  render-tiles:
+    name: Render vector tiles
+    needs: [prepare-droplet, merge-osm-data-files]
+    environment: tiles
+    runs-on: ubuntu-22.04
+    env:
+      DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
+      MERGED_OSM_DATA_FILENAME: ${{ needs.merge-osm-data-files.outputs.MERGED_OSM_DATA_FILENAME }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Login to GHCR
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Pull the planetiler-openmaptiles Docker image
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker pull --quiet ghcr.io/${{ github.repository }}/planetiler-openmaptiles:latest"
+
+      - name: Pull the tippecanoe Docker image
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker pull --quiet ghcr.io/${{ github.repository }}/tippecanoe:latest"
+        
+      - name: Render tiles for each region
+        run: |
+          # Define the SSH command to be executed
+          ssh_command="
+          set -e
+          # Parse the tile-regions file and extract the regions
+          regions=\$(jq -r 'keys[]' ${{ github.event.inputs.tile-regions-id }}.json)
+          # Iterate over each region
+          for region in \${regions[@]}; do
+            # Extract the variables using jq with dot notation
+            min_zoom=\$(jq -r .\$region.minZoom ${{ github.event.inputs.tile-regions-id }}.json)
+            max_zoom=\$(jq -r .\$region.maxZoom ${{ github.event.inputs.tile-regions-id }}.json)
+            bbox=\$(jq -r .\$region.bbox ${{ github.event.inputs.tile-regions-id }}.json)
+            # Print the extracted variables
+            echo \"Region: \$region | Min Zoom: \$min_zoom | Max Zoom: \$max_zoom | Bounding Box: \$bbox\"
+            docker run --rm -e JAVA_TOOL_OPTIONS='-Xmx2g' \
+            -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions/${{ env.MERGED_OSM_DATA_FILENAME }}':/input/${{ env.MERGED_OSM_DATA_FILENAME }} \
+            -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/planetiler-openmaptiles-data/':/data \
+            -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/':/output \
+            ghcr.io/${{ github.repository }}/planetiler-openmaptiles:latest \
+            --force --download --fetch-wikidata \
+            --exclude_layers=building,housenumber --languages=en  \
+            --bounds=\$bbox --minzoom=\$min_zoom --maxzoom=\$max_zoom \
+            --osm-path=/input/${{ env.MERGED_OSM_DATA_FILENAME }} \
+            --output=/output/\${region}-z\${min_zoom}-z\${max_zoom}.mbtiles
+            echo '---'
+          done
+          rm /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions/${{ env.MERGED_OSM_DATA_FILENAME }}"
+          # Execute the SSH command on the remote host
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command "$ssh_command"
+
+      - name: Combine and convert regional mbtiles to planet pmtiles
+        id: combine-and-convert-mbtiles-to-pmtiles
+        run: |
+          PMTILES_FILENAME="${{ github.event.inputs.tile-regions-id }}_$(date +%Y-%m-%d)_${{ github.run_number }}.pmtiles"
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "docker run \
+            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/:/input \
+            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/:/output \
+            ghcr.io/${{ github.repository }}/tippecanoe:latest \
+            bash -c 'tile-join --force -o /output/$PMTILES_FILENAME /input/*.mbtiles'"
+          rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/
+          echo "PMTILES_FILENAME=$PMTILES_FILENAME" >> $GITHUB_OUTPUT
+          echo "PMTILES_FILENAME=$PMTILES_FILENAME" >> $GITHUB_ENV
+
+      - name: Push the pmtiles file to S3
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID }} \
+            --ssh-key-path ${{ runner.temp }}/id_rsa \
+            --ssh-command \
+            "export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} && \
+            export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} && \
+            echo \$AWS_ACCESS_KEY_ID | tail -c 4 && \
+            aws s3 cp --no-progress /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/${{ env.PMTILES_FILENAME }} s3://${{ vars.AWS_S3_BUCKET_ID }}/${{ env.PMTILES_FILENAME }}
+            rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/"
+          echo s3://${{ vars.AWS_S3_BUCKET_ID }}/${{ env.PMTILES_FILENAME }} > ${{ env.PMTILES_FILENAME }}.txt
+  
+      - name: Publish pmtiles file details as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.PMTILES_FILENAME }}.txt
+          path: ${{ env.PMTILES_FILENAME }}.txt
+
+  cleanup:
+    name: Cleanup
+    needs: [prepare-droplet, download-osm-data, merge-osm-data-files, render-tiles]
+    if: (success() || failure()) && ${{ github.event.inputs.disable-cleanup-job }} != 'true'
+    runs-on: ubuntu-22.04
+    env:
+      DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
+      DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
+      BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure SSH
+        uses: ./.github/actions/configure-ssh
+        with:
+          ssh-private-key: ${{ secrets.DIGITAL_OCEAN_SSH_PRIVATE_KEY }}
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Unmount Block Storage file system volume
+        if: always()
+        run: |
+          doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; umount /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }} || true"
+
+      - name: Disconnect the Block Storage volume from the Droplet       
+        if: always()
+        run: |
+          doctl compute volume-action detach ${{ env.BLOCK_STORAGE_VOLUME_ID }} ${{ env.DROPLET_ID}} --wait || true
+
+      - name: Destroy the Droplet
+        if: always()
+        run: |
+          doctl compute droplet delete -f ${{ env.DROPLET_ID}} || true

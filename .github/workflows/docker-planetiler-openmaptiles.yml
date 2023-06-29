@@ -1,0 +1,37 @@
+name: Build And Push planetiler-openmaptiles Docker Image
+
+on: [ workflow_dispatch ]
+
+jobs:
+  build-and-push-image:
+    name: Build and Push Image
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout planetiler-openmaptiles repo
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ github.actor }}/planetiler-openmaptiles
+        path: planetiler-openmaptiles
+
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: 'temurin'
+        cache: 'maven'
+
+    - name: Build and Push Docker Image
+      run: |
+        cd planetiler-openmaptiles &&
+        ./mvnw \
+        --batch-mode \
+        -no-transfer-progress \
+        -Djib.to.auth.username=${{ github.actor }} \
+        -Djib.to.auth.password=${{ secrets.GITHUB_TOKEN }} \
+        -DskipTests \
+        -Pjib-multi-arch \
+        -Dimage=ghcr.io/${{ github.repository }}/planetiler-openmaptiles:latest \
+        package \
+        jib:build
