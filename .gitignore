@@ -4,3 +4,4 @@ config.json
 .build/
 .deploy/
 static/downloads/
+deploy.sh

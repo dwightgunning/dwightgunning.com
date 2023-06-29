@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+'''
+Parameters required:
+- AWS Bucket ID
+- AWS Cloudfront Distribution ID
+'''
+
+cactus build
+aws s3 cp .build s3://${AWS S3 Bucket ID} --recursive
+aws cloudfront create-invalidation --distribution-id ${AWS Cloudfront Distribution ID} --paths /

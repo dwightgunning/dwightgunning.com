@@ -4,12 +4,22 @@
 
 ## Deploying to S3:
 
-First deploy the build to the S3 bucket `www.dwightgunning.com`.
+_See: `deploy.sh.template`
+
+First build the project:
+
 ```(shell)
-cactus deploy
+cactus build
 ```
 
-Then issue a CDN invalidation
+Then, deploy the build to the S3 bucket:
+
 ```(shell)
-aws cloudfront create-invalidation --distribution-id <<distribution id>> --paths /
+aws s3 cp .build s3://${AWS S3 Bucket ID} --recursive
+```
+
+Finally, issue a CDN invalidation:
+
+```(shell)
+aws cloudfront create-invalidation --distribution-id ${AWS Cloudfront Distribution ID} --paths /
 ```
