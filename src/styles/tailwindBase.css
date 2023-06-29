@@ -1,0 +1,103 @@
+/* The integration's default injected base.css file */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  /* Native elements */
+  
+  body {
+    /* Duplicates: .surface-bg, .text-primary */
+    @apply bg-armadillo-50 dark:bg-armadillo-900 text-armadillo-900 dark:text-fern-50;
+  }
+
+  /* Surface */
+
+  .surface-bg {
+    @apply bg-armadillo-50 dark:bg-armadillo-900;
+  }
+
+  .surface-low {
+    @apply bg-fern-50 dark:bg-fern-700;
+  }
+
+  .surface-high {
+    @apply bg-fern-100 dark:bg-fern-800;
+  }
+
+  .surface-accent {
+    @apply bg-amber-200 dark:bg-amber-800;
+  }
+
+  /* Text */
+
+  .text-primary {
+    @apply text-armadillo-900 dark:text-armadillo-50;
+  }
+
+  .text-secondary {
+    @apply text-armadillo-700 dark:text-armadillo-200;
+  }
+
+  .text-accent {
+    @apply text-amber-800 dark:text-amber-200;
+  }
+
+  .text-success {
+    @apply text-green-800 dark:text-green-300;
+  }
+
+  .text-warning {
+    @apply text-yellow-800 dark:text-yellow-300;
+  }
+
+  .text-error {
+    @apply text-red-800 dark:text-red-300;
+  }
+
+  a, .interactive {
+    @apply text-stone-700 dark:text-stone-200 underline;
+  }
+  
+  a:hover, .interactive:hover {
+    @apply text-stone-800 dark:text-stone-100;
+  }
+
+  .interactive-accent {
+    @apply text-amber-800 dark:text-amber-200;
+  }
+
+  .interactive-accent:hover {
+    @apply text-amber-900 dark:text-amber-100;
+  }
+
+  /* Separator */
+
+  hr, .separator {
+    @apply h-px my-4 bg-gray-400 border-0 dark:bg-gray-700;
+  }
+
+  /* Lobotomized Owl Spacing */
+
+  .o-0 > * + * { margin-top: 0; }
+  .o-1 > * + * { margin-top: 0.25rem; }
+  .o-2 > * + * { margin-top: 0.5rem; }
+  .o-3 > * + * { margin-top: 0.75rem; }
+  .o-4 > * + * { margin-top: 1rem; }
+  .o-5 > * + * { margin-top: 1.25rem; }
+  .o-6 > * + * { margin-top: 1.5rem; }
+  .o-8 > * + * { margin-top: 2rem; }
+  .o-10 > * + * { margin-top: 2.5rem; }
+  .o-12 > * + * { margin-top: 3rem; }
+  .o-16 > * + * { margin-top: 4rem; }
+  .o-20 > * + * { margin-top: 5rem; }
+  .o-24 > * + * { margin-top: 6rem; }
+  .o-32 > * + * { margin-top: 8rem; }
+  .o-40 > * + * { margin-top: 10rem; }
+  .o-48 > * + * { margin-top: 12rem; }
+  .o-56 > * + * { margin-top: 14rem; }
+  .o-64 > * + * { margin-top: 16rem; }
+  .o-px > * + * { margin-top: 1px; }
+
+}

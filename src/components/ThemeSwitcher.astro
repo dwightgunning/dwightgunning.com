@@ -1,0 +1,74 @@
+---
+import Sun from 'astro-heroicons/outline/Sun.astro';
+import Moon from 'astro-heroicons/outline/Moon.astro';
+---
+
+<script is:inline>
+  if (typeof localStorage !== 'undefined' && localStorage.getItem('colorTheme')) {
+    const currentTheme = localStorage.getItem('colorTheme');
+    document.documentElement.setAttribute('color-theme', currentTheme);
+    if (currentTheme === 'light') {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    }
+  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('color-theme', 'dark');
+    document.documentElement.classList.add('dark');
+    if (typeof localStorage !== 'undefined') localStorage.setItem('colorTheme', 'dark');
+  } else {
+    document.documentElement.setAttribute('color-theme', 'light');
+    document.documentElement.classList.remove('dark');
+    if (typeof localStorage !== 'undefined') localStorage.setItem('colorTheme', 'light');
+  }
+</script>
+
+<style>
+  #header__sun,
+  #header__moon {
+    display: none;
+  }
+  html[color-theme='dark'] #header__moon {
+    display: block;
+  }
+  html[color-theme='light'] #header__sun {
+    display: block;
+  }
+</style>
+
+<div class="pointer-events-auto">
+  <button
+    id="header__sun"
+    onclick="setColorTheme('dark')"
+    title="Switch to dark theme"
+    class="object-center object-contain rounded-full h-9 w-9 bg-fern-100 dark:bg-fern-900 p-0"
+  >
+    <Sun class="h-6 w-6 m-auto" />
+  </button>
+  <button
+    id="header__moon"
+    onclick="setColorTheme('light')"
+    title="Switch to light theme"
+    class="object-center object-contain rounded-full h-9 w-9 bg-fern-300 dark:bg-fern-800 p-0"
+  >
+    <Moon class="h-6 w-6 m-auto" />
+  </button>
+</div>
+<script>
+  window.setColorTheme = (theme: string) => {
+    switch (theme) {
+      case 'dark':
+        document.documentElement.classList.add('dark');
+        document.documentElement.setAttribute('color-theme', 'dark');
+        if (typeof localStorage !== undefined) localStorage.colorTheme = 'dark';
+        break;
+      case 'light':
+        document.documentElement.classList.remove('dark');
+        document.documentElement.setAttribute('color-theme', 'light');
+        if (typeof localStorage !== undefined) localStorage.colorTheme = 'light';
+        break;
+    }
+  };
+</script>

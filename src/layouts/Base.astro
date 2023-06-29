@@ -1,0 +1,31 @@
+---
+import '../styles/tailwindBase.css';
+
+export interface Props {
+  bodyClass?: string;
+  windowTitle: string;
+  metaTitle: string;
+  metaDescription: string;
+}
+
+const { bodyClass, windowTitle, metaTitle, metaDescription } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta name="title" content={metaTitle} />
+    <meta name="description" content={metaDescription} />
+    <meta name="author" content="Dwight Gunning" />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <title>{`${windowTitle} | dwightgunning.com`}</title>
+  </head>
+  <body class={`sm:overflow-y-scroll px-2 pt-2 pb-4 ${bodyClass}`}>
+    <slot />
+  </body>
+</html>

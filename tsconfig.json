@@ -1,3 +1,18 @@
 {
-  "extends": "astro/tsconfigs/strict"
+  "extends": "astro/tsconfigs/strictest",
+  "parserOptions": {
+    "extraFileExtensions": [".astro"]
+  },
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["src/assets/*"],
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@pages/*": ["src/pages/*"],
+      "@style/*": ["src/style/*"],
+      "@vendor/*": ["src/vendor/*"]
+    },
+    "types": ["vite/client"]
+  }
 }

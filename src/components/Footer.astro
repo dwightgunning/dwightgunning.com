@@ -1,0 +1,30 @@
+---
+import { TNavLink, navLinks } from '../lib/navLinks';
+
+export type Props = {
+  showFooterNav: boolean;
+};
+
+const { showFooterNav } = Astro.props;
+---
+
+<footer class="pt-10 mt-32 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-6">
+  {
+    showFooterNav && (
+      <div class="flex gap-2 sm:gap-6 text-sm font-medium">
+        {navLinks
+          .filter((navLink) => navLink.locations.includes('footer'))
+          .map(({ href, text }: TNavLink) => (
+            <a href={href} class="transition">
+              {text}
+            </a>
+          ))}
+      </div>
+    )
+  }
+  <div class="text-secondary text-sm font-light whitespace-nowrap">
+    Copyright &copy; 2005-{new Date().getFullYear().toString().slice(2)}. <a class="underline outline-offset-4" href="/"
+      >Dwight Gunning</a
+    >.
+  </div>
+</footer>

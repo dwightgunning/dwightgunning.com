@@ -1,0 +1,139 @@
+---
+import StandardLayout from '@layouts/Standard.astro';
+import ListItem from '@components/pages/about/ListItem.astro';
+import AboutSurface from '@components/pages/about/AboutSurface.astro';
+
+const workOnSurfacesData = [
+  { heading: 'Roles', details: 'Senior Engineer, Tech Lead, Engineering Manager' },
+  { heading: 'Industries', details: 'Developer Recruitment, EdTech, Finance, Transport' },
+];
+
+const workWithSurfacesData = [
+  { heading: 'Languages', details: 'CSS, HTML, JavaScript, Python, SQL, TypeScript' },
+  { heading: 'Frameworks', details: 'Astro, Django, Express, FastAPI, MUI, Next.js, React, Strapi, Tailwind' },
+  { heading: 'Self-hosted Services', details: 'Airflow, ListMonk, Postgres, RabbitMQ, Redis, Strapi' },
+  {
+    heading: 'Cloud APIs & Services',
+    details: 'DataDog, Heap, Mailchimp, Rollbar, Segment, SendGrid, Sentry, Stripe, Twilio',
+  },
+
+  { heading: 'Containerization & Micro-services', details: 'Docker, Helm, Kubernetes, Nginx, Traefik' },
+  {
+    heading: 'Infra / Networking / PAAS',
+    details: 'Amazon Web Services, Clouldflare, Digital Ocean, Heroku, Vercel',
+  },
+];
+
+const desktopSoftwareListItemsData = [
+  { heading: 'Alfred', description: 'The Workflows and Snippets features are automation superpowers.' },
+  {
+    heading: 'Spectacles',
+    description: "Great for focus and speed by keeping all the apps you're working with right in view.",
+  },
+  { heading: 'Flux', description: 'Great when working at night with teammates across timezones.' },
+  {
+    heading: 'KeepassXC',
+    description: 'Secure and simple password manager with OSS apps for Linux/macOS/iOS/Android.',
+  },
+  {
+    heading: 'Todoist',
+    description:
+      "I've tried dozens of to-do apps and this is the one I think best maps to the Getting Things Done method.",
+  },
+  {
+    heading: 'Firefox Developer Edition',
+    description: 'I love how this special version puts developer tools and features front and center.',
+  },
+  {
+    heading: 'Sublime Editor',
+    description:
+      "No longer my first-choice coding editor but I'm always jumping to Sublime for scratch files and wrangly text, json etc.",
+  },
+  {
+    heading: 'Sublime Merge',
+    description:
+      "Great for visual diffs and brings some super handy branch/commit wrangling shortcuts. I've also found popular IDE plugins for git to be a little distracting and that they seem to slow things down; keeping git off to the side avoids that.",
+  },
+  { heading: 'VS Code', description: 'Fast, feature-rich and free.' },
+  { heading: 'Wezterm', description: 'Lightening fast.' },
+];
+
+const hardwareListItemsData = [
+  {
+    heading: 'Macbook Pro laptops',
+    description:
+      "I've been using MBPs since ~2010. Each time it's an upgrade is due I've thought long and hard about switching to a different manufacturer and running Linux. So far I've always stuck with Apple for the build quality and switching cost.",
+  },
+  {
+    heading: 'LG monitors',
+    description:
+      "Just reliable panels with good-looking bezels. I'm currently on a 27\" UHD 4K model that's all I could need.",
+  },
+  {
+    heading: 'Logitech MX Anywhere 3 mice',
+    description:
+      "Just love these little things. Comfortable, a solid build, and compact for travelling. Bluetooth enabled so there's dongle to lose.",
+  },
+  {
+    heading: 'Apple wireless keyboards',
+    description:
+      'The only decision-making factor here is that the dimensions are identical to the laptop. This means a seamless switch between the external keyboard (at home or office) and the laptop (on planes and in cafes).',
+  },
+  {
+    heading: 'Fully standing desks',
+    description:
+      'I brought the frame only and added a Ikea tabletop to get the smallest footprint possible. Adding a set of rolling castor wheels makes it easy to shift around too. Highly recommended.',
+  },
+  {
+    heading: 'Herman Miller Aeron chairs',
+    description:
+      "It's hard to fault the comfort and adjustability. They're made to last, are available everywhere. That's means I probably never have to think about chairs again.",
+  },
+];
+---
+
+<StandardLayout
+  windowTitle="About Me"
+  metaTitle="About Me: Dwight Gunning"
+  metaDescription="More info about my career and interests as well as some genuine recommendations"
+  pageHeading="About Me"
+  showFooterNav={true}
+>
+  <p class="text-lg">A little more about my career, interests, and things I often recommend.</p>
+  <div class="rounded flex flex-col gap-2 md:gap-4">
+    <h2 class="text-2xl">What I like to work on</h2>
+    <div class="grid md:grid-cols-2 gap-2">
+      {workOnSurfacesData.map((item) => <AboutSurface heading={item.heading} details={item.details} />)}
+    </div>
+  </div>
+  <div class="rounded flex flex-col gap-4">
+    <h2 class="text-2xl">What I like to work with</h2>
+    <div class="grid md:grid-cols-3 gap-2 md:gap-4">
+      {workWithSurfacesData.map((item) => <AboutSurface heading={item.heading} details={item.details} />)}
+    </div>
+  </div>
+  <h2 class="text-2xl">What I like to use</h2>
+  <div class="flex flex-col gap-4">
+    <h4 class="text-xl">Desktop Software</h4>
+    <p>
+      There's really only a few apps that I use daily. For these, I always try to purchase a premium plan or support the
+      OSS maintainers. I'd encourage all software engineers to likewise so we can all continue to benefit from these
+      awesome apps.
+    </p>
+    <div class="rounded surface-low p-6 sm:flex-row gap-2 w-full flex-wrap">
+      <ul class="o-2">
+        {desktopSoftwareListItemsData.map((item) => <ListItem heading={item.heading} description={item.description} />)}
+      </ul>
+    </div>
+    <h4 class="text-xl">Hardware</h4>
+    <p>
+      I travel and work from quite a few locations, often for months at a time. My choices optimise for convience while
+      travelling, or being able to put together a similar setup when I get where I need to be.
+    </p>
+    <div class="rounded surface-low p-6 gap-2">
+      <ul class="o-2">
+        {hardwareListItemsData.map((item) => <ListItem heading={item.heading} description={item.description} />)}
+      </ul>
+    </div>
+  </div>
+</StandardLayout>

@@ -1,0 +1,24 @@
+---
+import StandardLayout from '@layouts/Standard.astro';
+import ActivitySummaryCard from '@components/pages/outdoors/ActivitySummaryCard.astro';
+import getOutdoorPagesCollection from 'src/lib/getOutdoorPagesCollection';
+
+const allOutdoorsPages = await getOutdoorPagesCollection();
+---
+
+<StandardLayout
+  windowTitle="Outdoors"
+  metaTitle="Outdoor activities"
+  metaDescription="A collection of fun and memorable outdoor activities"
+  pageHeading="Outdoors"
+  showFooterNav={true}
+>
+  <p class="text-xl">Memorable runs, bike rides, hikes, and campsites.</p>
+  <p>
+    Activities on this page are ordered by date. You may also like to browse by <a
+      class="interactive"
+      href="/outdoors/tags/">tag</a
+    >.
+  </p>
+  {allOutdoorsPages.map((outdoorsPage) => <ActivitySummaryCard outdoorsPage={outdoorsPage} />)}
+</StandardLayout>

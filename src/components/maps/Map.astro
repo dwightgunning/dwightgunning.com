@@ -1,0 +1,113 @@
+---
+type Props = {
+  className: string;
+  mapCenterDefault: string;
+  mapId: string;
+  mapZoomDefault: number;
+  tracks: string;
+};
+
+const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.props;
+---
+
+<astro-map
+  class={className}
+  data-tracks={tracks}
+  data-map-center-default={mapCenterDefault}
+  data-map-id={mapId}
+  data-map-zoom-default={mapZoomDefault}
+>
+  <div id={mapId} class="rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200 w-full h-full"></div>
+  <script>
+    import 'maplibre-gl/dist/maplibre-gl.css';
+    import * as VectorTextProtocol from '@vendor/maplibre-gl-vector-text-protocol.es';
+    import maplibregl from 'maplibre-gl';
+    import type { LngLatLike } from 'maplibre-gl';
+
+    import * as pmtiles from 'pmtiles';
+
+    let osmLibertyStyle: string;
+    if (import.meta.env.MODE === 'production' && import.meta.env.SITE === 'https://www.dwightgunning.com') {
+      osmLibertyStyle = '/assets/maps/osm-liberty.style.prod.json';
+    } else if (import.meta.env.SITE === 'https://staging.dwightgunning.com') {
+      osmLibertyStyle = '/assets/maps/osm-liberty.style.staging.json';
+    } else {
+      osmLibertyStyle = '/assets/maps/osm-liberty.style.dev.json';
+    }
+
+    class AstroMap extends HTMLElement {
+      constructor() {
+        super();
+        maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
+        VectorTextProtocol.addProtocols(maplibregl);
+
+        const mapCenterDefault: LngLatLike = this.dataset.mapCenterDefault
+          ? JSON.parse(this.dataset.mapCenterDefault)
+          : null;
+        const mapId = this.dataset.mapId;
+        const mapZoomDefault: number = this.dataset.mapZoomDefault
+          ? parseFloat(this.dataset.mapZoomDefault) || 10.0
+          : 10.0;
+        const tracks = this.dataset.tracks ? JSON.parse(this.dataset.tracks) : null;
+
+        if ([mapCenterDefault, mapId, mapZoomDefault].some((v) => v == null)) {
+          throw new Error('mapCenterDefault, mapId, mapZoomDefault are required');
+        }
+
+        const map = new maplibregl.Map({
+          center: mapCenterDefault,
+          container: mapId as string,
+          maxZoom: 20,
+          style: osmLibertyStyle,
+          zoom: mapZoomDefault,
+        });
+        map.addControl(new maplibregl.NavigationControl({}));
+        map.addControl(new maplibregl.FullscreenControl({}));
+
+        map.on('load', () => {
+          const layers = map.getStyle().layers;
+          // Find the index of the first symbol layer in the map style
+          let firstSymbolId: string | undefined;
+
+          for (var i = 0; i < layers?.length; i++) {
+            if (layers[i]?.type === 'symbol' && layers[i]?.id) {
+              firstSymbolId = layers[i]?.id;
+              break;
+            }
+          }
+          tracks.map((track: string) => {
+            let gpxLink;
+            if (import.meta.env.MODE === 'production' && import.meta.env.SITE === 'https://www.dwightgunning.com') {
+              gpxLink = `gpx://https://www.dwightgunning.com${track}`;
+            } else if (import.meta.env.SITE === 'https://staging.dwightgunning.com') {
+              gpxLink = `gpx://https://staging.dwightgunning.com${track}`;
+            } else {
+              gpxLink = `gpx://http://localhost:3000${track}`;
+            }
+
+            map.addSource(track, {
+              type: 'geojson',
+              data: gpxLink,
+            });
+
+            map.addLayer(
+              {
+                id: track,
+                type: 'line',
+                source: track,
+                paint: {
+                  'line-color': '#12bfa7',
+                  'line-width': 4,
+                },
+                layout: { visibility: 'visible' },
+              },
+              firstSymbolId
+            );
+          });
+        });
+      }
+    }
+
+    customElements.define('astro-map', AstroMap);
+  </script>
+</astro-map>

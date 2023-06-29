@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import toLocalTzISOString from 'src/lib/toLocalTzISOString';
+
+type Props = {
+  outdoorsPage: CollectionEntry<'outdoors'>;
+};
+const { outdoorsPage } = Astro.props;
+---
+
+<div class="grid grid-cols-3 gap-2 text-sm">
+  <div class="text-left overflow-hidden">
+    <span class="font-semibold">Activity:</span>{' '}
+    <span class="whitespace-nowrap"
+      >{outdoorsPage.data.activityDate && toLocalTzISOString(outdoorsPage.data.activityDate)}</span
+    >
+  </div>
+  {
+    outdoorsPage.data.publishedAt && (
+      <div class="text-center overflow-hidden">
+        <span class="font-semibold">Published:</span>{' '}
+        <span class="whitespace-nowrap">
+          {outdoorsPage.data.publishedAt && toLocalTzISOString(outdoorsPage.data.publishedAt)}
+        </span>
+      </div>
+    )
+  }
+  {
+    outdoorsPage.data.updatedAt && (
+      <div class="text-right overflow-hidden">
+        <span class="font-semibold">Updated:</span>{' '}
+        <span class="whitespace-nowrap">
+          {outdoorsPage.data.updatedAt && toLocalTzISOString(outdoorsPage.data.updatedAt)}
+        </span>
+      </div>
+    )
+  }
+</div>

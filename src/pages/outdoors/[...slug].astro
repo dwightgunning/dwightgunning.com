@@ -1,0 +1,56 @@
+---
+import type { InferGetStaticPropsType } from 'astro';
+
+import StandardLayout from '@layouts/Standard.astro';
+import Map from '@components/maps/Map.astro';
+import ActivityTagPill from '@components/pages/outdoors/ActivityTagPill.astro';
+import getOutdoorPagesCollection from 'src/lib/getOutdoorPagesCollection';
+import ActivityDateLabels from '@components/pages/outdoors/ActivityDateLabels.astro';
+
+export const getStaticPaths = async () =>
+  (await getOutdoorPagesCollection()).map((outdoorsPage) => ({
+    params: { slug: outdoorsPage.slug },
+    props: { outdoorsPage },
+  }));
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { outdoorsPage } = Astro.props;
+const { Content } = await outdoorsPage.render();
+---
+
+<StandardLayout
+  windowTitle={`${outdoorsPage.data.title} | Outdoors`}
+  metaTitle={outdoorsPage.data.title}
+  metaDescription={outdoorsPage.data.introduction}
+  pageHeading={outdoorsPage.data.title}
+  showFooterNav={true}
+>
+  <h3 class="text-2xl text-accent">{outdoorsPage.data.type}</h3>
+  <div class="flex flex-row gap-2">
+    {outdoorsPage.data.tags.map((tag: string) => <ActivityTagPill tag={tag} />)}
+  </div>
+  <ActivityDateLabels outdoorsPage={outdoorsPage} />
+  <div class="surface-low rounded-lg p-2">
+    <p class="text-md">{outdoorsPage.data.introduction}</p>
+  </div>
+  <Map
+    className="w-full h-[300px]"
+    mapCenterDefault={JSON.stringify(outdoorsPage.data.map.fullsize.mapCenterDefault)}
+    mapId={`${outdoorsPage.data.label}-map`}
+    mapZoomDefault={outdoorsPage.data.map.fullsize.mapZoomDefault}
+    tracks={JSON.stringify(outdoorsPage.data.map.tracks)}
+  />
+  <Content />
+  <hr />
+  <div class="flex flex-row justify-between text-secondary">
+    <div>Go to: <a class="interactive-accent" href="/outdoors/">Outdoors</a></div>
+    <div>Go to: <button id="scrollToTop" class="underline interactive-accent" type="button">top of page</button></div>
+  </div>
+</StandardLayout>
+
+<script>
+  document
+    .querySelector('button#scrollToTop')
+    ?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>

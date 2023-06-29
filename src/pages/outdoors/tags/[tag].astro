@@ -1,0 +1,35 @@
+---
+import type { InferGetStaticPropsType } from 'astro';
+
+import StandardLayout from '@layouts/Standard.astro';
+import ActivitySummaryCard from '@components/pages/outdoors/ActivitySummaryCard.astro';
+import getOutdoorPagesCollection from 'src/lib/getOutdoorPagesCollection';
+
+export async function getStaticPaths() {
+  const allOutdoorsPages = await getOutdoorPagesCollection();
+  const uniqueTags: string[] = [...new Set(allOutdoorsPages.map((outdoorsPage) => outdoorsPage.data.tags).flat())];
+  return uniqueTags.map((tag: string) => {
+    const filteredOutdoorsPages = allOutdoorsPages.filter((outdoorsPage) => outdoorsPage.data.tags.includes(tag));
+    return {
+      params: { tag },
+      props: { outdoorsPages: filteredOutdoorsPages },
+    };
+  });
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { tag } = Astro.params;
+const { outdoorsPages } = Astro.props;
+---
+
+<StandardLayout
+  windowTitle={tag ? `${tag} tag` : ''}
+  metaTitle={`Outdoor activities tagged: ${tag}`}
+  metaDescription={`All the Outdoor activities tagged with ${tag}`}
+  pageHeading={tag ? `Tag: ${tag} ` : ''}
+  showFooterNav={true}
+>
+  <p class="text-lg">Outdoor activities tagged with <span class="text-accent">{tag}</span>.</p>
+  {outdoorsPages.map((outdoorsPage) => <ActivitySummaryCard outdoorsPage={outdoorsPage} />)}
+</StandardLayout>

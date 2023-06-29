@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+
+import dwightIconImage from '@assets/images/dwight-icon-2.jpg';
+import { navLinks } from '../lib/navLinks';
+import type { TNavLink } from '../lib/navLinks';
+import ThemeSwitcher from './ThemeSwitcher.astro';
+---
+
+<header class="flex justify-items-stretch justify-center">
+  <div class="flex content-center items-center gap-4 lg:gap-16 rounded-lg surface-low p-2 mx-2">
+    <a href="/">
+      <Image
+        alt="Home"
+        class="object-cover object-center rounded-full h-9 w-9 p-0"
+        src={dwightIconImage}
+        width={36}
+        height={36}
+      />
+    </a>
+    <nav>
+      <ul class="flex content-center gap-4 lg:gap-16">
+        {
+          navLinks
+            .filter((navLink) => navLink.locations.includes('header'))
+            .map(({ href, text }: TNavLink) => (
+              <li>
+                <a class="no-underline hover:no-underline" href={href}>
+                  {text}
+                </a>
+              </li>
+            ))
+        }
+      </ul>
+    </nav>
+    <ThemeSwitcher />
+  </div>
+</header>

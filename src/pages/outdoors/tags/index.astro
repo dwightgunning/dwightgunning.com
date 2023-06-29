@@ -1,0 +1,25 @@
+---
+import StandardLayout from '@layouts/Standard.astro';
+import getOutdoorPagesCollection from 'src/lib/getOutdoorPagesCollection';
+
+const allOutdoorsPages = await getOutdoorPagesCollection();
+const uniqueTags = [...new Set(allOutdoorsPages.map((outdoorsPage) => outdoorsPage.data.tags).flat())];
+---
+
+<StandardLayout
+  windowTitle="Outdoor tags | dwightgunning.com"
+  metaTitle={`Outdoor activities by tag`}
+  metaDescription={`A list of tags through which the Outdoor activities can be browsed`}
+  pageHeading="Tags"
+  showFooterNav={true}
+>
+  <div>
+    {
+      uniqueTags.map((tag) => (
+        <p>
+          <a href={`/outdoors/tags/${tag}/`}>{tag}</a>
+        </p>
+      ))
+    }
+  </div>
+</StandardLayout>

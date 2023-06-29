@@ -1,0 +1,31 @@
+---
+import BaseLayout from '@layouts/Base.astro';
+import Footer from '@components/Footer.astro';
+import Header from '@components/Header.astro';
+
+export interface Props {
+  windowTitle: string;
+  metaTitle: string;
+  metaDescription: string;
+  pageHeading?: string;
+  showFooterNav: boolean;
+}
+
+const { pageHeading, metaDescription, metaTitle, windowTitle, showFooterNav } = Astro.props;
+---
+
+<BaseLayout
+  windowTitle={windowTitle}
+  metaTitle={metaTitle}
+  metaDescription={metaDescription}
+  bodyClass="flex flex-col min-h-screen max-w-screen-md m-auto"
+>
+  <Header />
+  <main class="bg-pampas-200 mt-2">
+    <div class="flex flex-col gap-4 max-w-screen-lg m-auto justify-content bg-pampas-200">
+      <h1 class="mt-8 text-4xl">{pageHeading}</h1>
+      <slot />
+    </div>
+  </main>
+  <Footer showFooterNav={showFooterNav} />
+</BaseLayout>

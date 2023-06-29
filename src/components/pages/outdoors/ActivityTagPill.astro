@@ -1,0 +1,7 @@
+---
+const { tag } = Astro.props;
+---
+
+<div class="surface-accent text-accent rounded-lg text-xs py-1 px-2">
+  <a class="text-accent" href={`/outdoors/tags/${tag}/`}>{tag}</a>
+</div>
