@@ -315,7 +315,7 @@ jobs:
             bbox=\$(jq -r .\$region.bbox ${{ github.event.inputs.tile-regions-id }}.json)
             # Print the extracted variables
             echo \"Region: \$region | Min Zoom: \$min_zoom | Max Zoom: \$max_zoom | Bounding Box: \$bbox\"
-            docker run --rm -e JAVA_TOOL_OPTIONS='-Xmx2g' \
+            docker run --rm -e JAVA_TOOL_OPTIONS='-Xmx${{ vars.JAVA_TOOL_OPTIONS_MAX_HEAP_SIZE }}' \
             -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions/${{ env.MERGED_OSM_DATA_FILENAME }}':/input/${{ env.MERGED_OSM_DATA_FILENAME }} \
             -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/planetiler-openmaptiles-data/':/data \
             -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/':/output \
