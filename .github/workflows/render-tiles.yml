@@ -341,11 +341,11 @@ jobs:
             --ssh-key-path ${{ runner.temp }}/id_rsa \
             --ssh-command \
             "docker run \
-            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/:/input \
-            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/:/output \
-            ghcr.io/${{ github.repository }}/tippecanoe:latest \
-            bash -c 'tile-join --force -o /output/$PMTILES_FILENAME /input/*.mbtiles'"
-          rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/
+              -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/:/input \
+              -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/:/output \
+              ghcr.io/${{ github.repository }}/tippecanoe:latest \
+              bash -c 'tile-join --force -o /output/$PMTILES_FILENAME /input/*.mbtiles' && \
+              rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/"
           echo "PMTILES_FILENAME=$PMTILES_FILENAME" >> $GITHUB_OUTPUT
           echo "PMTILES_FILENAME=$PMTILES_FILENAME" >> $GITHUB_ENV
 
