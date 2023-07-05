@@ -72,10 +72,18 @@ jobs:
           SLEEP_TIME=10
           sleep $SLEEP_TIME  # Sleep before the first attempt
           for i in $(seq 1 $MAX_RETRIES); do
-            doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa && break
+            if ssh root@${{ env.DROPLET_IP}} 'exit'; then
+              echo "SSH connection successful."
+              break
+            fi
             sleep $SLEEP_TIME  # Sleep between retries
           done
-
+          # Check if maximum retries reached without successful connection and fail the step
+          if [ $i -eq $MAX_RETRIES ]; then
+            echo "Maximum retries reached without successful SSH connection. Exiting..."
+            exit 1
+          fi
+      
       - name: Attach the re-usable Block Storage volume to the Droplet
         id: attach-block-storage
         run: |
