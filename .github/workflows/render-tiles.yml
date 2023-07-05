@@ -68,7 +68,7 @@ jobs:
 
       - name: Poll for SSH connectivity to the Droplet
         run: |
-          MAX_RETRIES=3
+          MAX_RETRIES=6
           SLEEP_TIME=10
           sleep $SLEEP_TIME  # Sleep before the first attempt
           for i in $(seq 1 $MAX_RETRIES); do
