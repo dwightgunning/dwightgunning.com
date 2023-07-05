@@ -169,8 +169,10 @@ jobs:
       - name: Copy scripts and data to the Droplet
         shell: bash
         run: |
-          scp ${{ github.workspace }}/tiles/osm-data-download.py root@${{ env.DROPLET_IP }}:/root/osm-data-download.py
-          scp ${{ github.workspace }}/tiles/${{ github.event.inputs.tile-regions-id }}.json root@${{ env.DROPLET_IP }}:/root/${{ github.event.inputs.tile-regions-id }}.json
+          scp \
+          ${{ github.workspace }}/tiles/osm-data-download.py \
+          ${{ github.workspace }}/tiles/${{ github.event.inputs.tile-regions-id }}.json \
+          root@${{ env.DROPLET_IP }}:/root/
 
   download-osm-data:
     name: Download OSM Data
