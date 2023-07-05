@@ -65,13 +65,36 @@ Tools:
 
 ## Deployment
 
-### Deploy to S3 (excluding OpenMapTiles)
+### Setup
 
+#### Digital Ocean
+
+- Personal Access Token. Enables the `doctl` command to authenticate and perform actions with Digital Ocean resources. Setup [here](https://cloud.digitalocean.com/account/api/tokens).
+- SSH key pair. Enables setup of SSH Key-Based Authentication on new Droplets. Setup [here](https://cloud.digitalocean.com/account/security).
+- Project identifier. Identifiable via `doctl projects list`.
+
+##### References
+
+- [Digital Ocean Slugs](https://slugs.do-api.dev/): Identifiers for droplet, distro/app images, regions, etc.
+- [doctl Command Line Interface docs](https://docs.digitalocean.com/reference/doctl/)
+
+#### Amazon Web Services
+
+- An AWS I&AM user authentication key
+- S3 Bucket
+- Cloudfront Distribution
+
+### Upload to S3
+
+```
 aws s3 sync dist/ s3://staging.dwightgunning.com/ --exclude 'assets/maps/pmtiles*' --exclude 'assets/maps/fonts/*' --exclude 'assets/maps/sprites/\*' --delete
+```
 
-# Invalidate Cloudfront CDN Cache
+### Invalidate Cloudfront CDN Cache
 
+```
 aws cloudfront create-invalidation --distribution-id E1LBPVSBKVF447 --paths "/outdoors/_" "/\_astro/_"
+```
 
 ## Astro docs
 
