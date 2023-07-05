@@ -156,7 +156,7 @@ jobs:
           df -h \$EXPECTED_MOUNT_POINT
           EOF
 
-      - name: Run SSH script
+      - name: Create working directories on Block Storage
         run: |
           doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
           mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions
