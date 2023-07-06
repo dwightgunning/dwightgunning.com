@@ -12,7 +12,7 @@ jobs:
     - name: Checkout planetiler-openmaptiles repo
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.actor }}/planetiler-openmaptiles
+        repository: dwightgunning/planetiler-openmaptiles
         path: planetiler-openmaptiles
 
     - name: Set up JDK
