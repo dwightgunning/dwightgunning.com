@@ -10,7 +10,7 @@
     "openmaptiles": {
       "attribution": "<div style=\"color: black; display: inline;\">&copy; <a style=\"color: black;\" href=\"https://www.openmaptiles.org\" target=\"_blank\" rel=\"noreferrer noopener\">OpenMapTiles</a> | <a style=\"color: black;\" href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noreferrer noopener\">OpenStreetMap</a> contributors</div>",
       "type": "vector",
-      "url": "pmtiles://http://localhost:3000/assets/maps/pmtiles/planet-z0-14.pmtiles"
+      "url": "pmtiles://http://tiles.dwightgunning.com/planet_2023-06-27_169.pmtiles"
     },
     "natural_earth_shaded_relief": {
       "attribution": "<div style=\"color: black; display: inline\">Natural Earth</div>",
