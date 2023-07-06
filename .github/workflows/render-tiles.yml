@@ -68,7 +68,7 @@ jobs:
 
       - name: Poll for SSH connectivity to the Droplet
         run: |
-          MAX_RETRIES=3
+          MAX_RETRIES=6
           SLEEP_TIME=10
           sleep $SLEEP_TIME  # Sleep before the first attempt
           for i in $(seq 1 $MAX_RETRIES); do
@@ -169,8 +169,10 @@ jobs:
       - name: Copy scripts and data to the Droplet
         shell: bash
         run: |
-          scp ${{ github.workspace }}/tiles/osm-data-download.py root@${{ env.DROPLET_IP }}:/root/osm-data-download.py
-          scp ${{ github.workspace }}/tiles/${{ github.event.inputs.tile-regions-id }}.json root@${{ env.DROPLET_IP }}:/root/${{ github.event.inputs.tile-regions-id }}.json
+          scp \
+          ${{ github.workspace }}/tiles/osm-data-download.py \
+          ${{ github.workspace }}/tiles/${{ github.event.inputs.tile-regions-id }}.json \
+          root@${{ env.DROPLET_IP }}:/root/
 
   download-osm-data:
     name: Download OSM Data
@@ -315,7 +317,7 @@ jobs:
             bbox=\$(jq -r .\$region.bbox ${{ github.event.inputs.tile-regions-id }}.json)
             # Print the extracted variables
             echo \"Region: \$region | Min Zoom: \$min_zoom | Max Zoom: \$max_zoom | Bounding Box: \$bbox\"
-            docker run --rm -e JAVA_TOOL_OPTIONS='-Xmx2g' \
+            docker run --rm -e JAVA_TOOL_OPTIONS='-Xmx${{ vars.JAVA_TOOL_OPTIONS_MAX_HEAP_SIZE }}' \
             -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/merged-geofabriek-regions/${{ env.MERGED_OSM_DATA_FILENAME }}':/input/${{ env.MERGED_OSM_DATA_FILENAME }} \
             -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/planetiler-openmaptiles-data/':/data \
             -v '/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/':/output \
