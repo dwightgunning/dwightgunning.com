@@ -72,10 +72,18 @@ jobs:
           SLEEP_TIME=10
           sleep $SLEEP_TIME  # Sleep before the first attempt
           for i in $(seq 1 $MAX_RETRIES); do
-            doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa && break
+            if ssh root@${{ env.DROPLET_IP}} 'exit'; then
+              echo "SSH connection successful."
+              break
+            fi
             sleep $SLEEP_TIME  # Sleep between retries
           done
-
+          # Check if maximum retries reached without successful connection and fail the step
+          if [ $i -eq $MAX_RETRIES ]; then
+            echo "Maximum retries reached without successful SSH connection. Exiting..."
+            exit 1
+          fi
+      
       - name: Attach the re-usable Block Storage volume to the Droplet
         id: attach-block-storage
         run: |
@@ -148,7 +156,7 @@ jobs:
           df -h \$EXPECTED_MOUNT_POINT
           EOF
 
-      - name: Run SSH script
+      - name: Create working directories on Block Storage
         run: |
           doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; bash -s" <<EOF
           mkdir -p /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions
@@ -333,11 +341,11 @@ jobs:
             --ssh-key-path ${{ runner.temp }}/id_rsa \
             --ssh-command \
             "docker run \
-            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/:/input \
-            -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/:/output \
-            ghcr.io/${{ github.repository }}/tippecanoe:latest \
-            bash -c 'tile-join --force -o /output/$PMTILES_FILENAME /input/*.mbtiles'"
-          rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/
+              -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/:/input \
+              -v /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/:/output \
+              ghcr.io/${{ github.repository }}/tippecanoe:latest \
+              bash -c 'tile-join --force -o /output/$PMTILES_FILENAME /input/*.mbtiles' && \
+              rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-mbtiles/run_${{ github.run_number }}/"
           echo "PMTILES_FILENAME=$PMTILES_FILENAME" >> $GITHUB_OUTPUT
           echo "PMTILES_FILENAME=$PMTILES_FILENAME" >> $GITHUB_ENV
 
@@ -349,7 +357,7 @@ jobs:
             "export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} && \
             export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} && \
             echo \$AWS_ACCESS_KEY_ID | tail -c 4 && \
-            aws s3 cp --no-progress /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/${{ env.PMTILES_FILENAME }} s3://${{ vars.AWS_S3_BUCKET_ID }}/${{ env.PMTILES_FILENAME }}
+            aws s3 cp --no-progress /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/${{ env.PMTILES_FILENAME }} s3://${{ vars.AWS_S3_BUCKET_ID }}/${{ env.PMTILES_FILENAME }} && \
             rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/"
           echo s3://${{ vars.AWS_S3_BUCKET_ID }}/${{ env.PMTILES_FILENAME }} > ${{ env.PMTILES_FILENAME }}.txt
   

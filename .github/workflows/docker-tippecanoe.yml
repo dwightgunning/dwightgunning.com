@@ -11,7 +11,7 @@ jobs:
     - name: Checkout Tippecanoe repo
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.actor }}/tippecanoe
+        repository: dwightgunning/tippecanoe
         path: tippecanoe
 
     - name: Set up Docker Buildx

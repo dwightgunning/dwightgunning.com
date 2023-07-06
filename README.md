@@ -63,7 +63,7 @@ Tools:
 - Quick FIT>GPX converter: https://www.alltrails.com/converter/
 - Bounding Box coordinates tool: https://geojson.io/
 
-## Deployment
+## CI/CD
 
 ### Setup
 
@@ -82,7 +82,7 @@ Tools:
 
 - An AWS I&AM user authentication key
 - S3 Bucket
-- Cloudfront Distribution
+- CloudFront Distribution
 
 ### Upload to S3
 
@@ -90,7 +90,7 @@ Tools:
 aws s3 sync dist/ s3://staging.dwightgunning.com/ --exclude 'assets/maps/pmtiles*' --exclude 'assets/maps/fonts/*' --exclude 'assets/maps/sprites/\*' --delete
 ```
 
-### Invalidate Cloudfront CDN Cache
+### Invalidate CloudFront Distribution
 
 ```
 aws cloudfront create-invalidation --distribution-id E1LBPVSBKVF447 --paths "/outdoors/_" "/\_astro/_"
