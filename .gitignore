@@ -4,6 +4,15 @@
 # Build output
 dist/
 
+# Yarn without PnP
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # Node dependencies
 node_modules/
 

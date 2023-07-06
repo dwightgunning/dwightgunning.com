@@ -8,7 +8,8 @@
     "start": "astro dev",
     "build": "astro check && tsc --noEmit && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@astrojs/mdx": "^0.19.4",
@@ -27,8 +28,10 @@
     "eslint": "^8.37.0",
     "eslint-plugin-astro": "^0.27.1",
     "eslint-plugin-jsx-a11y": "^6.7.1",
+    "husky": "^8.0.0",
     "prettier": "^2.8.7",
     "prettier-plugin-astro": "^0.9.0",
     "typescript": "^5.0.4"
-  }
+  },
+  "packageManager": "yarn@3.6.1"
 }

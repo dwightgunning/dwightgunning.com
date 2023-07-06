@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+trufflehog git file://. --exclude-paths=.trufflehog-exclude-paths --since-commit HEAD --fail

@@ -1,0 +1,53 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!staging'
+      - '!production'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Login to GHCR
+        if: ${{ env.ACT }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Yarn when running via act
+        if: ${{ env.ACT }}
+        run: npm install -g yarn
+
+      - name: Read Node.js version from .nvmrc
+        id: node-version
+        run: echo "::set-output name=version::$(cat .nvmrc)"
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.node-version.outputs.version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Lint the Astro project
+        run: yarn astro check
+      
+      - name: Audit with TuffleHog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: main
+          head: HEAD
+          extra_args: --exclude-paths=.trufflehog-exclude-paths
