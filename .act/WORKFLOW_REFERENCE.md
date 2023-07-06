@@ -9,13 +9,10 @@ Note no event is necessary; the default is 'push'.
 ```
 act \
   --container-architecture linux/arm64 \
-  --platform ubuntu-latest=act-runner:latest \
-  --platform ubuntu-22.04=act-runner:latest \
   --pull=false \
   --env-file .act/.env \
   --secret-file .act/.secrets \
-  --workflows .github/workflows/ci.yml \
-  --job ci
+  --workflows .github/workflows/ci.yml
 ```
 
 ## Docker tippecanoe
