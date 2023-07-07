@@ -27,7 +27,6 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
   import type { LngLatLike } from 'maplibre-gl';
   import * as pmtiles from 'pmtiles';
 
-  console.log();
   let osmLibertyStyle: string;
   if (import.meta.env.MODE === 'production' && import.meta.env.SITE === 'https://www.dwightgunning.com') {
     osmLibertyStyle = '/assets/maps/osm-liberty.style.prod.json';
