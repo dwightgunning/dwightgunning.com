@@ -23,10 +23,13 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
   </div>
   <script>
     import 'maplibre-gl/dist/maplibre-gl.css';
+    import '@components/maps/controls/RecenterControl/style.css';
+
     import * as VectorTextProtocol from '@vendor/maplibre-gl-vector-text-protocol.es';
     import maplibregl from 'maplibre-gl';
     import type { LngLatLike } from 'maplibre-gl';
-
+    import RecenterControl from '@components/maps/controls/RecenterControl/RecenterControl';
+    
     import * as pmtiles from 'pmtiles';
 
     let osmLibertyStyle: string;
@@ -66,8 +69,9 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
           style: osmLibertyStyle,
           zoom: mapZoomDefault,
         });
-        map.addControl(new maplibregl.NavigationControl({}));
-        map.addControl(new maplibregl.FullscreenControl({}));
+        map.addControl(new maplibregl.NavigationControl({}), 'top-right');
+        map.addControl(new maplibregl.FullscreenControl({}), 'bottom-right');
+        map.addControl(new RecenterControl({center: mapCenterDefault, zoom: mapZoomDefault}), 'top-right');
 
         map.on('load', () => {
           const layers = map.getStyle().layers;
