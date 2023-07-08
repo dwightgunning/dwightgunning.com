@@ -47,6 +47,12 @@
     "maxZoom": 15,
     "bbox": "-122.0113940984,45.648052638,-121.9226802917,45.7224018579"
   },
+  "multnomahFallsWahkeenaFalls": {
+    "geofabrikRegions": ["us/oregon"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "-122.142396,45.55557,-122.092701,45.584337"
+  },
   "craterLakeNationalPark": {
     "geofabrikRegions": ["us/oregon"],
     "minZoom": 13,
