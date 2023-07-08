@@ -11,13 +11,13 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
 ---
 
 <astro-map-thumbnail
+  id={mapId} 
   class={className || ''}
   data-tracks={tracks}
   data-map-center-default={mapCenterDefault}
   data-map-id={mapId}
   data-map-zoom-default={mapZoomDefault}
 >
-  <div id={mapId} class="rounded border-solid border-2 border-amber-800 dark:border-amber-200 w-full h-full"></div>
 </astro-map-thumbnail>
 
 <script>
@@ -65,6 +65,7 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
         style: osmLibertyStyle,
         zoom: mapZoomDefault,
         interactive: false,
+        preserveDrawingBuffer: true
       });
 
       map.on('load', () => {
@@ -106,6 +107,16 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
             },
             firstSymbolId
           );
+          map.on('idle', function() {
+            var img = map.getCanvas().toDataURL('image/png');
+            var link = document.createElement('a');
+            link.href = img;
+            link.download = `${mapId}.png`;
+
+            // Simulate a click on the link to initiate the download
+            var event = new MouseEvent('click');
+            link.dispatchEvent(event);
+          });
         });
       });
     }
