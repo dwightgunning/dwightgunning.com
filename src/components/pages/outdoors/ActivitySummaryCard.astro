@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 
-import AstroMapThumbnail from '@components/maps/MapThumbnail.astro';
 import ActivityTagPill from './ActivityTagPill.astro';
 import ActivityDateLabels from './ActivityDateLabels.astro';
 
@@ -29,12 +28,7 @@ const outdoorsPageUrl = `/outdoors/${outdoorsPage.slug}/`;
   </div>
   <div class="flex-none self-center w-full sm:w-[160px] h-[120px]">
     <a href={outdoorsPageUrl}>
-      <AstroMapThumbnail
-        mapCenterDefault={JSON.stringify(outdoorsPage.data.map.thumbnail.mapCenterDefault)}
-        mapId={`${outdoorsPage.data.label}-thumbnail`}
-        mapZoomDefault={outdoorsPage.data.map.thumbnail.mapZoomDefault}
-        tracks={JSON.stringify(outdoorsPage.data.map.tracks)}
-      />
+      <img class="object-scale-down rounded border-solid border-2 border-amber-800 dark:border-amber-200 w-full h-full" src={`/assets/outdoors/${outdoorsPage.data.label}/${outdoorsPage.data.label}-thumbnail.png`} />
     </a>
   </div>
 </div>

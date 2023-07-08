@@ -1,0 +1,34 @@
+---
+import BaseLayout from '@layouts/Base.astro';
+import AstroMapThumbnail from '@components/maps/MapThumbnail.astro';
+import getOutdoorPagesCollection from 'src/lib/getOutdoorPagesCollection';
+
+const allOutdoorsPages = await getOutdoorPagesCollection();
+---
+<BaseLayout
+windowTitle="Map Thumbnails"
+metaTitle="Map Thumbnails"
+metaDescription="Map Thumbnails"
+bodyClass="flex flex-col min-h-screen max-w-screen-md m-auto"
+>
+<div class="flex flex-col gap-4">
+{allOutdoorsPages.map((outdoorsPage) => 
+    (
+        <AstroMapThumbnail
+          className="sm:w-[160px] h-[120px] border-solid border-2 border-amber-800"
+          mapCenterDefault={JSON.stringify(outdoorsPage.data.map.thumbnail.mapCenterDefault)}
+          mapId={`${outdoorsPage.data.label}-thumbnail`}
+          mapZoomDefault={outdoorsPage.data.map.thumbnail.mapZoomDefault}
+          tracks={JSON.stringify(outdoorsPage.data.map.tracks)}
+        />
+        <AstroMapThumbnail
+          className="w-full h-[300px] border-solid border-2 border-amber-800"
+          mapCenterDefault={JSON.stringify(outdoorsPage.data.map.fullsize.mapCenterDefault)}
+          mapId={`${outdoorsPage.data.label}-placeholder`}
+          mapZoomDefault={outdoorsPage.data.map.fullsize.mapZoomDefault}
+          tracks={JSON.stringify(outdoorsPage.data.map.tracks)}
+        />
+    )
+  )}
+  </div>
+</BaseLayout>
