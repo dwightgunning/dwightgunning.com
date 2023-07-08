@@ -14,9 +14,9 @@ export default defineConfig({
     // @ts-ignore
     mdx(),
     tailwind({
-      config: {
-        applyBaseStyles: false,
-      },
+      applyBaseStyles: false,
+      // config: {
+      // },
     }),
     robotsTxt({
       productionSite: PRODUCTION_SITE,
