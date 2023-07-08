@@ -15,7 +15,7 @@ bodyClass="flex flex-col min-h-screen max-w-screen-md m-auto"
 {allOutdoorsPages.map((outdoorsPage) => 
     (
         <AstroMapThumbnail
-          className="sm:w-[160px] h-[120px] border-solid border-2 border-amber-800"
+          className="w-[160px] h-[120px] border-solid border-2 border-amber-800"
           mapCenterDefault={JSON.stringify(outdoorsPage.data.map.thumbnail.mapCenterDefault)}
           mapId={`${outdoorsPage.data.label}-thumbnail`}
           mapZoomDefault={outdoorsPage.data.map.thumbnail.mapZoomDefault}
