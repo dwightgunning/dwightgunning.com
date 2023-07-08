@@ -17,7 +17,10 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
   data-map-id={mapId}
   data-map-zoom-default={mapZoomDefault}
 >
-  <div id={mapId} class="rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200 w-full h-full"></div>
+  <div class="relative w-full h-full">
+    <img id={`${mapId}-placeholder`} class="absolute inset-0 object-contain opacity-100 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200" src={`/assets/outdoors/${mapId}/${mapId}-placeholder.png`} />
+    <div id={`${mapId}-map`} class="absolute inset-0 opacity-0 transition-opacity duration-150 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"></div>
+  </div>
   <script>
     import 'maplibre-gl/dist/maplibre-gl.css';
     import * as VectorTextProtocol from '@vendor/maplibre-gl-vector-text-protocol.es';
@@ -58,7 +61,7 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
 
         const map = new maplibregl.Map({
           center: mapCenterDefault,
-          container: mapId as string,
+          container: `${mapId}-map` as string,
           maxZoom: 20,
           style: osmLibertyStyle,
           zoom: mapZoomDefault,
@@ -105,6 +108,18 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
               },
               firstSymbolId
             );
+            map.on('idle', function() {
+              var mapContainerEl = document.getElementById(`${mapId}-map`);
+              var placeholderContainerEl = document.getElementById(`${mapId}-placeholder`);
+              if (!mapContainerEl || !placeholderContainerEl) {
+                throw new Error('mapContainerEl or placeholderContainerEl not found in the DOM');
+              }
+              mapContainerEl.classList.remove('opacity-0');
+              mapContainerEl.classList.add('opacity-100');
+              setTimeout(function() {
+                placeholderContainerEl!.classList.add('hidden');
+              }, 150); 
+            });
           });
         });
       }

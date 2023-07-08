@@ -37,7 +37,7 @@ const { Content } = await outdoorsPage.render();
   <Map
     className="w-full h-[300px]"
     mapCenterDefault={JSON.stringify(outdoorsPage.data.map.fullsize.mapCenterDefault)}
-    mapId={`${outdoorsPage.data.label}-map`}
+    mapId={outdoorsPage.data.label}
     mapZoomDefault={outdoorsPage.data.map.fullsize.mapZoomDefault}
     tracks={JSON.stringify(outdoorsPage.data.map.tracks)}
   />
