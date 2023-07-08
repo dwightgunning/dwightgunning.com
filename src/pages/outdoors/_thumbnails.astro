@@ -21,6 +21,13 @@ bodyClass="flex flex-col min-h-screen max-w-screen-md m-auto"
           mapZoomDefault={outdoorsPage.data.map.thumbnail.mapZoomDefault}
           tracks={JSON.stringify(outdoorsPage.data.map.tracks)}
         />
+        <AstroMapThumbnail
+          className="w-full h-[300px] border-solid border-2 border-amber-800"
+          mapCenterDefault={JSON.stringify(outdoorsPage.data.map.fullsize.mapCenterDefault)}
+          mapId={`${outdoorsPage.data.label}-placeholder`}
+          mapZoomDefault={outdoorsPage.data.map.fullsize.mapZoomDefault}
+          tracks={JSON.stringify(outdoorsPage.data.map.tracks)}
+        />
     )
   )}
   </div>
