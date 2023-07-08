@@ -33,7 +33,7 @@
     "geofabrikRegions": ["us/washington"],
     "minZoom": 13,
     "maxZoom": 15,
-    "bbox": "-122.0252342165,45.6256874022,-122.0187601653,45.6293461399"
+    "bbox": "-122.033326,45.61339,-121.994936,45.637365"
   },
   "hamiltonMountain": {
     "geofabrikRegions": ["us/washington"],
@@ -46,6 +46,12 @@
     "minZoom": 13,
     "maxZoom": 15,
     "bbox": "-122.0113940984,45.648052638,-121.9226802917,45.7224018579"
+  },
+  "multnomahFallsWahkeenaFalls": {
+    "geofabrikRegions": ["us/oregon"],
+    "minZoom": 13,
+    "maxZoom": 15,
+    "bbox": "-122.142396,45.55557,-122.092701,45.584337"
   },
   "craterLakeNationalPark": {
     "geofabrikRegions": ["us/oregon"],
