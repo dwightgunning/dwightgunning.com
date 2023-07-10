@@ -18,7 +18,10 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
   data-map-zoom-default={mapZoomDefault}
 >
   <div class="relative w-full h-full">
-    <img id={`${mapId}-placeholder`} class="absolute inset-0 object-contain opacity-100 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200" src={`/assets/outdoors/${mapId}/${mapId}-placeholder.png`} />
+    <img 
+      alt={`A map showing where the activity took place.`}
+      id={`${mapId}-placeholder`} class="absolute inset-0 object-contain opacity-100 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"
+      src={`/assets/outdoors/${mapId}/${mapId}-placeholder.png`} />
     <div id={`${mapId}-map`} class="absolute inset-0 opacity-0 transition-opacity duration-150 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"></div>
   </div>
   <script>
