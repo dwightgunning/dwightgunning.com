@@ -33,4 +33,6 @@ const { outdoorsPages } = Astro.props;
 >
   <p class="text-lg">Outdoor activities tagged with <span class="text-accent">{tag}</span>.</p>
   {outdoorsPages.map((outdoorsPage) => <ActivitySummaryCard outdoorsPage={outdoorsPage} />)}
+  <p>See all the <a href="/outdoors/tags">tags</a>.</p>
+  
 </StandardLayout>
