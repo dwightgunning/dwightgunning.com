@@ -28,7 +28,10 @@ const outdoorsPageUrl = `/outdoors/${outdoorsPage.slug}/`;
   </div>
   <div class="flex-none self-center w-[160px] h-[120px]">
     <a href={outdoorsPageUrl}>
-      <img class="object-scale-down rounded border-solid border-2 border-amber-800 dark:border-amber-200 w-full h-full" src={`/assets/outdoors/${outdoorsPage.data.label}/${outdoorsPage.data.label}-thumbnail.png`} />
+      <img 
+        alt={`Thumbnail map showing the ${outdoorsPage.data.title} ${outdoorsPage.data.type.toLowerCase()} activity.`}
+        class="object-scale-down rounded border-solid border-2 border-amber-800 dark:border-amber-200 w-full h-full" 
+        src={`/assets/outdoors/${outdoorsPage.data.label}/${outdoorsPage.data.label}-thumbnail.png`} />
     </a>
   </div>
 </div>
