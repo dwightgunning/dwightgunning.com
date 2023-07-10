@@ -27,7 +27,7 @@ const OutdoorsPagesCollection = defineCollection({
     publishedAt: z.date().optional(),
     tags: z.array(z.string()),
     title: z.string(),
-    type: z.enum(['Hiking', 'Running', 'Camping']),
+    type: z.enum(['hiking', 'running', 'camping']),
     wikipedia: z.string().optional(),
     updatedAt: z.date().optional(),
   }),
