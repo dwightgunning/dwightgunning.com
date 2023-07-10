@@ -29,7 +29,7 @@ const { outdoorsPages } = Astro.props;
   metaDescription={`All the Outdoor activities tagged with ${tag}`}
   pageHeading={tag ? `Tag: ${tag} ` : ''}
   showFooterNav={true}
-  canonicalHref={`${import.meta.env.SITE}/outdoors`}
+  canonicalHref={`${import.meta.env.SITE}/outdoors/`}
 >
   <p class="text-lg">Outdoor activities tagged with <span class="text-accent">{tag}</span>.</p>
   {outdoorsPages.map((outdoorsPage) => <ActivitySummaryCard outdoorsPage={outdoorsPage} />)}

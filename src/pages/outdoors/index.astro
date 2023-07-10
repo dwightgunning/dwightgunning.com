@@ -7,11 +7,12 @@ const allOutdoorsPages = await getOutdoorPagesCollection();
 ---
 
 <StandardLayout
-  windowTitle="Outdoors"
-  metaTitle="Outdoor activities"
-  metaDescription="A collection of memorable runs, bike rides and camping adventures in the outdoors. Tales from the trip, photos, maps and GPX tracks."
+  windowTitle="Outdoors activities: hikes, runs, rides, camping"
+  metaTitle="Memorable hikes, runs, rides, and camping in the outdoors"
+  metaDescription="A collection of memorable hikes, runs, bike rides and camping adventures in the outdoors. Tales from the trip, photos, maps and GPX tracks."
   pageHeading="Outdoors"
   showFooterNav={true}
+  canonicalHref={`${import.meta.env.SITE}/outdoors/`}
 >
   <p class="text-xl">Memorable runs, bike rides, hikes, and campsites.</p>
   <p>
