@@ -21,7 +21,9 @@ export default defineConfig({
     robotsTxt({
       productionSite: PRODUCTION_SITE,
     }),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.split(`${PRODUCTION_SITE}/outdoors/tags/`)[1],
+    }),
   ],
   site: PRODUCTION_SITE,
   vite: {
