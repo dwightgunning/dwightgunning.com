@@ -2,20 +2,17 @@
 import BaseLayout from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '@components/Footer.astro';
-export interface Props {
-  windowTitle: string;
-  metaTitle: string;
-  metaDescription: string;
+import type { Props as BaseTemplateProps } from './Base.astro';
+
+interface Props extends BaseTemplateProps {
   showFooterNav: boolean;
 }
 
-const { windowTitle, metaDescription, metaTitle, showFooterNav } = Astro.props;
+const { showFooterNav } = Astro.props;
 ---
 
 <BaseLayout
-  windowTitle={windowTitle}
-  metaTitle={metaTitle}
-  metaDescription={metaDescription}
+  {...Astro.props}
   bodyClass="flex flex-col min-h-screen justify-center max-w-screen-md m-auto"
 >
   <Header />

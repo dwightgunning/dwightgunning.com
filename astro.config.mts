@@ -23,6 +23,7 @@ export default defineConfig({
     }),
     sitemap(),
   ],
+  site: PRODUCTION_SITE,
   vite: {
     assetsInclude: ['**/*.gpx', '**/*.pmtiles'],
   },
