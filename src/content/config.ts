@@ -6,7 +6,7 @@ const OutdoorsPagesCollection = defineCollection({
     draft: z.boolean(),
     introduction: z.string(),
     label: z.string(),
-    tags: z.array(z.string()),
+    metaDescription: z.string(),
     map: z.object({
       fullsize: z.object({
         mapCenterDefault: z.object({
@@ -25,6 +25,7 @@ const OutdoorsPagesCollection = defineCollection({
       tracks: z.array(z.string()),
     }),
     publishedAt: z.date().optional(),
+    tags: z.array(z.string()),
     title: z.string(),
     type: z.enum(['Hiking', 'Running', 'Camping']),
     wikipedia: z.string().optional(),
