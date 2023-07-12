@@ -19,6 +19,37 @@ map:
   tracks:
     - /assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/track.gpx
 metaDescription: Hike over Hamilton Mountain and loop the saddle and Bridge Trail in Skamania County, Washington, with a route description, outdoor map, GPX track and photos.
+photos:
+  bridgeTrailBridge:
+    alt: 'The bridge along Bridge Trail'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/bridge-trail-bridge.jpg'
+  equestrianTrailUpperHardyCreekTrail:
+    alt: 'Sign post marking turns for the Equestrian Trail and Upper Hardy Creek Trail'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/equestrian-trail-upper-hardy-creek-trail.jpg'
+  hamiltonMountainSelfie:
+    alt: 'A selfie by the Hamilton Mountain cliff face'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/hamilton-mountain-selfie.jpg'
+  hardyCreekLookingDown:
+    alt: 'Looking down Hardy Creek'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/hardy-creek-looking-down.jpg'
+  hardyCreekLookingUp:
+    alt: 'Looking up Hardy Creek'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/hardy-creek-looking-up.jpg'
+  mountHood:
+    alt: 'Mount Hood'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/mount-hood.jpg'
+  phloxPoint:
+    alt: 'Phlox Point'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/phlox-point.jpg'
+  pierceIslandColumbiaRiver:
+    alt: 'Pierce Island on the Columbia River'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/pierce-island-columbia-river.jpg'
+  tableMountainMountAdams:
+    alt: 'Mount Adams'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/table-mountain-mount-adams.jpg'
+  upperHardyBridgeTrail:
+    alt: 'Sign post marking the spot where Bridge Trail turns off from the Upper Hardy Creek Trail'
+    img: '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/upper-hardy-creek-bridge-trail.jpg'
 publishedAt: 2023-03-19
 tags:
   - waterfall
@@ -30,6 +61,18 @@ tags:
 title: Hamilton Mountain and Bridge Trail, Washington, USA
 type: hiking
 ---
+
+import { Image } from 'astro:assets';
+import bridgeTrailBridgeImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/bridge-trail-bridge.jpg';
+import equestrianTrailUpperHardyCreekTrailImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/equestrian-trail-upper-hardy-creek-trail.jpg';
+import hamiltonMountainSelfieImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/hamilton-mountain-selfie.jpg';
+import hardyCreekLookingDownImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/hardy-creek-looking-down.jpg';
+import hardyCreekLookingUpImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/hardy-creek-looking-up.jpg';
+import mountHoodImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/mount-hood.jpg';
+import phloxPointImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/phlox-point.jpg';
+import pierceIslandColumbiaRiverImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/pierce-island-columbia-river.jpg';
+import tableMountainMountAdamsImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/table-mountain-mount-adams.jpg';
+import upperHardyBridgeTrailImage from '../../assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/photos/upper-hardy-creek-bridge-trail.jpg';
 
 There were wonderful clear skies for a Saturday morning and as anticipated a few people already out and about when I arrived at the Beacon Rock trailhead. I parked lower at Beacon Rock, rather than the upper carpark at the Hamilton Mountain Trailhead, because the original plan included Phlox Point and looked like this:
 
@@ -46,22 +89,24 @@ The early part of the day was quite easy going up past the lower bridge over Har
 <div class="grid grid-cols-2 gap-x-4 gap-y-2 lg:mx-32 ">
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <figure class="object-contain">
-      <img
-        alt="Looking up Hardy Creek"
+      <Image
+        src={hardyCreekLookingUpImage}
+        alt={frontmatter.photos.hardyCreekLookingUp.alt}
         class="rounded-lg drop-shadow lg:drop-shadow-lg"
-        src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/hardy-creek-looking-up.jpg"
+        width="800"
       />
-      <figcaption class="text-center text-sm italic">Looking up from a bridge over Hardy Creek.</figcaption>
+      <figcaption class="text-center text-sm italic">Looking up Hardy Creek.</figcaption>
     </figure>
   </div>
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <figure class="object-contain grid-cols-2">
-      <img
-        alt="Looking down Hardy Creek"
+      <Image
+        src={hardyCreekLookingDownImage}
+        alt={frontmatter.photos.hardyCreekLookingDown.alt}
         class="rounded-lg drop-shadow lg:drop-shadow-lg"
-        src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/hardy-creek-looking-down.jpg"
+        width="800"
       />
-      <figcaption class="text-center text-sm italic">The view down toward Hardy Fall.</figcaption>
+      <figcaption class="text-center text-sm italic">The view down toward Hardy Falls.</figcaption>
     </figure>
   </div>
 </div>
@@ -71,10 +116,11 @@ Conditions were cool but not cold; it definitely felt like Spring.
 Past the bridge, the grade became steeper with several switchbacks and a couple high ledges requiring a little effort to step up onto. The views out to the Columbia River are great as always.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Pierce Island on the Columbia River"
+  <Image
+    src={pierceIslandColumbiaRiverImage}
+    alt={frontmatter.photos.pierceIslandColumbiaRiver.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/pierce-island-columbia-river.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">Beacon Rock and Pierce Island on the Columbia River.</figcaption>
 </figure>
@@ -88,20 +134,22 @@ So it was boots on in snow for the final approach to the summit with ankle-to-kn
 <div class="grid grid-cols-2 gap-x-4 gap-y-2 lg:mx-32">
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <figure class="object-contain">
-      <img
-        alt="Mount Adams"
+      <Image
+        src={tableMountainMountAdamsImage}
+        alt={frontmatter.photos.tableMountainMountAdams.alt}
         class="rounded-lg drop-shadow lg:drop-shadow-lg"
-        src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/table-mountain-mount-adams.jpg"
+        width="800"
       />
-      <figcaption class="text-center text-sm italic">Table Mountains with Mount Adam in the distance.</figcaption>
+      <figcaption class="text-center text-sm italic">Table Mountain with Mount Adam in the distance.</figcaption>
     </figure>
   </div>
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <figure class="object-contain grid-cols-2">
-      <img
-        alt="Mount Hood"
+      <Image
+        src={mountHoodImage}
+        alt={frontmatter.photos.mountHood.alt}
         class="rounded-lg drop-shadow lg:drop-shadow-lg"
-        src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/mount-hood1.jpg"
+        width="800"
       />
       <figcaption class="text-center text-sm italic">Mount Hood behind the Mark O Hatfield Wilderness.</figcaption>
     </figure>
@@ -113,10 +161,11 @@ Coming off the summit the hot ticket is to track across to the Hamilton Saddle, 
 It's from here I see what I'm presuming is Phlox Point towards the northern end of Hardy Ridge. I figure it will be a slog through some snow, but that maybe (and hopefully) someone will have left tracks to follow. If not I'm guessing I'll have to adjust the plan.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Phlox Point"
+  <Image
+    src={phloxPointImage}
+    alt={frontmatter.photos.phloxPoint.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/phlox-point.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">Phlox Point towards the northern end of Hardy Ridge.</figcaption>
 </figure>
@@ -126,10 +175,11 @@ North/North-west from Hamilton Saddle, there are several zig-zagging trails that
 The first section along the Equestrian Trail is a gradual decent with a shallow, well tracked, layer of snow. Nice and easy. Though as I came to the Upper Hardy Creek Trail turn off, I found it untracked and looking like the snow would be getting deeper as this part of the trail ascended higher.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Sign post marking turns for the Equestrian Trail and Upper Hardy Creek Trail"
+  <Image
+    src={equestrianTrailUpperHardyCreekTrailImage}
+    alt={frontmatter.photos.equestrianTrailUpperHardyCreekTrail.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/equestrian-trail-upper-hardy-creek-trail.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">It was a sign.</figcaption>
 </figure>
@@ -141,10 +191,11 @@ The snow got to knee depth pretty quickly and I wasn't setting any speed records
 By the time I reached to the point where Bridge Trail turns off from the Upper Hardy Creek Trail, I'm convinced I won't be heading further and tackling Phlox Point.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Sign post marking the spot where Bridge Trail turns off from the Upper Hardy Creek Trail"
+  <Image
+    src={upperHardyBridgeTrailImage}
+    alt={frontmatter.photos.upperHardyBridgeTrail.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/upper-hardy-creek-bridge-trail.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">The turn off to Bridge Trail from Upper Hardy Creek Trail</figcaption>
 </figure>
@@ -154,10 +205,11 @@ It's now a question of whether to proceed via the Bridge Trail or head back usin
 As expected, the conditions are about the same going forward toward the bridge. I'm thankful it's relatively new and looking structurally sound, considering the weight of all the snow on the deck.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="The bridge along Bridge Trail"
+  <Image
+    src={bridgeTrailBridgeImage}
+    alt={frontmatter.photos.bridgeTrailBridge.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/bridge-trail-bridge.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">
     The upper bridge over Hardy Creek may not be all that impressive in summer but it is sure fun to cross in knee deep
@@ -172,10 +224,11 @@ After eventually reaching and re-joining the Equestrian Trail joining up with, i
 By this point all the hard work and the rewards for the effort are the books. The last section was just a long downhill along the Equestrian Trail to it's trailhead, complete with real live horses. Then down the paved road to Beacon Rock.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="A selfie by the Hamilton Mountain cliff face"
+  <Image
+    src={hamiltonMountainSelfieImage}
+    alt={frontmatter.photos.hamiltonMountainSelfie.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-03-18-hamilton-mountain-and-bridge-trail-washington-usa/hamilton-mountain-selfie.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">Just a selfie.</figcaption>
 </figure>
