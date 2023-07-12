@@ -19,6 +19,13 @@ map:
   tracks:
     - /assets/outdoors/2023-02-16-beacon-rock-washington-usa/track.gpx
 metaDescription: Hike to the top of Beacon Rock in Skamania County, Washington with a route description, outdoor map, GPX track and selected photos.
+photos:
+  columbiaRiverWesterly:
+    alt: 'A westerly view down the Columbia River'
+    img: '../../assets/outdoors/2023-02-16-beacon-rock-washington-usa/photos/columbia-river-westerly.jpg'
+  summitSelfie:
+    alt: 'A selfie on the summit of Beacon Rock'
+    img: '../../assets/outdoors/2023-02-16-beacon-rock-washington-usa/photos/summit-selfie.jpg'
 publishedAt: 2023-03-12
 tags:
   - summit
@@ -30,17 +37,32 @@ wikipedia: https://en.wikipedia.org/wiki/Beacon_Rock_State_Park
 updatedAt: 2023-03-12
 ---
 
+import { Image } from 'astro:assets';
+import columbiaRiverWesterlyImage from '../../assets/outdoors/2023-02-16-beacon-rock-washington-usa/photos/columbia-river-westerly.jpg';
+import summitSelfieImage from '../../assets/outdoors/2023-02-16-beacon-rock-washington-usa/photos/summit-selfie.jpg';
+
 An early-ish alarm. Coffee brewed and thermos filled. It's work day but it's just a five minute blast down the Evergreen Highway to the trailhead and this isn't a long or difficult route. The carpark is empty. The trail starts with plenty of pine trees and lush greenery but shortly, as the path wraps around to the river side where the view opens up and the path becomes as rocky as one would expect, given the name.
 
 The air is crisp and there's just a few clouds high in the sky. The views across the river are great all the way up as the path winds back and forth through a series of tight switchbacks on the south-western side of the rock. At around two thirds of the way up, the path wraps around to the east and over a saddle before a short, steeper section that leads to the pinnacle. The views aren't quite 360 with some taller trees growing around the summit, but the wide view of the Columbia river is all one could wish for.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="A westerly view down the Columbia River"
+  <Image
+    src={columbiaRiverWesterlyImage}
+    alt={frontmatter.photos.columbiaRiverWesterly.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-02-16-beacon-rock-washington-usa/beacon-rock-columbia-river-westerly.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">A westerly view down the Columbia River.</figcaption>
 </figure>
 
-Getting a hike in before work always feels great.
+<figure class="lg:mx-32 object-contain">
+  <Image
+    src={summitSelfieImage}
+    alt={frontmatter.photos.summitSelfie.alt}
+    class="rounded-lg drop-shadow lg:drop-shadow-lg"
+    width="800"
+  />
+  <figcaption class="text-center text-sm italic">A quick selfie from the top.</figcaption>
+</figure>
+
+Getting an early hike in before work always feels great. Highly recommended.
