@@ -19,6 +19,19 @@ map:
       lat: 45.57632958987951
     mapZoomDefault: 12
 metaDescription: Hike in loop around Multnomah Falls and Wahkeena Falls, in Oregon, with a route description, outdoor map, GPX track and photos.
+photos:
+  fullHeight:
+    alt: 'Looking up at Multnomah Falls from the bottom, with a stone bridge in the foreground'
+    img: '../../assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/photos/multnomah-falls-full-height.jpg'
+  lowerFalls:
+    alt: 'The lower part of Multnomah Falls'
+    img: '../../assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/photos/multnomah-falls-lower-falls.jpg'
+  lookingDown:
+    alt: 'Looking down from a lookout over the edge of Multnomah Falls'
+    img: '../../assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/photos/multnomah-falls-looking-down.jpg'
+  lookingUp:
+    alt: 'Looking up at Wahkeena Falls'
+    img: '../../assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/photos/wahkeena-falls-looking-up.jpg'
 tags:
   - waterfall
   - loop
@@ -26,6 +39,12 @@ tags:
 title: Multnomah Falls and Wahkeena Falls loop, Oregon, USA
 type: hiking
 ---
+
+import { Image } from 'astro:assets';
+import fullHeightImage from  '../../assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/photos/multnomah-falls-full-height.jpg';
+import lookingDownImage from '../../assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/photos/multnomah-falls-looking-down.jpg';
+import lookingUpImage from        '../../assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/photos/wahkeena-falls-looking-up.jpg';
+import lowerFallsImage from       '../../assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/photos/multnomah-falls-lower-falls.jpg';
 
 The original plan was simply to checkout the falls on a Saturday morning. Peeking at the maps quickly before heading out the door showed there was a chance at linking a set of trails into a loop that should provide an extra challenge and reward. I wasn't too sure what to expect of the crowds, the condition of the trail after recent snow and rain in mid-winter, and how the weather would turn out.
 
@@ -36,11 +55,12 @@ This waterfall is right by the highway and just a 5min walk from the carpark to 
 <div class="grid grid-cols-2 gap-x-4 gap-y-2 lg:mx-32 ">
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <figure class="object-contain">
-      <img
-        alt="Looking up at Multnomah Falls from the bottom, with a stone bridge in the foreground"
-        class="rounded-lg drop-shadow lg:drop-shadow-lg"
-        src="/assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/multnomah-falls-full-height.jpg"
-      />
+        <Image
+          src={fullHeightImage}
+          alt={frontmatter.photos.fullHeight.alt}
+          class="rounded-lg drop-shadow lg:drop-shadow-lg"
+          width="800"
+        />
       <figcaption class="text-center text-sm italic">
         The stone arch bridge emphasises the height of the falls
       </figcaption>
@@ -48,10 +68,11 @@ This waterfall is right by the highway and just a 5min walk from the carpark to 
   </div>
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <figure class="object-contain grid-cols-2">
-      <img
-        alt="The lower part of Multnomah Falls"
+      <Image
+        src={lowerFallsImage}
+        alt={frontmatter.photos.lowerFalls.alt}
         class="rounded-lg drop-shadow lg:drop-shadow-lg"
-        src="/assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/multnomah-falls-lower-fall.jpg"
+        width="800"
       />
       <figcaption class="text-center text-sm italic">A noisy splashdown at the lower section of the falls.</figcaption>
     </figure>
@@ -61,10 +82,11 @@ This waterfall is right by the highway and just a 5min walk from the carpark to 
 After making the elevation, a spur trailheads to the lookout at the top of the falls. This lookout is a hair-raising platform that which extends out and over the exact spot where the Multnomah Creek plunges over the cliff. The sound of the rushing creek and the views to the people and rock pool below are breathtaking.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Looking down from a lookout over the edge of Multnomah Falls"
+  <Image
+    src={lookingDownImage}
+    alt={frontmatter.photos.lookingDown.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/multnomah-falls-looking-down.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">
     The lookout platform extending over the edge of the falls. Not for the feint of heart.
@@ -76,10 +98,11 @@ While the falls are the main draw card, there's plenty more on offer in the area
 The next stop on the trail is the Wahkeena Falls. Although not as impressive as Multnomah Falls, the surrounding moss covered rocks make for a wonderful view.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Looking up at Wahkeena Falls"
+  <Image
+    src={lookingUpImage}
+    alt={frontmatter.photos.lookingUp.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2023-02-04-multnomah-falls-and-wahkeena-falls-loop-oregon-usa/wahkeena-falls-looking-up.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">The Wahkeena Falls in amongst moss covered rock</figcaption>
 </figure>
