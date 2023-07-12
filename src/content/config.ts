@@ -27,6 +27,15 @@ const OutdoorsPagesCollection = defineCollection({
         }),
         tracks: z.array(z.string()),
       }),
+      photos: z
+        .record(
+          z.string(),
+          z.object({
+            img: image(),
+            alt: z.string(),
+          }),
+        )
+        .optional(),
       publishedAt: z.date().optional(),
       tags: z.array(z.string()),
       title: z.string(),

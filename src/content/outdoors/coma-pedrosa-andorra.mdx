@@ -19,6 +19,16 @@ map:
       lat: 42.591
     mapZoomDefault: 11
 metaDescription: Hike to Coma Pedrosa, Andorra's highest peak, with a route description, outdoor map, GPX track and selected photos.
+photos:
+  lowForrestStream:
+    alt: 'Forrest and stream'
+    img: '../../assets/outdoors/2017-07-17-coma-pedrosa-andorra/photos/low-forrest-stream.jpg'
+  estanyNegre:
+    alt: 'Lake: Estany Negre'
+    img: '../../assets/outdoors/2017-07-17-coma-pedrosa-andorra/photos/estany-negre.jpg'
+  pyraneesMountainTops:
+    alt: Pyrenees mountain tops
+    img: '../../assets/outdoors/2017-07-17-coma-pedrosa-andorra/photos/pyranees-mountain-tops.jpg'
 tags:
   - summit
   - lakes
@@ -27,15 +37,21 @@ type: hiking
 wikipedia: https://en.wikipedia.org/wiki/Coma_Pedrosa
 ---
 
+import { Image } from 'astro:assets';
+import lowForrestStreamImage from '../../assets/outdoors/2017-07-17-coma-pedrosa-andorra/photos/low-forrest-stream.jpg';
+import estanyNegreImage from '../../assets/outdoors/2017-07-17-coma-pedrosa-andorra/photos/estany-negre.jpg';
+import pyraneesMountainTopsImage from '../../assets/outdoors/2017-07-17-coma-pedrosa-andorra/photos/pyranees-mountain-tops.jpg';
+
 Having arrived in Andorra late on the previous day, and not being real familiar with the roads, the early morning drive from our campsite to the trailhead was a fun little navigational exercise in itself. As it turned out, the hike was almost easier than the drive! Despite being a little rushed at the summit - due to an approaching storm - the hike was a nice physical test and great fun overall.
 
 Setting off at around 10am, we knew we were in for a fairly long day with ~14km and ~1500m elevation gain ahead of us. The early stages of the trail meanders through a light forrest, over the occasional bridge and picturesque streams. The path is well marked and the ascent is gradual which makes for an enjoyable morning.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Forrest and stream"
+  <Image
+    src={lowForrestStreamImage}
+    alt={frontmatter.photos.lowForrestStream.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2017-07-17-coma-pedrosa-andorra/coma-pedrosa-low-forrests.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">
     The trail starts with a light forrest and crosses a small but fast running stream.
@@ -45,10 +61,11 @@ Setting off at around 10am, we knew we were in for a fairly long day with ~14km 
 Having been told of Andorra's impressive lakes by friends who'd recently visited the area, I was keen to see for myself. After emerging from the forrest we took a side-path that dipped lower, past the lovely _Estany de les Truites_. Further along we stopped for a drink a _Estany Negre_ with its beautiful clear water and patches of snow around the waters edge.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Lake: Estany Negre"
+  <Image
+    src={estanyNegreImage}
+    alt={frontmatter.photos.estanyNegre.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2017-07-17-coma-pedrosa-andorra/coma-pedrosa-estany-negre.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">
     The deep blue Estany Negre with patches of snow at the waters edge.
@@ -58,10 +75,11 @@ Having been told of Andorra's impressive lakes by friends who'd recently visited
 As we ascended the trail became drier and rockier, with increasingly impressive views across to the surrounding ridgelines and mountains of the Pyrenees.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Pyrenees mountain tops"
+  <Image
+    src={pyraneesMountainTopsImage}
+    alt={frontmatter.photos.pyraneesMountainTops.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2017-07-17-coma-pedrosa-andorra/coma-pedrosa-mountain-tops.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">Views over the Pyrenees.</figcaption>
 </figure>
