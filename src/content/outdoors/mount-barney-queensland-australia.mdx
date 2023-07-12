@@ -5,26 +5,64 @@ draft: false
 label: 2022-04-03-mount-barney-queensland-australia
 map:
   fullsize:
+    image: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/map/fullsize.png'
     mapCenterDefault:
       lng: 152.70974636077884
       lat: -28.28911467703842
     mapZoomDefault: 13
   thumbnail:
+    image: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/map/thumbnail.png'
     mapCenterDefault:
       lng: 152.70575523376468
       lat: -28.288358877287504
     mapZoomDefault: 11
   tracks:
     - /assets/outdoors/2022-04-03-mount-barney-queensland-australia/track.gpx
+metaDescription: Hike the South East Summit Ridge Route way to the East Peak of Mount Barney in Queensland, with a route description, outdoor map, GPX track and photos.
+photos:
+  earlyStart:
+    alt: 'All smiles at the trailhead.'
+    img: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/early-start.jpg'
+  routeMarker:
+    alt: 'Triangular route marker along the SE Ridge Route'
+    img: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/route-marker.jpg'
+  flora:
+    alt: 'Grass trees and Eucalyptus'
+    img: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/flora.jpg'
+  southEastRidgeRouteViews:
+    alt: 'Dad and I making our way up the South East Ridge Route'
+    img: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/south-east-ridge-route-views.jpg'
+  logansRidgeHorizon:
+    alt: "Looking down at Logan's Ridge"
+    img: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/logans-ridge.jpg'
+  logansRidge:
+    alt: "Looking across at Logan's Ridge"
+    img: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/logans-ridge.jpg'
+  lookingOverToMountLindesay:
+    alt: 'Dad looks out at Mt Lindesay from the East Peak of Mt Barney.'
+    img: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/looking-over-to-mount-lindesay.jpg'
+  exploringEastPeak:
+    alt: 'Exploring the East Peak of Mt Barney.'
+    img: '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/exploring-east-peak.jpg'
 publishedAt: 2023-07-06
 tags:
-  - Summit
-  - Loop
+  - summit
+  - loop
 title: Mount Barney East Peak, QLD, Australia
-type: Hiking
+type: hiking
 wikipedia: https://en.wikipedia.org/wiki/Mount_Barney_(Queensland)
 updatedAt: 2023-07-06
 ---
+
+import { Image } from 'astro:assets';
+import earlyStartImage from '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/early-start.jpg';
+import routeMarkerImage from '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/route-marker.jpg';
+import floraImage from '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/flora.jpg';
+import southEastRidgeRouteViewsImage from '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/south-east-ridge-route-views.jpg';
+import logansRidgeHorizonImage from '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/logans-ridge-horizon.jpg';
+import logansRidgeImage from '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/logans-ridge.jpg';
+import lookingOverToMountLindesayImage from '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/looking-over-to-mount-lindesay.jpg';
+import exploringEastPeakImage from '../../assets/outdoors/2022-04-03-mount-barney-queensland-australia/photos/exploring-east-peak.jpg';
 
 Mount Barney is known as one of the most impressive peaks and challenging hikes in the Scenic Rim region of Queensland, Australia. In my experience it was a solid test and the views along the South East Ridge were really amazing.
 
@@ -37,27 +75,27 @@ Back home through the week, with only a few days remaining on my Australian trip
 The journey out to the trailhead was a couple hour drive. We took off in my parents 4WD well before sunrise and arrived right around dawn.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="All smiles at the trailhead."
+  <Image
+    src={earlyStartImage}
+    alt={frontmatter.photos.earlyStart.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2022-04-03-mount-barney-queensland-australia/early-start.jpg"
+    width="800"
   />
-  <figcaption class="text-center text-sm italic">
-    All smiles at the trailhead.
-  </figcaption>
+  <figcaption class="text-center text-sm italic">All smiles at the trailhead.</figcaption>
 </figure>
 
 The first section from the carpark rises gently and wraps around the base of an interesting little peak known as Yellow Pinch. I'd actually been to the top the week before and can recommend the lookout at the top for great views of Mount Barney. On this particular morning our focus was on the climb ahead so we carried along the trail, through a first then a second gate that marks the beginning of the South East Ridge Summit Route.
 
 After a few minutes heading gently downhill we came to a creek crossing, which is in fact the early stages of the Logan River, and our first challenge of the day. The waters were flowing reasonably quickly and it was too deep to wade across fully clothed. After tracked up and down a ways we eventually found a series logs and rocks that let us hop our way to the other side.
 
-At around the 3.5km mark, the trail becomes steeper though it's mostly a straight shot up along the ridge without any switchbacks. The trail is well worn if not all that well marked; we saw just one marker along the route. 
+At around the 3.5km mark, the trail becomes steeper though it's mostly a straight shot up along the ridge without any switchbacks. The trail is well worn if not all that well marked; we saw just one marker along the route.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Triangular route marker along the SE Ridge Route"
+  <Image
+    src={routeMarkerImage}
+    alt={frontmatter.photos.routeMarker.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2022-04-03-mount-barney-queensland-australia/south-east-ridge-route.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">
     SE Ridge Route marker - the only one we saw along the trail.
@@ -65,23 +103,23 @@ At around the 3.5km mark, the trail becomes steeper though it's mostly a straigh
 </figure>
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Grass trees and Eucalyptus"
+  <Image
+    src={floraImage}
+    alt={frontmatter.photos.flora.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2022-04-03-mount-barney-queensland-australia/grass-trees-and-gums.jpg"
+    width="800"
   />
-  <figcaption class="text-center text-sm italic">
-    Australian bush classics: Grass trees and Eucalyptus.
-  </figcaption>
+  <figcaption class="text-center text-sm italic">Australian bush classics: Grass trees and Eucalyptus.</figcaption>
 </figure>
 
 There are several steep chutes with a little scrambling required. Nothing too technical except for one section where a a fixed rope has been set. This we actually skipped the roped section because the smooth, wet rock offered zero traction. Instead hiked we around to the south and found an alternate. In hindsight, this option was more technical and exposed, but it worked and no harm done.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Dad and I making our way up the South East Ridge Route"
+  <Image
+    src={southEastRidgeRouteViewsImage}
+    alt={frontmatter.photos.southEastRidgeRouteViews.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2022-04-03-mount-barney-queensland-australia/south-east-ridge-route-views.jpg"
+    width="800"
   />
   <figcaption class="text-center text-sm italic">
     One of the many spots for great views along the South East Ridge Route.
@@ -90,23 +128,24 @@ There are several steep chutes with a little scrambling required. Nothing too te
 
 At various points the rocky ridge rose above the surrounding trees and the easterly views opened up for us. The sun was shining and although there were clouds on the horizon, the sky above was mostly clear. The green trees of the National Park below were like a mossy carpet covering a network of ridges and valleys below.
 
-
 <div class="grid grid-cols-2 gap-x-4 gap-y-2 lg:mx-32 ">
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <figure class="object-contain">
-      <img
-        alt="Looking down at Logan's Ridge"
+      <Image
+        src={logansRidgeHorizonImage}
+        alt={frontmatter.photos.logansRidgeHorizon.alt}
         class="rounded-lg drop-shadow lg:drop-shadow-lg"
-        src="/assets/outdoors/2022-04-03-mount-barney-queensland-australia/tree-cover.jpg"
+        width="600"
       />
     </figure>
   </div>
   <div class="grid col-span-2 sm:col-span-1 content-center justify-center">
     <figure class="object-contain grid-cols-2">
-      <img
-        alt="Looking across at Logan's Ridge"
+      <Image
+        src={logansRidgeImage}
+        alt={frontmatter.photos.logansRidge.alt}
         class="rounded-lg drop-shadow lg:drop-shadow-lg"
-        src="/assets/outdoors/2022-04-03-mount-barney-queensland-australia/steep-sections.jpg"
+        width="600"
       />
     </figure>
   </div>
@@ -115,25 +154,23 @@ At various points the rocky ridge rose above the surrounding trees and the easte
 The summit was all ours. Quiet, hot but with a cool breeze to balance it out. There was a little more cloud on the horizon than one would hope. Stunning nonetheless.
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Dad looks out at Mt Lindesay from the East Peak of Mt Barney."
+  <Image
+    src={lookingOverToMountLindesayImage}
+    alt={frontmatter.photos.lookingOverToMountLindesay.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2022-04-03-mount-barney-queensland-australia/looking-at-mt-lindesay.jpg"
+    width="800"
   />
-  <figcaption class="text-center text-sm italic">
-    A view from the East Peak looking across at Mt Lindesay
-  </figcaption>
+  <figcaption class="text-center text-sm italic">A view from the East Peak looking across at Mt Lindesay</figcaption>
 </figure>
 
 <figure class="lg:mx-32 object-contain">
-  <img
-    alt="Exploring the East Peak of Mt Barney."
+  <Image
+    src={exploringEastPeakImage}
+    alt={frontmatter.photos.exploringEastPeak.alt}
     class="rounded-lg drop-shadow lg:drop-shadow-lg"
-    src="/assets/outdoors/2022-04-03-mount-barney-queensland-australia/near-the-edge.jpg"
+    width="800"
   />
-  <figcaption class="text-center text-sm italic">
-    Exploring the East Peak of Mt Barney.
-  </figcaption>
+  <figcaption class="text-center text-sm italic">Exploring the East Peak of Mt Barney.</figcaption>
 </figure>
 
 It's a long, roughly 10km hike back to the carpark via Peasants Ridge. After using plenty of energy on the climb our legs and knees were definitely feeling it. It was some relief to finally be back at the car where cool drinks and some fresh snacks were awaiting us. All smiles after a great day out in the mountains.

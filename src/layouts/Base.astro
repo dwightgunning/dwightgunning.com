@@ -6,9 +6,12 @@ export interface Props {
   windowTitle: string;
   metaTitle: string;
   metaDescription: string;
+  canonicalHref?: string;
+  metaAuthor?: string;
+  noIndex?: boolean;
 }
 
-const { bodyClass, windowTitle, metaTitle, metaDescription } = Astro.props;
+const { bodyClass, windowTitle, metaAuthor, metaTitle, metaDescription, canonicalHref, noIndex } = Astro.props;
 ---
 
 <html lang="en">
@@ -18,12 +21,15 @@ const { bodyClass, windowTitle, metaTitle, metaDescription } = Astro.props;
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    {canonicalHref && <link rel="canonical" href={canonicalHref} />}
+    {noIndex && <meta name="robots" content="noindex" />}
+
     <meta name="title" content={metaTitle} />
     <meta name="description" content={metaDescription} />
-    <meta name="author" content="Dwight Gunning" />
+    <meta name="author" content={metaAuthor || 'Dwight Gunning'} />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <title>{`${windowTitle} | dwightgunning.com`}</title>
+    <title>{windowTitle}</title>
   </head>
   <body class={`sm:overflow-y-scroll px-2 pt-2 pb-4 ${bodyClass}`}>
     <slot />

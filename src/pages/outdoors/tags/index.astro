@@ -7,19 +7,24 @@ const uniqueTags = [...new Set(allOutdoorsPages.map((outdoorsPage) => outdoorsPa
 ---
 
 <StandardLayout
-  windowTitle="Outdoor tags | dwightgunning.com"
-  metaTitle={`Outdoor activities by tag`}
-  metaDescription={`A list of tags through which the Outdoor activities can be browsed`}
+  windowTitle="Outdoor tags | dwightgunning.com" 
+  metaTitle={`Outdoor activities by tag`} 
+  metaDescription={`A quick list of all the tags, along with links, to easily browse the various outdoor activities found on the site.`}
   pageHeading="Tags"
   showFooterNav={true}
+  canonicalHref={`${import.meta.env.SITE}/outdoors/tags/`}
 >
   <div>
+    <p class="mb-3">All outdoor activities on the site can be browsed by tag.</p>
+    <p class="mb-3">The aim for every activity is to share a description along with maps, gpx trails, photos and other useful information, that'll give an impression from my experience and be helpful to others looking to enjoy the same locations and areas. Use the links below to jump to a tag that takes your interest.</p>
+    <ul class="mb-3">
     {
-      uniqueTags.map((tag) => (
-        <p>
+      uniqueTags.sort().map((tag) => (
+        <li class="list-disc list-inside">
           <a href={`/outdoors/tags/${tag}/`}>{tag}</a>
-        </p>
+        </li>
       ))
     }
+    </ul>
   </div>
 </StandardLayout>

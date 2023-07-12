@@ -24,12 +24,15 @@ const { outdoorsPages } = Astro.props;
 ---
 
 <StandardLayout
-  windowTitle={tag ? `${tag} tag` : ''}
-  metaTitle={`Outdoor activities tagged: ${tag}`}
-  metaDescription={`All the Outdoor activities tagged with ${tag}`}
-  pageHeading={tag ? `Tag: ${tag} ` : ''}
+  windowTitle={`Tag: ${tag} - Outdoor maps, GPX tracks and photos`}
+  metaTitle={`Outdoor activities tag: ${tag}`}
+  metaDescription={`Outdoor activities tagged with '${tag}'. Helpful descriptions, maps and GPX tracks from my hiking, running, riding and camping adventures.`}
+  pageHeading={`Tag: ${tag}`}
   showFooterNav={true}
+  canonicalHref={`${import.meta.env.SITE}/outdoors/`}
 >
-  <p class="text-lg">Outdoor activities tagged with <span class="text-accent">{tag}</span>.</p>
+  <p class="text-lg">Outdoor activities tagged with '<span class="text-accent">{tag}</span>'.</p>
   {outdoorsPages.map((outdoorsPage) => <ActivitySummaryCard outdoorsPage={outdoorsPage} />)}
+  <p>See all the <a href="/outdoors/tags/">tags</a>.</p>
+  
 </StandardLayout>
