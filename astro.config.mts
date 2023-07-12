@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, sharpImageService } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import robotsTxt from './src/integrations/robotsTxt';
 import sitemap from '@astrojs/sitemap';
@@ -9,6 +9,9 @@ const PRODUCTION_SITE = 'https://www.dwightgunning.com';
 export default defineConfig({
   experimental: {
     assets: true,
+  },
+  image: {
+    service: sharpImageService(),
   },
   integrations: [
     // @ts-ignore
