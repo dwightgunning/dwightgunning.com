@@ -1,13 +1,17 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 type Props = {
   className: string;
   mapCenterDefault: string;
   mapId: string;
   mapZoomDefault: number;
+  placeholderImage: ImageMetadata;
   tracks: string;
 };
 
-const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.props;
+const { className, mapCenterDefault, mapId, mapZoomDefault, placeholderImage, tracks } = Astro.props;
 ---
 
 <astro-map
@@ -18,10 +22,10 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
   data-map-zoom-default={mapZoomDefault}
 >
   <div class="relative w-full h-full">
-    <img 
-      alt={`A map showing where the activity took place.`}
+    <Image 
+      alt="A map showing where the activity took place."
       id={`${mapId}-placeholder`} class="absolute inset-0 object-contain opacity-100 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"
-      src={`/assets/outdoors/${mapId}/${mapId}-placeholder.png`} />
+      src={placeholderImage} />
     <div id={`${mapId}-map`} class="absolute inset-0 opacity-0 transition-opacity duration-150 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"></div>
   </div>
   <script>
