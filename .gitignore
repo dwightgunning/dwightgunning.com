@@ -1,4 +1,4 @@
-# Astro 
+# Astro
 .astro
 
 # Build output
@@ -38,8 +38,8 @@ public/assets/maps/pmtiles
 # Act Runner
 !.act/.env*.template
 .act/.vars*
-!.act/.env*.template
-.act/.secrets*
-!.act/.secrets*.template
+!.act/.vars*.template
+.act/.secrets
+!.act/.secrets.template
 .act/id_rsa*
 .act/tmp
