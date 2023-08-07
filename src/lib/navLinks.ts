@@ -20,4 +20,9 @@ export const navLinks: TNavLink[] = [
     href: '/about/',
     locations: ['header', 'footer'],
   },
+  {
+    text: 'Now',
+    href: '/now/',
+    locations: ['footer'],
+  },
 ];
