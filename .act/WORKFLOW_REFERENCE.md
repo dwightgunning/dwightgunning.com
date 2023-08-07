@@ -53,12 +53,12 @@ act \
   --platform ubuntu-latest=act-runner:latest \
   --platform ubuntu-22.04=act-runner:latest \
   --pull=false \
-  --var-file .act/.vars-render-tiles \
+  --var-file .act/.vars-render-map-tiles \
   --env-file .act/.env \
   --secret DIGITAL_OCEAN_SSH_PRIVATE_KEY="$(< .act/id_rsa)" \
   --secret-file .act/.secrets \
-  --workflows .github/workflows/render-tiles.yml \
-  --job render-tiles \
+  --workflows .github/workflows/render-map-tiles.yml \
+  --job render-map-tiles \
   --job cleanup \
   --input tile-regions-id=test-monaco \
   workflow_dispatch

@@ -11,7 +11,7 @@ This directory contains artifacts related to the toolchain for preparing and ren
 
 ## Workflow
 
-The workflow is executed via the [render-tiles](/.github/workflows/render-tiles.yml) Github Action.
+The workflow is executed via the [render-map-tiles](/.github/workflows/render-map-tiles.yml) Github Action.
 
 The workflow is based on the regions defined in ([regions.json](/tiles/regions.json)). Each region specifies a bounding box and the zoom levels for which tiles will be rendered, as well as an (optional) [Geofabriek](https://www.geofabrik.de/data/download.html) region identifier for Open Street Map data.
 
@@ -39,15 +39,14 @@ The majority of the steps are executed on a large, short-lived, Digital Ocean dr
 - [BBOX Selector](https://boundingbox.klokantech.com/): A tool for obtaining BBOX coordinates.
 - [BBOX Checker](https://linestrings.com/bbox/): A tool for verifying BBOX coordinates.
 - [PMTiles Viewer](https://protomaps.github.io/PMTiles/): A tool for inspecting PMTiles files.
-- [MBTiles files](https://github.com/consbio/mbtileserver):  Basic Go server for mbtiles.
-
+- [MBTiles files](https://github.com/consbio/mbtileserver): Basic Go server for mbtiles.
 
 ## Next up
 
-  - Customise the planetiler-openmaptiles profile to exclude POIs and other features that aren't useful for outdoor oriented maps.
-  - Schedule the Github Actions workflows so that tiles are automatically periodically re-rendered with the latest source data.
-  - Setup related projects as submodules for more streamlined development experience.
-  - Setup workflows to render and host tilesets with hill shading, contour lines.
+- Customise the planetiler-openmaptiles profile to exclude POIs and other features that aren't useful for outdoor oriented maps.
+- Schedule the Github Actions workflows so that tiles are automatically periodically re-rendered with the latest source data.
+- Setup related projects as submodules for more streamlined development experience.
+- Setup workflows to render and host tilesets with hill shading, contour lines.
 
 ## Inspiration and Prior Art
 

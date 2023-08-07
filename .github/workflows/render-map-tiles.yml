@@ -1,6 +1,6 @@
 name: Render Map Tiles
 
-on: 
+on:
   workflow_dispatch:
     inputs:
       disable-cleanup-job:
@@ -83,7 +83,7 @@ jobs:
             echo "Maximum retries reached without successful SSH connection. Exiting..."
             exit 1
           fi
-      
+
       - name: Attach the re-usable Block Storage volume to the Droplet
         id: attach-block-storage
         run: |
@@ -213,7 +213,7 @@ jobs:
       DROPLET_IP: ${{ needs.prepare-droplet.outputs.DROPLET_IP }}
       BLOCK_STORAGE_VOLUME_ID: ${{ needs.prepare-droplet.outputs.BLOCK_STORAGE_VOLUME_ID }}
     outputs:
-      MERGED_OSM_DATA_FILENAME: ${{ steps.merge-osm-data-files-with-osmium.outputs.MERGED_OSM_DATA_FILENAME }}  
+      MERGED_OSM_DATA_FILENAME: ${{ steps.merge-osm-data-files-with-osmium.outputs.MERGED_OSM_DATA_FILENAME }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -257,7 +257,7 @@ jobs:
           echo "MERGED_OSM_DATA_FILENAME=$MERGED_OSM_DATA_FILENAME" >> $GITHUB_ENV
           echo "MERGED_OSM_DATA_FILENAME=$MERGED_OSM_DATA_FILENAME" >> $GITHUB_OUTPUT
 
-  render-tiles:
+  render-map-tiles:
     name: Render vector tiles
     needs: [prepare-droplet, merge-osm-data-files]
     environment: tiles
@@ -301,7 +301,7 @@ jobs:
             --ssh-key-path ${{ runner.temp }}/id_rsa \
             --ssh-command \
             "docker pull --quiet ghcr.io/${{ github.repository }}/tippecanoe:latest"
-        
+
       - name: Render tiles for each region
         run: |
           # Define the SSH command to be executed
@@ -362,7 +362,7 @@ jobs:
             aws s3 cp --no-progress /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/${{ env.PMTILES_FILENAME }} s3://${{ vars.AWS_S3_BUCKET_ID }}/${{ env.PMTILES_FILENAME }} && \
             rm -rf /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/rendered-pmtiles/run_${{ github.run_number }}/"
           echo s3://${{ vars.AWS_S3_BUCKET_ID }}/${{ env.PMTILES_FILENAME }} > ${{ env.PMTILES_FILENAME }}.txt
-  
+
       - name: Publish pmtiles file details as an artifact
         uses: actions/upload-artifact@v3
         with:
@@ -371,7 +371,7 @@ jobs:
 
   cleanup:
     name: Cleanup
-    needs: [prepare-droplet, download-osm-data, merge-osm-data-files, render-tiles]
+    needs: [prepare-droplet, download-osm-data, merge-osm-data-files, render-map-tiles]
     if: (success() || failure()) && ${{ github.event.inputs.disable-cleanup-job }} != 'true'
     runs-on: ubuntu-22.04
     env:
@@ -397,7 +397,7 @@ jobs:
         run: |
           doctl compute ssh ${{ env.DROPLET_ID}} --ssh-key-path ${{ runner.temp }}/id_rsa --ssh-command "set -e; umount /mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }} || true"
 
-      - name: Disconnect the Block Storage volume from the Droplet       
+      - name: Disconnect the Block Storage volume from the Droplet
         if: always()
         run: |
           doctl compute volume-action detach ${{ env.BLOCK_STORAGE_VOLUME_ID }} ${{ env.DROPLET_ID}} --wait || true
