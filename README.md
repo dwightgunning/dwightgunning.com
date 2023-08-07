@@ -1,67 +1,26 @@
 # dwightgunning.com
 
-## Project notes
+The project source and CI/CD for [www.dwightgunning.com](https://www.dwightgunning.com).
 
-### Color palette
+A static site built with [Astro.build](https://astro.build/) and GitHub actions, hosted on AWS with Route53+CloudFront+S3.
+
+## Development notes
+
+### Design system
+
+The site is styled with [Tailwindcss](https://tailwindcss.com).
 
 - `tailwind.config.cjs`
 - `tailwindBase.css`
+- [color palette](./COLOR_PALETTE.md)
 
-#### Custom Colors
+### Images
 
-- fern
-- armadillo
+[ImageMagick](https://imagemagick.org/index.php) `mogrify` is good for converting original photos from various formats to jpegs with minimal quality loss. The Astro [assets](https://docs.astro.build/en/guides/assets/#overview) can then take care of generating web optimized images.
 
-#### Surfaces:
+### Maps
 
-- surface-bg
-- surface-low
-- surface-high
-
-#### Text:
-
-- text-primary
-- text-secondary
-- text-accent
-- text-success
-- text-warning
-- text-error
-
-#### Interactive elements:
-
-- interactive
-- interactive-accent
-
-#### Separation:
-
-- separator
-
-#### References:
-
-- https://www.shortwave.com/blog/dark-mode/
-- https://blog.zeplin.io/dark-mode-color-palette
-- https://medium.com/eightshapes-llc/light-dark-9f8ea42c9081
-- https://www.w3.org/TR/WCAG22/
-- https://uicolors.app/create
-- https://tailwindcss.com/docs/customizing-colors
-- https://www.tints.dev
-- https://color.adobe.com/create/color-wheel
-- https://contrast-grid.eightshapes.com
-
-## Image processing
-
-ImageMagick mogrify is good for re-formatting and resizing images for the web. I'm following [this guide](https://www.smashingmagazine.com/2015/06/efficient-image-resizing-with-imagemagick/).
-
-```
-mogrify -path OUTPUT_PATH -filter Triangle -define filter:support=2 -thumbnail 1024 -unsharp 0.25x0.25+8+0.065 -dither None -posterize 136 -quality 82 -define jpeg:fancy-upsampling=off -define png:compression-filter=5 -define png:compression-level=9 -define png:compression-strategy=1 -define png:exclude-chunk=all -interlace none -colorspace sRGB -strip -format jpg INPUT_PATH
-```
-
-## Maps
-
-Tools:
-
-- Quick FIT>GPX converter: https://www.alltrails.com/converter/
-- Bounding Box coordinates tool: https://geojson.io/
+See the [tiles readme](./tiles/README.md).
 
 ## CI/CD
 
@@ -96,14 +55,13 @@ docker build -t act-runner:latest .github/act-runner
 
 2. Configure the workflow environment, variables and secrets. See the `.templates` in `.act/`.
 
-  a. Create an SSH key pair. Then setup Digital Ocean with the public key for SSH Key-Based Authentication
+a. Create an SSH key pair. Then setup Digital Ocean with the public key for SSH Key-Based Authentication
 
-  ```
-  ssh-keygen -f $(pwd)/.act/id_rsa && chmod 600 $(pwd)/.act/id_rsa
-  ```
+```
+ssh-keygen -f $(pwd)/.act/id_rsa && chmod 600 $(pwd)/.act/id_rsa
+```
 
-  b. Create an AWS I&AM User with permissions to access the bucket. Generate an access key; retrieve the access key id and secret.
-
+b. Create an AWS I&AM User with permissions to access the bucket. Generate an access key; retrieve the access key id and secret.
 
 3. List the workflows:
 
@@ -133,33 +91,7 @@ aws s3 sync dist/ s3://staging.dwightgunning.com/ --exclude 'assets/maps/pmtiles
 aws cloudfront create-invalidation --distribution-id E1LBPVSBKVF447 --paths "/outdoors/_" "/\_astro/_"
 ```
 
-## Astro docs
-
-### 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-### 🧞 Commands
+## Astro commands
 
 All commands are run from the root of the project, from a terminal:
 
@@ -171,7 +103,3 @@ All commands are run from the root of the project, from a terminal:
 | `npm run preview`      | Preview your build locally, before deploying       |
 | `npm run astro ...`    | Run CLI commands like `astro add`, `astro preview` |
 | `npm run astro --help` | Get help using the Astro CLI                       |
-
-### 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
