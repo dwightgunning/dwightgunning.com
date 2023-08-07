@@ -22,7 +22,7 @@ const { Content } = await outdoorsPage.render();
 <StandardLayout
   windowTitle={outdoorsPage.data.title}
   metaTitle={outdoorsPage.data.title}
-  metaDescription={outdoorsPage.data.introduction}
+  metaDescription={outdoorsPage.data.metaDescription}
   pageHeading={outdoorsPage.data.title}
   showFooterNav={true}
   canonicalHref={`${import.meta.env.SITE}/outdoors/${outdoorsPage.slug}/`}
