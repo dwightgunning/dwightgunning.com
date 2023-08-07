@@ -1,6 +1,8 @@
 name: Render Map Tiles
 
 on:
+  schedule:
+    - cron: '0 3 * * 2'
   workflow_dispatch:
     inputs:
       disable-cleanup-job:
@@ -171,7 +173,7 @@ jobs:
         run: |
           scp \
           ${{ github.workspace }}/tiles/osm-data-download.py \
-          ${{ github.workspace }}/tiles/${{ github.event.inputs.tile-regions-id }}.json \
+          ${{ github.workspace }}/tiles/${{ github.event.inputs.tile-regions-id || 'regions' }}.json \
           root@${{ env.DROPLET_IP }}:/root/
 
   download-osm-data:
@@ -201,7 +203,7 @@ jobs:
         run: |
           doctl compute ssh ${{ env.DROPLET_ID }} \
             --ssh-key-path ${{ runner.temp }}/id_rsa \
-            --ssh-command "pip install requests && REGIONS_FILE=/root/${{ github.event.inputs.tile-regions-id }}.json DOWNLOAD_DIR=/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions/ python3 /root/osm-data-download.py"
+            --ssh-command "pip install requests && REGIONS_FILE=/root/${{ github.event.inputs.tile-regions-id || 'regions' }}.json DOWNLOAD_DIR=/mnt/${{ vars.BLOCK_STORAGE_VOLUME_NAME }}/geofabriek-regions/ python3 /root/osm-data-download.py"
 
   merge-osm-data-files:
     name: Merge OSM data files
@@ -308,13 +310,13 @@ jobs:
           ssh_command="
           set -e
           # Parse the tile-regions file and extract the regions
-          regions=\$(jq -r 'keys[]' ${{ github.event.inputs.tile-regions-id }}.json)
+          regions=\$(jq -r 'keys[]' ${{ github.event.inputs.tile-regions-id || 'regions' }}.json)
           # Iterate over each region
           for region in \${regions[@]}; do
             # Extract the variables using jq with dot notation
-            min_zoom=\$(jq -r .\$region.minZoom ${{ github.event.inputs.tile-regions-id }}.json)
-            max_zoom=\$(jq -r .\$region.maxZoom ${{ github.event.inputs.tile-regions-id }}.json)
-            bbox=\$(jq -r .\$region.bbox ${{ github.event.inputs.tile-regions-id }}.json)
+            min_zoom=\$(jq -r .\$region.minZoom ${{ github.event.inputs.tile-regions-id || 'regions' }}.json)
+            max_zoom=\$(jq -r .\$region.maxZoom ${{ github.event.inputs.tile-regions-id || 'regions' }}.json)
+            bbox=\$(jq -r .\$region.bbox ${{ github.event.inputs.tile-regions-id || 'regions' }}.json)
             # Print the extracted variables
             echo \"Region: \$region | Min Zoom: \$min_zoom | Max Zoom: \$max_zoom | Bounding Box: \$bbox\"
             docker run --rm -e JAVA_TOOL_OPTIONS='-Xmx${{ vars.JAVA_TOOL_OPTIONS_MAX_HEAP_SIZE }}' \
@@ -338,7 +340,7 @@ jobs:
       - name: Combine and convert regional mbtiles to planet pmtiles
         id: combine-and-convert-mbtiles-to-pmtiles
         run: |
-          PMTILES_FILENAME="${{ github.event.inputs.tile-regions-id }}_$(date +%Y-%m-%d)_${{ github.run_number }}.pmtiles"
+          PMTILES_FILENAME="${{ github.event.inputs.tile-regions-id || 'regions' }}_$(date +%Y-%m-%d)_${{ github.run_number }}.pmtiles"
           doctl compute ssh ${{ env.DROPLET_ID }} \
             --ssh-key-path ${{ runner.temp }}/id_rsa \
             --ssh-command \
@@ -372,7 +374,7 @@ jobs:
   cleanup:
     name: Cleanup
     needs: [prepare-droplet, download-osm-data, merge-osm-data-files, render-map-tiles]
-    if: (success() || failure()) && ${{ github.event.inputs.disable-cleanup-job }} != 'true'
+    if: (success() || failure()) && ${{ github.event.inputs.disable-cleanup-job || 'false' }} != 'true'
     runs-on: ubuntu-22.04
     env:
       DROPLET_ID: ${{ needs.prepare-droplet.outputs.DROPLET_ID }}
