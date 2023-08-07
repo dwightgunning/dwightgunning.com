@@ -25,7 +25,8 @@ export default defineConfig({
       productionSite: PRODUCTION_SITE,
     }),
     sitemap({
-      filter: (page) => !page.split(`${PRODUCTION_SITE}/outdoors/tags/`)[1],
+      filter: (page) =>
+        page !== `${PRODUCTION_SITE}/design-system/` && !page.split(`${PRODUCTION_SITE}/outdoors/tags/`)[1],
     }),
   ],
   site: PRODUCTION_SITE,
