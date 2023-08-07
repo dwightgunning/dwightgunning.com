@@ -1,4 +1,4 @@
-name: Render Tiles
+name: Render Map Tiles
 
 on: 
   workflow_dispatch:
