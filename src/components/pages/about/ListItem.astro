@@ -1,13 +1,12 @@
 ---
 export interface Props {
   heading: string;
-  description?: string;
 }
 
-const { description, heading } = Astro.props;
+const { heading } = Astro.props;
 ---
 
 <li>
   <h4 class="font-semibold text-accent">{heading}</h4>
-  <p class="mt-1">{description}</p>
+  <p class="mt-1"><slot /></p>
 </li>
