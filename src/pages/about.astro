@@ -104,13 +104,13 @@ const hardwareListItemsData = [
   <div class="rounded flex flex-col gap-2 md:gap-4">
     <h2 class="text-2xl">What I like to work on</h2>
     <div class="grid md:grid-cols-2 gap-2">
-      {workOnSurfacesData.map((item) => <AboutSurface heading={item.heading} details={item.details} />)}
+      {workOnSurfacesData.map((item) => <AboutSurface heading={item.heading}>{item.details}</AboutSurface>)}
     </div>
   </div>
   <div class="rounded flex flex-col gap-4">
     <h2 class="text-2xl">What I like to work with</h2>
     <div class="grid md:grid-cols-3 gap-2 md:gap-4">
-      {workWithSurfacesData.map((item) => <AboutSurface heading={item.heading} details={item.details} />)}
+      {workWithSurfacesData.map((item) => <AboutSurface heading={item.heading}>{item.details}</AboutSurface>)}
     </div>
   </div>
   <h2 class="text-2xl">What I like to use</h2>
@@ -123,7 +123,7 @@ const hardwareListItemsData = [
     </p>
     <div class="rounded surface-low p-6 sm:flex-row gap-2 w-full flex-wrap">
       <ul class="o-2">
-        {desktopSoftwareListItemsData.map((item) => <ListItem heading={item.heading} description={item.description} />)}
+        {desktopSoftwareListItemsData.map((item) => <ListItem heading={item.heading}>{item.description}</ListItem>)}
       </ul>
     </div>
     <h4 class="text-xl">Hardware</h4>
@@ -133,7 +133,7 @@ const hardwareListItemsData = [
     </p>
     <div class="rounded surface-low p-6 gap-2">
       <ul class="o-2">
-        {hardwareListItemsData.map((item) => <ListItem heading={item.heading} description={item.description} />)}
+        {hardwareListItemsData.map((item) => <ListItem heading={item.heading}>{item.description}</ListItem>)}
       </ul>
     </div>
   </div>
