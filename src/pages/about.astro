@@ -3,11 +3,6 @@ import StandardLayout from '@layouts/Standard.astro';
 import ListItem from '@components/pages/about/ListItem.astro';
 import AboutSurface from '@components/pages/about/AboutSurface.astro';
 
-const workOnSurfacesData = [
-  { heading: 'Roles', details: 'Senior Engineer, Tech Lead, Engineering Manager' },
-  { heading: 'Industries', details: 'Developer Recruitment, EdTech, Finance, Transport' },
-];
-
 const workWithSurfacesData = [
   { heading: 'Languages', details: 'CSS, HTML, JavaScript, Python, SQL, TypeScript' },
   { heading: 'Frameworks', details: 'Astro, Django, Express, FastAPI, MUI, Next.js, React, Strapi, Tailwind' },
@@ -104,7 +99,8 @@ const hardwareListItemsData = [
   <div class="rounded flex flex-col gap-2 md:gap-4">
     <h2 class="text-2xl">What I like to work on</h2>
     <div class="grid md:grid-cols-2 gap-2">
-      {workOnSurfacesData.map((item) => <AboutSurface heading={item.heading}>{item.details}</AboutSurface>)}
+      <AboutSurface heading="Roles">Engineering Manager, Tech Lead, Senior Software Engineer.</AboutSurface>
+      <AboutSurface heading="Manager Readme">My <a href="https://managerreadme.com/readme/dwightgunning" target="_blank">manager readme</a> aims to help people get to know me, in a "working together" sense.</AboutSurface>
     </div>
   </div>
   <div class="rounded flex flex-col gap-4">
