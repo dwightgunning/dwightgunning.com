@@ -11,11 +11,11 @@ const { showFooterNav } = Astro.props;
 <footer class="pt-10 mt-32 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-6">
   {
     showFooterNav && (
-      <div class="flex gap-2 sm:gap-6 text-sm font-medium">
+      <div class="flex gap-3 sm:gap-6 text-sm font-medium">
         {navLinks
           .filter((navLink) => navLink.locations.includes('footer'))
           .map(({ href, text }: TNavLink) => (
-            <a href={href} class="transition">
+            <a href={href} class="-m-1 p-1 transition">
               {text}
             </a>
           ))}
@@ -23,7 +23,7 @@ const { showFooterNav } = Astro.props;
     )
   }
   <div class="text-secondary text-sm font-light whitespace-nowrap">
-    Copyright &copy; 2005-{new Date().getFullYear().toString().slice(2)}. <a class="underline outline-offset-4" href="/"
+    Copyright &copy; 2005-{new Date().getFullYear().toString().slice(2)}. <a class="-m-1 p-1 underline outline-offset-4" href="/"
       >Dwight Gunning</a
     >.
   </div>

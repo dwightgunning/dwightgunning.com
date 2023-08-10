@@ -25,7 +25,7 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
             .filter((navLink) => navLink.locations.includes('header'))
             .map(({ href, text }: TNavLink) => (
               <li>
-                <a class="no-underline hover:no-underline" href={href}>
+                <a class="-m-1 p-1 no-underline hover:no-underline" href={href}>
                   {text}
                 </a>
               </li>
