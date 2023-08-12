@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && tsc --noEmit && astro build",
+    "build": "astro check && echo 'tsc...' && tsc --noEmit && echo 'tsc succeeded.' && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "postinstall": "husky install"

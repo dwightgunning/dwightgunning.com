@@ -13,6 +13,7 @@
       "@style/*": ["src/style/*"],
       "@vendor/*": ["src/vendor/*"]
     },
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "verbatimModuleSyntax": true
   }
 }
