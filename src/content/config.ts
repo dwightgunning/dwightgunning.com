@@ -41,6 +41,8 @@ const OutdoorsPagesCollection = defineCollection({
       title: z.string(),
       type: z.enum(['hiking', 'running', 'camping']),
       wikipedia: z.string().optional(),
+      alltrails: z.string().optional(),
+      wikiloc: z.string().optional(),
       updatedAt: z.date().optional(),
     }),
 });
