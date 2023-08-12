@@ -1,0 +1,54 @@
+---
+import 'photoswipe/style.css';
+
+export type Photo = { img: ImageMetadata; alt: string };
+
+export interface Props {
+  id: string;
+  photos: Record<string, Photo>;
+}
+
+const { photos } = Astro.props;
+---
+
+<photo-gallery-inner data-photos={JSON.stringify(photos)}></photo-gallery-inner>
+
+<script>
+  import PhotoSwipe from 'photoswipe';
+  import type { Photo } from './PhotoGallery.astro';
+  import type { DataSource } from 'photoswipe';
+
+  class PhotoGalleryInner extends HTMLElement {
+    constructor() {
+      super();
+      const photos: Record<string, Photo> =
+        this.dataset.photos && JSON.parse(this.dataset.photos);
+      const photoSwipeData: DataSource = [];
+      const photoIdIndexes: Record<string, number> = {};
+
+      Object.entries(photos).map(
+        ([photoId, photo]: [string, Photo], index: number) => {
+          console.log(photo);
+          photoSwipeData.push(photo.img);
+          photoIdIndexes[photoId] = index;
+        }
+      );
+
+      document.querySelectorAll('.open-gallery').forEach(function (element) {
+        element.addEventListener('click', function (event) {
+          event.preventDefault();
+          const anchor = event.currentTarget as HTMLAnchorElement;
+          const selectedImageId = anchor.getAttribute('data-image-id');
+          const index =
+            (selectedImageId && photoIdIndexes[selectedImageId]) || 0;
+          const pswp = new PhotoSwipe({
+            index,
+            dataSource: photoSwipeData,
+          });
+          pswp.init();
+        });
+      });
+    }
+  }
+  customElements.define('photo-gallery-inner', PhotoGalleryInner);
+</script>

@@ -1258,6 +1258,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/photoswipe@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "@types/photoswipe@npm:4.1.2"
+  checksum: 58f9b85171b5d24a70dea8b7cd68eaaef29159f05130f2284320ef438874c538f00e81763d4025d79fb03366180cff12e01c4a40d04a0c823ca4df656ee8b912
+  languageName: node
+  linkType: hard
+
 "@types/resolve@npm:^1.17.0":
   version: 1.20.2
   resolution: "@types/resolve@npm:1.20.2"
@@ -2550,6 +2557,7 @@ __metadata:
     "@astrojs/sitemap": ^2.0.1
     "@astrojs/tailwind": ^4.0.0
     "@types/node": ^18.16.19
+    "@types/photoswipe": ^4.1.2
     "@typescript-eslint/parser": ^6.2.1
     astro: ^2.10.1
     astro-heroicons: ^0.3.0
@@ -2558,6 +2566,7 @@ __metadata:
     eslint-plugin-jsx-a11y: ^6.7.1
     husky: ^8.0.3
     maplibre-gl: ^3.2.2
+    photoswipe: ^5.3.8
     pmtiles: ^2.10.0
     prettier: ^3.0.1
     prettier-plugin-astro: ^0.11.0
@@ -6163,6 +6172,13 @@ __metadata:
     estree-walker: ^3.0.0
     is-reference: ^3.0.0
   checksum: 2153244352e58a0d76e7e8d9263e66fe74509495f809af388da20045fb30aa3e93f2f94468dc0b9166ecf206fcfc0d73d2c7641c6fbedc07b1de858b710142cb
+  languageName: node
+  linkType: hard
+
+"photoswipe@npm:^5.3.8":
+  version: 5.3.8
+  resolution: "photoswipe@npm:5.3.8"
+  checksum: c33fd86e1a7bb4710d2c971c6e0983a4c41f55b61bf62466d3a7fc1ae3acff3431292cf0b668a52e103092e7ea21ac548fdd90cec7286cd148c6640e915e3184
   languageName: node
   linkType: hard
 
