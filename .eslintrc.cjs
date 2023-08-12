@@ -1,7 +1,4 @@
 module.exports = {
-  parserOptions: {
-    ecmaVersion: 'latest',
-  },
   extends: ['plugin:astro/recommended', 'plugin:astro/jsx-a11y-recommended'],
   overrides: [
     {
@@ -11,6 +8,19 @@ module.exports = {
         parser: '@typescript-eslint/parser',
         extraFileExtensions: ['.astro'],
       },
+    },
+    {
+      // Define the configuration for `<script>` tag.
+      // Script in `<script>` is assigned a virtual file name with the `.js` extension.
+      files: ['**/*.astro/*.js', '*.astro/*.js'],
+      parser: '@typescript-eslint/parser',
+      rules: {
+        'prettier/prettier': 'off',
+      },
+    },
+    {
+      files: ['*.ts'],
+      parser: '@typescript-eslint/parser',
     },
   ],
 };
