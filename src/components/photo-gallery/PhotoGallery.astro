@@ -28,7 +28,6 @@ const { photos } = Astro.props;
 
       Object.entries(photos).map(
         ([photoId, photo]: [string, Photo], index: number) => {
-          console.log(photo);
           photoSwipeData.push(photo.img);
           photoIdIndexes[photoId] = index;
         }
