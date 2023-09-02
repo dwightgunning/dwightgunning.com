@@ -4,14 +4,19 @@ on:
   push:
     branches:
       - staging
+      - 'feat-*'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: staging
+    environment:
+      name: staging
+      url: ${{ steps.deploy-info.outputs.branch-url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - id: deploy-info
+        run: echo "::set-output name=branch-url::https://${{ github.ref_name }}.staging.dwightgunning.com"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -23,6 +28,6 @@ jobs:
       - name: Build application
         run: yarn build --site ${{ vars.SITE }}
       - name: Deploy to S3
-        run: aws s3 sync ./dist/ s3://${{ vars.AWS_S3_BUCKET_ID }}
+        run: aws s3 sync ./dist/ s3://${{ vars.AWS_S3_BUCKET_ID }}/${{ github.ref_name }}
       - name: Create CloudFront invalidation
-        run: aws cloudfront create-invalidation --distribution-id ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/${{ github.ref_name }}/*"
