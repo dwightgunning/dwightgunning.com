@@ -7,11 +7,12 @@ type Props = {
   tracks?: string;
 };
 
-const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.props;
+const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } =
+  Astro.props;
 ---
 
 <astro-map-thumbnail
-  id={mapId} 
+  id={mapId}
   class={className || ''}
   data-tracks={tracks}
   data-map-center-default={mapCenterDefault}
@@ -28,7 +29,10 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
   import * as pmtiles from 'pmtiles';
 
   let osmLibertyStyle: string;
-  if (import.meta.env.MODE === 'production' && import.meta.env.SITE === 'https://www.dwightgunning.com') {
+  if (
+    import.meta.env.MODE === 'production' &&
+    import.meta.env.SITE === 'https://www.dwightgunning.com'
+  ) {
     osmLibertyStyle = '/assets/maps/osm-liberty.style.prod.json';
   } else if (import.meta.env.SITE === 'https://staging.dwightgunning.com') {
     osmLibertyStyle = '/assets/maps/osm-liberty.style.staging.json';
@@ -51,7 +55,9 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
       const mapZoomDefault: number = this.dataset.mapZoomDefault
         ? parseFloat(this.dataset.mapZoomDefault) || 10.0
         : 10.0;
-      const tracks = this.dataset.tracks ? JSON.parse(this.dataset.tracks) : null;
+      const tracks = this.dataset.tracks
+        ? JSON.parse(this.dataset.tracks)
+        : null;
 
       if ([mapCenterDefault, mapId, mapZoomDefault].some((v) => v == null)) {
         throw new Error('mapCenterDefault, mapId, mapZoomDefault are required');
@@ -65,7 +71,7 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
         style: osmLibertyStyle,
         zoom: mapZoomDefault,
         interactive: false,
-        preserveDrawingBuffer: true
+        preserveDrawingBuffer: true,
       });
 
       map.on('load', () => {
@@ -81,9 +87,14 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
         }
         tracks.map((track: string) => {
           let gpxLink;
-          if (import.meta.env.MODE === 'production' && import.meta.env.SITE === 'https://www.dwightgunning.com') {
+          if (
+            import.meta.env.MODE === 'production' &&
+            import.meta.env.SITE === 'https://www.dwightgunning.com'
+          ) {
             gpxLink = `gpx://https://www.dwightgunning.com${track}`;
-          } else if (import.meta.env.SITE === 'https://staging.dwightgunning.com') {
+          } else if (
+            import.meta.env.SITE === 'https://staging.dwightgunning.com'
+          ) {
             gpxLink = `gpx://https://staging.dwightgunning.com${track}`;
           } else {
             gpxLink = `gpx://http://localhost:3000${track}`;
@@ -107,7 +118,7 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, tracks } = Astro.pro
             },
             firstSymbolId
           );
-          map.on('idle', function() {
+          map.on('idle', function () {
             var img = map.getCanvas().toDataURL('image/png');
             var link = document.createElement('a');
             link.href = img;
