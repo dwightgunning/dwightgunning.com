@@ -52,17 +52,10 @@ const {
 
     import * as pmtiles from 'pmtiles';
 
-    let osmLibertyStyle: string;
-    if (
-      import.meta.env.MODE === 'production' &&
-      import.meta.env.SITE === 'https://www.dwightgunning.com'
-    ) {
-      osmLibertyStyle = '/assets/maps/osm-liberty.style.prod.json';
-    } else if (import.meta.env.SITE === 'https://staging.dwightgunning.com') {
-      osmLibertyStyle = '/assets/maps/osm-liberty.style.staging.json';
-    } else {
-      osmLibertyStyle = '/assets/maps/osm-liberty.style.dev.json';
-    }
+    console.log(`PROD: ${import.meta.env.PROD}`);
+    const osmLibertyStyle = `/assets/maps/osm-liberty.style.${
+      import.meta.env.PROD ? 'prod' : 'dev'
+    }.json`;
 
     class AstroMap extends HTMLElement {
       constructor() {
@@ -118,19 +111,11 @@ const {
             }
           }
           tracks.map((track: string) => {
-            let gpxLink;
-            if (
-              import.meta.env.MODE === 'production' &&
-              import.meta.env.SITE === 'https://www.dwightgunning.com'
-            ) {
-              gpxLink = `gpx://https://www.dwightgunning.com${track}`;
-            } else if (
-              import.meta.env.SITE === 'https://staging.dwightgunning.com'
-            ) {
-              gpxLink = `gpx://https://staging.dwightgunning.com${track}`;
-            } else {
-              gpxLink = `gpx://http://localhost:3000${track}`;
-            }
+            const gpxLink = `gpx://${
+              import.meta.env.PROD
+                ? import.meta.env.SITE
+                : 'http://localhost:4321'
+            }${track}`;
 
             map.addSource(track, {
               type: 'geojson',
