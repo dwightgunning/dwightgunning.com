@@ -7,14 +7,10 @@ import tailwind from '@astrojs/tailwind';
 const PRODUCTION_SITE = 'https://www.dwightgunning.com';
 
 export default defineConfig({
-  experimental: {
-    assets: true,
-  },
   image: {
     service: sharpImageService(),
   },
   integrations: [
-    // @ts-ignore
     mdx(),
     tailwind({
       applyBaseStyles: false,

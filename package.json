@@ -12,28 +12,29 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@astrojs/mdx": "^0.19.7",
-    "@astrojs/sitemap": "^2.0.1",
-    "@astrojs/tailwind": "^4.0.0",
-    "astro": "^2.10.1",
+    "@astrojs/check": "^0.2.0",
+    "@astrojs/mdx": "^1.0.0",
+    "@astrojs/sitemap": "^3.0.0",
+    "@astrojs/tailwind": "^5.0.0",
+    "astro": "^3.0.7",
     "astro-heroicons": "^0.3.0",
-    "maplibre-gl": "^3.2.2",
+    "maplibre-gl": "^3.3.1",
     "photoswipe": "^5.3.8",
     "pmtiles": "^2.10.0",
-    "sharp": "^0.32.4",
+    "sharp": "^0.32.5",
     "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
-    "@types/node": "^18.16.19",
+    "@types/node": "^20.5.8",
     "@types/photoswipe": "^4.1.2",
-    "@typescript-eslint/parser": "^6.2.1",
-    "eslint": "^8.46.0",
-    "eslint-plugin-astro": "^0.28.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "eslint": "^8.48.0",
+    "eslint-plugin-astro": "^0.29.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "husky": "^8.0.3",
-    "prettier": "^3.0.1",
-    "prettier-plugin-astro": "^0.11.0",
-    "typescript": "^5.1.6"
+    "prettier": "^3.0.3",
+    "prettier-plugin-astro": "^0.12.0",
+    "typescript": "^5.2.2"
   },
   "packageManager": "yarn@3.6.1"
 }
