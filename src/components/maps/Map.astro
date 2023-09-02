@@ -1,6 +1,6 @@
 ---
-import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
 type Props = {
   className: string;
@@ -11,7 +11,14 @@ type Props = {
   tracks: string;
 };
 
-const { className, mapCenterDefault, mapId, mapZoomDefault, placeholderImage, tracks } = Astro.props;
+const {
+  className,
+  mapCenterDefault,
+  mapId,
+  mapZoomDefault,
+  placeholderImage,
+  tracks,
+} = Astro.props;
 ---
 
 <astro-map
@@ -22,11 +29,17 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, placeholderImage, tr
   data-map-zoom-default={mapZoomDefault}
 >
   <div class="relative w-full h-full">
-    <Image 
+    <Image
       alt="A map showing where the activity took place."
-      id={`${mapId}-placeholder`} class="absolute inset-0 object-contain opacity-100 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"
-      src={placeholderImage} />
-    <div id={`${mapId}-map`} class="absolute inset-0 opacity-0 transition-opacity duration-150 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"></div>
+      id={`${mapId}-placeholder`}
+      class="absolute inset-0 object-contain opacity-100 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"
+      src={placeholderImage}
+    />
+    <div
+      id={`${mapId}-map`}
+      class="absolute inset-0 opacity-0 transition-opacity duration-150 rounded-lg border-solid border-2 border-amber-800 dark:border-amber-200"
+    >
+    </div>
   </div>
   <script>
     import 'maplibre-gl/dist/maplibre-gl.css';
@@ -36,17 +49,13 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, placeholderImage, tr
     import maplibregl from 'maplibre-gl';
     import type { LngLatLike } from 'maplibre-gl';
     import RecenterControl from '@components/maps/controls/RecenterControl/RecenterControl';
-    
+
     import * as pmtiles from 'pmtiles';
 
-    let osmLibertyStyle: string;
-    if (import.meta.env.MODE === 'production' && import.meta.env.SITE === 'https://www.dwightgunning.com') {
-      osmLibertyStyle = '/assets/maps/osm-liberty.style.prod.json';
-    } else if (import.meta.env.SITE === 'https://staging.dwightgunning.com') {
-      osmLibertyStyle = '/assets/maps/osm-liberty.style.staging.json';
-    } else {
-      osmLibertyStyle = '/assets/maps/osm-liberty.style.dev.json';
-    }
+    console.log(`PROD: ${import.meta.env.PROD}`);
+    const osmLibertyStyle = `/assets/maps/osm-liberty.style.${
+      import.meta.env.PROD ? 'prod' : 'dev'
+    }.json`;
 
     class AstroMap extends HTMLElement {
       constructor() {
@@ -63,10 +72,14 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, placeholderImage, tr
         const mapZoomDefault: number = this.dataset.mapZoomDefault
           ? parseFloat(this.dataset.mapZoomDefault) || 10.0
           : 10.0;
-        const tracks = this.dataset.tracks ? JSON.parse(this.dataset.tracks) : null;
+        const tracks = this.dataset.tracks
+          ? JSON.parse(this.dataset.tracks)
+          : null;
 
         if ([mapCenterDefault, mapId, mapZoomDefault].some((v) => v == null)) {
-          throw new Error('mapCenterDefault, mapId, mapZoomDefault are required');
+          throw new Error(
+            'mapCenterDefault, mapId, mapZoomDefault are required'
+          );
         }
 
         const map = new maplibregl.Map({
@@ -78,7 +91,13 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, placeholderImage, tr
         });
         map.addControl(new maplibregl.NavigationControl({}), 'top-right');
         map.addControl(new maplibregl.FullscreenControl({}), 'bottom-right');
-        map.addControl(new RecenterControl({center: mapCenterDefault, zoom: mapZoomDefault}), 'top-right');
+        map.addControl(
+          new RecenterControl({
+            center: mapCenterDefault,
+            zoom: mapZoomDefault,
+          }),
+          'top-right'
+        );
 
         map.on('load', () => {
           const layers = map.getStyle().layers;
@@ -92,14 +111,11 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, placeholderImage, tr
             }
           }
           tracks.map((track: string) => {
-            let gpxLink;
-            if (import.meta.env.MODE === 'production' && import.meta.env.SITE === 'https://www.dwightgunning.com') {
-              gpxLink = `gpx://https://www.dwightgunning.com${track}`;
-            } else if (import.meta.env.SITE === 'https://staging.dwightgunning.com') {
-              gpxLink = `gpx://https://staging.dwightgunning.com${track}`;
-            } else {
-              gpxLink = `gpx://http://localhost:3000${track}`;
-            }
+            const gpxLink = `gpx://${
+              import.meta.env.PROD
+                ? import.meta.env.SITE
+                : 'http://localhost:4321'
+            }${track}`;
 
             map.addSource(track, {
               type: 'geojson',
@@ -119,17 +135,21 @@ const { className, mapCenterDefault, mapId, mapZoomDefault, placeholderImage, tr
               },
               firstSymbolId
             );
-            map.on('idle', function() {
+            map.on('idle', function () {
               var mapContainerEl = document.getElementById(`${mapId}-map`);
-              var placeholderContainerEl = document.getElementById(`${mapId}-placeholder`);
+              var placeholderContainerEl = document.getElementById(
+                `${mapId}-placeholder`
+              );
               if (!mapContainerEl || !placeholderContainerEl) {
-                throw new Error('mapContainerEl or placeholderContainerEl not found in the DOM');
+                throw new Error(
+                  'mapContainerEl or placeholderContainerEl not found in the DOM'
+                );
               }
               mapContainerEl.classList.remove('opacity-0');
               mapContainerEl.classList.add('opacity-100');
-              setTimeout(function() {
+              setTimeout(function () {
                 placeholderContainerEl!.classList.add('hidden');
-              }, 150); 
+              }, 150);
             });
           });
         });
