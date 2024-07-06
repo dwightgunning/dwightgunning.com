@@ -12,11 +12,11 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@astrojs/check": "^0.2.0",
-    "@astrojs/mdx": "^1.0.0",
-    "@astrojs/sitemap": "^3.0.0",
-    "@astrojs/tailwind": "^5.0.0",
-    "astro": "^3.0.7",
+    "@astrojs/check": "0.7.0",
+    "@astrojs/mdx": "3.1.2",
+    "@astrojs/sitemap": "3.1.6",
+    "@astrojs/tailwind": "5.1.0",
+    "astro": "4.11.5",
     "astro-heroicons": "^0.3.0",
     "maplibre-gl": "^3.3.1",
     "photoswipe": "^5.3.8",
