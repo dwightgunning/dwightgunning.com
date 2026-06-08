@@ -39,9 +39,10 @@ See the [tiles readme](./tiles/README.md).
 
 #### Amazon Web Services
 
-- An AWS I&AM user authentication key
 - S3 Bucket
 - CloudFront Distribution
+- IAM OIDC identity provider for `token.actions.githubusercontent.com`
+- One IAM role per environment (`staging`, `production`) with a trust policy scoped to this repo + environment, granting `s3:PutObject`, `s3:ListBucket`, `s3:DeleteObject` on the bucket and `cloudfront:CreateInvalidation` on the distribution. The role ARN is set per GitHub Environment as `AWS_DEPLOY_ROLE_ARN`.
 
 ### Local runs with nektos/act
 
@@ -61,7 +62,7 @@ a. Create an SSH key pair. Then setup Digital Ocean with the public key for SSH 
 ssh-keygen -f $(pwd)/.act/id_rsa && chmod 600 $(pwd)/.act/id_rsa
 ```
 
-b. Create an AWS I&AM User with permissions to access the bucket. Generate an access key; retrieve the access key id and secret.
+b. For local `act` runs only, create an AWS IAM user with permissions to access the bucket and generate an access key. (GitHub-hosted runs use OIDC role-assumption — no static access keys are stored as repo secrets.)
 
 3. List the workflows:
 

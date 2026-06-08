@@ -1,0 +1,64 @@
+name: Deploy (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: GitHub Environment to deploy to (staging or production).
+        type: string
+        required: true
+      s3-prefix:
+        description: Path segment appended to the bucket (e.g. "/feat-foo"). Empty for production root.
+        type: string
+        required: false
+        default: ''
+      invalidation-paths:
+        description: CloudFront invalidation paths (e.g. "/*" or "/feat-foo/*").
+        type: string
+        required: true
+      deploy-url:
+        description: URL recorded against the GitHub deployment.
+        type: string
+        required: false
+        default: ''
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ inputs.deploy-url }}
+    permissions:
+      id-token: write
+      contents: read
+    concurrency:
+      group: deploy-${{ inputs.environment }}-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build site
+        run: yarn build --site ${{ vars.SITE }}
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Deploy to S3
+        run: aws s3 sync ./dist/ s3://${{ vars.AWS_S3_BUCKET_ID }}${{ inputs.s3-prefix }}
+
+      - name: Create CloudFront invalidation
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "${{ inputs.invalidation-paths }}"
